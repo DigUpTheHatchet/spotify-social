@@ -1,0 +1,1 @@
+export const spotifyAccessToken = process.env['SPOTIFY_ACCESS_TOKEN'];
