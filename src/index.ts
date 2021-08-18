@@ -2,10 +2,9 @@ import { spotifyClient } from "./services";
 import { RecentlyPlayedItem } from "./ts";
 
 async function run() {
-    const recentlyPlayedItems: RecentlyPlayedItem[] = await spotifyClient.getRecentlyPlayedItems();
-
-    console.log({x: recentlyPlayedItems[0]})
-
+    //const recentlyPlayedItems: RecentlyPlayedItem[] = await spotifyClient.getRecentlyPlayed();
+    const data = await spotifyClient.getCurrentlyPlaying();
+    console.log({data})
 }
 
 run();
