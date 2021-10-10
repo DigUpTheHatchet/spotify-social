@@ -1,20 +1,20 @@
 {
-    "compilerOptions": {
-      "allowJs": true,
-      "declaration": true,
-      "module": "commonjs",
-      "outDir": "dist",
-      "rootDirs": ["src", "test"],
-      "target": "es6",
-      "experimentalDecorators": true,
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
-      "sourceMap": true /* will generate TS file which will be helpful for debugging purposes */,
-      "strictNullChecks": true /* enable strict null checks and prevent compilation for possible null variables */,
-      "noUnusedParameters": false /* report errors on unused parameters and prevent compilation */,
-      "resolveJsonModule": true,
-      "lib": ["es6", "dom"],
-      "moduleResolution": "node"
-    },
-    "exclude": ["node_modules", "dist"]
-  }
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "module": "commonjs",
+    "outDir": "dist",
+    "rootDirs": ["src", "test"],
+    "target": "es6",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true /* will generate TS file which will be helpful for debugging purposes */,
+    "strictNullChecks": true /* enable strict null checks and prevent compilation for possible null variables */,
+    "noUnusedParameters": false /* report errors on unused parameters and prevent compilation */,
+    "resolveJsonModule": true,
+    "lib": ["es6", "dom"],
+    "moduleResolution": "node"
+  },
+  "exclude": ["node_modules", "dist"]
+}
