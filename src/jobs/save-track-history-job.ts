@@ -17,15 +17,20 @@ export class SaveTrackHistoryJob {
         this.trackHistoryModel = trackHistoryModel;
     }
 
-    async run() {
+    async run(userId: string) {
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyClient.getRecentlyPlayedTracks();
-        const lastSavedTrack: PlayedTrack = await this.getLastSavedTrack();
-
+        const lastSavedTrack: PlayedTrack = await this.getLastSavedTrack(userId);
     }
 
-    async getLastSavedTrack(): Promise<PlayedTrack> {
-        const lastSavedTrack: PlayedTrack = await this.trackHistoryModel.getLastSavedTrack();
+    async getLastSavedTrack(userId: string): Promise<PlayedTrack> {
+        const lastSavedTrack: PlayedTrack = await this.trackHistoryModel.getLastSavedTrack(userId);
 
         return lastSavedTrack;
+    }
+
+    async getTrackHistory(userId: string, startDate: Date, endDate: Date): Promise<PlayedTrack[]> {
+        const playedTracks: PlayedTrack[] = await this.trackHistoryModel.getPlayedTracks(userId, startDate, endDate);
+
+        return playedTracks;
     }
 }

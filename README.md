@@ -19,3 +19,19 @@ x Get dynamodb local running
 
 npm install -g dynamodb-admin 
 docker run -p 8000:8000 amazon/dynamodb-local
+
+Tables:
+
+TrackHistory
+    hashKey: userId
+    rangeKey: playedAt
+
+
+getLastPlayedTrack(userId: string)
+    query(key={userId}, ScanIndexForward=True, limit=1)
+    
+saveTracks(userId: string, tracks: PlayedTrack[])
+
+getTrackHistory(userId: string, startDate: Date, endDate: Date)
+
+    

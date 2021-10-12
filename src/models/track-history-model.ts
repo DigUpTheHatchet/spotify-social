@@ -7,13 +7,15 @@ export class TrackHistoryModel {
         this.trackHistoryStorage = TrackHistoryStorage;
     }
 
-    async getLastSavedTrack(): Promise<PlayedTrack> {
-        return this.trackHistoryStorage.getLastSavedTrack();
+    async getLastSavedTrack(userId: string): Promise<PlayedTrack> {
+        return this.trackHistoryStorage.getLastSavedTrack(userId);
     }
 
-    async savePlayedTracks(tracks: PlayedTrack[]): Promise<any> {
-
+    async savePlayedTracks(userId: string, tracks: PlayedTrack[]): Promise<any> {
+        return this.trackHistoryStorage.savePlayedTracks(userId, tracks);
     }
 
-    // async getTrackHistory()
+    async getPlayedTracks(userId: string, startDate: Date, endDate: Date): Promise<PlayedTrack[]> {
+        return this.trackHistoryStorage.getPlayedTracks(userId, startDate, endDate);
+    }
 }

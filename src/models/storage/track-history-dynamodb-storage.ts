@@ -1,5 +1,5 @@
 import DynamoDBClient from '../../services/dynamodb-wrapper';
-import { PlayedTrack, TrackHistoryStorage } from '../../ts';
+import { PlayedTrack, QueryParams, TrackHistoryStorage } from '../../ts';
 
 export class TrackHistoryDynamoDBStorage implements TrackHistoryStorage {
     private dynamoDBClient: DynamoDBClient;
@@ -10,8 +10,7 @@ export class TrackHistoryDynamoDBStorage implements TrackHistoryStorage {
         this.tableName = tableName;
     }
 
-    async getLastSavedTrack(): Promise<PlayedTrack> {
-
+    async getLastSavedTrack(userId: string): Promise<PlayedTrack> {
         const dummyTrack: PlayedTrack = {
             uri: 'dummy',
             id: 'dummy',
@@ -19,6 +18,29 @@ export class TrackHistoryDynamoDBStorage implements TrackHistoryStorage {
             playedAt: new Date(),
             artistNames: ['dummy']
         };
-        return Promise.resolve(dummyTrack);
+
+        const params: QueryParams = {
+            // key={userId}, ScanIndexForward=True, limit=1
+        };
+
+        const lastSavedTrack: PlayedTrack = await this.dynamoDBClient.query(this.tableName, params);
+
+        return lastSavedTrack;
+    }
+
+    async savePlayedTracks(userId: string, tracks: PlayedTrack[]): Promise<void> {
+
+    }
+
+    async getPlayedTracks(userId: string, startDate: Date, endDate: Date): Promise<PlayedTrack[]> {
+        const dummyTracks: PlayedTrack[] = [{
+            uri: 'dummy',
+            id: 'dummy',
+            name: 'dummy',
+            playedAt: new Date(),
+            artistNames: ['dummy']
+        }];
+
+        return Promise.resolve(dummyTracks);
     }
 }
