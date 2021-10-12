@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import rax from 'retry-axios';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-export class HttpClient {
+export default class HttpClient {
     protected axiosInstance: AxiosInstance;
 
     constructor() {

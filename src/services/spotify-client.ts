@@ -7,7 +7,7 @@ import {
     spotifyClientSecret
 } from '../config';
 import { PlayedTrack } from '../ts';
-import { HttpClient } from './http-client';
+import HttpClient from './http-client';
 
 const RECENTLY_PLAYED_URL: string = 'https://api.spotify.com/v1/me/player/recently-played';
 const REFRESH_ACCESS_TOKEN_URL: string = 'https://accounts.spotify.com/api/token';

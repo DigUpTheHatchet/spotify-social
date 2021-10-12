@@ -6,3 +6,16 @@ Goal:
 * It will need to deduplicate the played tracks because there will be overlap in the history (use the playedAt to dedupe?)
 * Spotify access tokens need to be refreshed every hour, so the call to spotify will need to refresh and then retry itself when this happens
     I'll need to store the access token in a db instead of an env variable because we will want to save this when this happens
+
+
+
+- Start using dotenv for managing environment variables
+x Get dynamodb local running 
+- Create basic crud operations in TrackHistoryDynamoDBStorage
+- Create table definitions to start with 
+- Parameterise all functions by userId
+
+
+
+npm install -g dynamodb-admin 
+docker run -p 8000:8000 amazon/dynamodb-local

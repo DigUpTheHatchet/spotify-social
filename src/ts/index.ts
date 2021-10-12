@@ -6,6 +6,10 @@ export type PlayedTrack = {
     artistNames: string[];
 };
 
+export interface DynamoDBClient {
+    getItem: (tableName: string, key: string) => any;
+}
+
 export interface TrackHistoryStorage {
-    getLastSavedTrack: () => PlayedTrack;
+    getLastSavedTrack: () => Promise<PlayedTrack>;
 }
