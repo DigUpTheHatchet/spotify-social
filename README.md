@@ -37,5 +37,6 @@ getTrackHistory(userId: string, startDate: Date, endDate: Date)
 
 
 SpotifyTokens
-    hashKey: userId
+    hashKey: userId  e.g. 'xdrk'
+    rangeKey: tokenType  e.g. 'refresh'
     
