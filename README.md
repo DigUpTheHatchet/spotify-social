@@ -34,4 +34,8 @@ saveTracks(userId: string, tracks: PlayedTrack[])
 
 getTrackHistory(userId: string, startDate: Date, endDate: Date)
 
+
+
+SpotifyTokens
+    hashKey: userId
     

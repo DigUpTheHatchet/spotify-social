@@ -22,3 +22,7 @@ export interface TrackHistoryStorage {
     savePlayedTracks: (userId: string, tracks: PlayedTrack[]) => Promise<void>;
     getPlayedTracks: (userId: string, startDate: Date, endDate: Date) => Promise<PlayedTrack[]>;
 }
+
+export interface TokenStorage {
+
+}

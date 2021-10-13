@@ -18,4 +18,4 @@ const dynamoDBConfig: DynamoDBClientConfig = {
 
 const ddb: DynamoDB = new DynamoDB(dynamoDBConfig);
 
-export const dynamoDBClient: DynamoDBWrapper = new DynamoDBWrapper(ddb);
+export const dynamoDBClient: DynamoDBClient = new DynamoDBWrapper(ddb);
