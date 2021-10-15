@@ -1,5 +1,4 @@
-import DynamoDBClient from '../../services/dynamodb-wrapper';
-import { PlayedTrack, QueryParams, TrackHistoryStorage } from '../../ts';
+import { PlayedTrack, QueryParams, TrackHistoryStorage, DynamoDBClient } from '../../ts';
 
 export class TrackHistoryDynamoDBStorage implements TrackHistoryStorage {
     private dynamoDBClient: DynamoDBClient;

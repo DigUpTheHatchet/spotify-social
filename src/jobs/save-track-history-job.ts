@@ -11,14 +11,14 @@ export class SaveTrackHistoryJob {
     private spotifyClient: SpotifyClient;
     private trackHistoryModel: TrackHistoryModel;
 
-    constructor(spotifyClient: SpotifyClient, trackHistoryModel: TrackHistoryModel) {
-        this.jobId = uniqueId();
+    constructor(spotifyClient: SpotifyClient, trackHistoryModel: TrackHistoryModel, jobId: string = uniqueId()) {
         this.spotifyClient = spotifyClient;
         this.trackHistoryModel = trackHistoryModel;
+        this.jobId = jobId;
     }
 
     async run(userId: string) {
-        const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyClient.getRecentlyPlayedTracks();
+        const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyClient.getRecentlyPlayedTracks(userId);
         const lastSavedTrack: PlayedTrack = await this.getLastSavedTrack(userId);
     }
 

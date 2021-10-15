@@ -3,9 +3,10 @@ import SpotifyClient from './spotify-client';
 import HttpClient from './http-client';
 import DynamoDBWrapper from './dynamodb-wrapper';
 import { DynamoDBClient } from '../ts';
+import { spotifyTokenStorage } from '../models';
 
 const httpClient = new HttpClient();
-export const spotifyClient: SpotifyClient = new SpotifyClient(httpClient);
+export const spotifyClient: SpotifyClient = new SpotifyClient(httpClient, spotifyTokenStorage);
 
 const dynamoDBConfig: DynamoDBClientConfig = {
     region: 'ap-southeast-2',

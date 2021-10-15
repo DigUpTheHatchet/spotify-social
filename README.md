@@ -26,6 +26,13 @@ TrackHistory
     hashKey: userId
     rangeKey: playedAt
 
+    userId
+    playedAt
+    spotifyUri
+    spotifyId
+    trackName
+    artistNames
+
 
 getLastPlayedTrack(userId: string)
     query(key={userId}, ScanIndexForward=True, limit=1)
@@ -38,5 +45,14 @@ getTrackHistory(userId: string, startDate: Date, endDate: Date)
 
 SpotifyTokens
     hashKey: userId  e.g. 'xdrk'
-    rangeKey: tokenType  e.g. 'refresh'
+    rangeKey: tokenType  e.g. 'refresh:track-history' 
+    
+    userId
+    tokenType
+    scopes
+    createdAt
+
+    getRefreshToken()
+    saveToken()
+
     

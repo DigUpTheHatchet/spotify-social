@@ -6,7 +6,7 @@ import {
     spotifyClientId,
     spotifyClientSecret
 } from '../config';
-import { PlayedTrack } from '../ts';
+import { PlayedTrack, SpotifyTokenStorage } from '../ts';
 import HttpClient from './http-client';
 
 const RECENTLY_PLAYED_URL: string = 'https://api.spotify.com/v1/me/player/recently-played';
@@ -15,19 +15,21 @@ const CURRENTLY_PLAYING_URL: string = 'https://api.spotify.com/v1/me/player/curr
 
 export default class SpotifyClient {
     private httpClient: HttpClient;
+    private tokenStorage: SpotifyTokenStorage;
 
-    constructor(httpClient: HttpClient) {
+    constructor(httpClient: HttpClient, tokenStorage: SpotifyTokenStorage) {
         this.httpClient = httpClient;
+        this.tokenStorage = tokenStorage;
     }
 
-    async getRecentlyPlayedTracks(): Promise<PlayedTrack[]> {
+    async getRecentlyPlayedTracks(userId: string): Promise<PlayedTrack[]> {
         const options = { headers: { 'Authorization': `Bearer ${spotifyAccessToken}` }, params: { limit: 50 }};
 
         return this.httpClient.get(RECENTLY_PLAYED_URL, options)
             .then(data => parseRecentlyPlayedTracks(data));
     }
 
-    async getRefreshedAccessToken(): Promise<String> {
+    async getRefreshedAccessToken(userId: string): Promise<String> {
         const options = { headers: { 'Authorization': 'Basic ' + (new Buffer(spotifyClientId + ':' + spotifyClientSecret).toString('base64')), 'Content-Type': 'application/x-www-form-urlencoded' } };
         const body: string = querystring.stringify({ grant_type: 'refresh_token', refresh_token: spotifyRefreshToken });
 
@@ -35,7 +37,7 @@ export default class SpotifyClient {
             .then(response => response.data);
     }
 
-    async getCurrentlyPlaying() {
+    async getCurrentlyPlaying(userId: string) {
         const options = { headers: { 'Authorization': `Bearer ${spotifyAccessToken}` } };
 
         return this.httpClient.get(CURRENTLY_PLAYING_URL, options);

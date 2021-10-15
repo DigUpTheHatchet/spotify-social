@@ -6,6 +6,13 @@ export type PlayedTrack = {
     artistNames: string[];
 };
 
+export interface SpotifyToken {
+    type: string;
+    userId: string;
+    scopes: string[];
+    createdAt: Date;
+}
+
 export type Key = any;
 export type Item = any;
 export type QueryParams = any;
@@ -23,6 +30,7 @@ export interface TrackHistoryStorage {
     getPlayedTracks: (userId: string, startDate: Date, endDate: Date) => Promise<PlayedTrack[]>;
 }
 
-export interface TokenStorage {
-
+export interface SpotifyTokenStorage {
+    getRefreshToken: (userId: string) => Promise<SpotifyToken>;
+    saveToken: (userId: string, token: SpotifyToken) => Promise<any>;
 }
