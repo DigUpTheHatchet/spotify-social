@@ -1,4 +1,4 @@
-import { AttributeValue, GetItemInput, PutItemInput, QueryInput } from "@aws-sdk/client-dynamodb";
+import { AttributeValue, BatchWriteItemInput, GetItemInput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
 
 export type PlayedTrack = {
     uri: string;
@@ -30,14 +30,14 @@ export type DynamoItem = {
 export type QueryParams = any;
 
 export interface DynamoDBClient {
-    //getItem: (tableName: string, key: Key) => any;
-    //putItem: (tableName: string, item: DynamoItem) => any;
-    //query: (tableName: string, params: QueryParams) => any;
-    //batchWriteItem: (tableName: string, items: Item[]) => any;
+    // getItem: (tableName: string, key: Key) => any;
+    // putItem: (tableName: string, item: DynamoItem) => any;
+    // query: (tableName: string, params: QueryParams) => any;
 
     getItem: (params: GetItemInput) => any;
     putItem: (params: PutItemInput) => any;
     query: (params: QueryInput) => any;
+    batchWriteItem: (params: BatchWriteItemInput) => any;
 }
 
 export interface TrackHistoryStorage {

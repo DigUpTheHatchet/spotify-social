@@ -1,4 +1,4 @@
-import { GetItemInput } from '@aws-sdk/client-dynamodb';
+import { GetItemInput, PutItemInput } from '@aws-sdk/client-dynamodb';
 import { DynamoDBClient, SpotifyToken, SpotifyTokenStorage } from '../../ts';
 
 export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
@@ -14,7 +14,7 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
         const params: GetItemInput = {
             TableName: this.tableName,
             Key: {
-                'userId': { 'S' : userId }, // Partition Key 
+                'userId': { 'S' : userId }, // Partition Key
                 'tokenType': { 'S' : 'refresh:track-history' } // Range Key
             }
         };
@@ -23,24 +23,19 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
     }
 
     async saveToken(userId: string, token: SpotifyToken): Promise<any> {
+        const { type, value, scopes, createdAt } = token;
+        const createdAtTs: string = (createdAt.valueOf() / 1000).toString();
 
-
+        const params: PutItemInput = {
+            TableName: this.tableName,
+            Item: {
+                userId: { 'S': userId },
+                type: { 'S': type },
+                value: { 'S': value },
+                scopes: { 'SS': scopes },
+                createdAt: { 'N': createdAtTs }
+            }
+        };
         return this.dynamoDBClient.putItem(params);
     }
-
-
-    // const getItemParams: GetItemInput = {
-    //     TableName: tableName,
-    //     Key: { 'testKey': { 'S' : key.value } }
-    // };
-
-    // const queryParams: QueryInput = {
-    //     TableName: tableName,
-    //     ExpressionAttributeValues: {
-    //         ":v1": {
-    //           S: "abc"
-    //          }
-    //        }, 
-    //     KeyConditionExpression: "userId = :v1", 
-    // };
 }
