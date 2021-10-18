@@ -1,3 +1,5 @@
+import { AttributeValue, GetItemInput, PutItemInput, QueryInput } from "@aws-sdk/client-dynamodb";
+
 export type PlayedTrack = {
     uri: string;
     id: string;
@@ -8,20 +10,34 @@ export type PlayedTrack = {
 
 export interface SpotifyToken {
     type: string;
+    value: string;
     userId: string;
     scopes: string[];
     createdAt: Date;
 }
 
-export type Key = any;
-export type Item = any;
+export declare type AttributeDataType = 'S' | 'SS' | 'N' | 'NS' | 'B' | 'BS' | 'BOOL' | 'NULL' | 'L' | 'M';
+
+export type Key = {
+    field: string;
+    value: any
+    type: AttributeDataType
+};
+
+export type DynamoItem = {
+    [key: string]: AttributeValue;
+} | undefined;
 export type QueryParams = any;
 
 export interface DynamoDBClient {
-    getItem: (tableName: string, key: Key) => any;
-    putItem: (tableName: string, item: Item) => any;
-    query: (tableName: string, params: QueryParams) => any;
-    batchPutItem: (tableName: string, items: Item[]) => any;
+    //getItem: (tableName: string, key: Key) => any;
+    //putItem: (tableName: string, item: DynamoItem) => any;
+    //query: (tableName: string, params: QueryParams) => any;
+    //batchWriteItem: (tableName: string, items: Item[]) => any;
+
+    getItem: (params: GetItemInput) => any;
+    putItem: (params: PutItemInput) => any;
+    query: (params: QueryInput) => any;
 }
 
 export interface TrackHistoryStorage {

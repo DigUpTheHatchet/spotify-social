@@ -1,9 +1,6 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import { DynamoDB, GetItemInput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
 import {
-    DynamoDBClient,
-    Key,
-    Item,
-    QueryParams
+    DynamoDBClient
 } from '../ts';
 
 export default class DynamoDBWrapper implements DynamoDBClient {
@@ -13,25 +10,17 @@ export default class DynamoDBWrapper implements DynamoDBClient {
         this.ddb = ddb;
     }
 
-    async getItem(tableName: string, key: Key): Promise<any> {
-        const getItemParams = {
-            TableName: tableName,
-            Key: { 'testKey': { 'S' : key } }
-        };
-
-        return this.ddb.getItem(getItemParams)
+    async getItem(params: GetItemInput): Promise<any> {
+        return this.ddb.getItem(params)
             .then(result => result.Item);
     }
 
-    async query(tableName: string, params: QueryParams): Promise<any> {
-
+    async query(params: QueryInput): Promise<any> {
+        return this.ddb.query(params)
+            .then(result => result.Items)
     }
 
-    async putItem(tableName: string, item: Item): Promise<any> {
-
-    }
-
-    async batchPutItem(tableName: string, items: Item[]): Promise<any> {
-
+    async putItem(params: PutItemInput): Promise<any> {
+        return this.ddb.putItem(params);
     }
 }

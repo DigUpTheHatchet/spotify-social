@@ -22,7 +22,6 @@ export default class HttpClient {
 
     async get(url: string, options?: AxiosRequestConfig) {
         const response = await this.axiosInstance.get(url, options);
-        console.log({data: response.data});
         return response['data'];
     }
 
