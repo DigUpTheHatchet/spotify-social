@@ -1,7 +1,7 @@
 import { BatchWriteItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
-import { PlayedTrack, TrackHistoryStorage, DynamoDBClient } from '../../ts';
+import { PlayedTrack, PlayedTracksStorage, DynamoDBClient } from '../../ts';
 
-export class TrackHistoryDynamoDBStorage implements TrackHistoryStorage {
+export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     private dynamoDBClient: DynamoDBClient;
     private tableName: string;
 
@@ -28,14 +28,14 @@ export class TrackHistoryDynamoDBStorage implements TrackHistoryStorage {
 
     async savePlayedTracks(userId: string, tracks: PlayedTrack[]): Promise<void> {
         const items = tracks.map(track => {
-            const { uri, id, name, playedAt, artistNames } = track;
-            const playedAtTs: string = (playedAt.valueOf() / 1000).toString();
+            const { spotifyUri, spotifyId, trackName, playedAt, artistNames } = track;
+            const playedAtTs: string = Math.floor(playedAt.valueOf() / 1000).toString();
             return {
                 PutRequest: {
                     Item: {
                         userId: { 'S': userId },
-                        uri: { 'S': uri },
-                        id: { 'S': uri },
+                        spotifyUri: { 'S': spotifyUri },
+                        spotifyId: { 'S': spotifyId },
                         playedAt: { 'N': playedAtTs },
                         artistNames: { 'SS': artistNames }
                     }

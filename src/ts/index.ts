@@ -1,9 +1,9 @@
 import { AttributeValue, BatchWriteItemInput, GetItemInput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
 
 export type PlayedTrack = {
-    uri: string;
-    id: string;
-    name: string;
+    spotifyUri: string;
+    spotifyId: string;
+    trackName: string;
     playedAt: Date;
     artistNames: string[];
 };
@@ -16,13 +16,13 @@ export interface SpotifyToken {
     createdAt: Date;
 }
 
-export declare type AttributeDataType = 'S' | 'SS' | 'N' | 'NS' | 'B' | 'BS' | 'BOOL' | 'NULL' | 'L' | 'M';
+// export declare type AttributeDataType = 'S' | 'SS' | 'N' | 'NS' | 'B' | 'BS' | 'BOOL' | 'NULL' | 'L' | 'M';
 
-export type Key = {
-    field: string;
-    value: any
-    type: AttributeDataType
-};
+// export type Key = {
+//     field: string;
+//     value: any
+//     type: AttributeDataType
+// };
 
 export type DynamoItem = {
     [key: string]: AttributeValue;
@@ -40,7 +40,7 @@ export interface DynamoDBClient {
     batchWriteItem: (params: BatchWriteItemInput) => any;
 }
 
-export interface TrackHistoryStorage {
+export interface PlayedTracksStorage {
     getLastSavedTrack: (userId: string) => Promise<PlayedTrack>;
     savePlayedTracks: (userId: string, tracks: PlayedTrack[]) => Promise<void>;
     getPlayedTracks: (userId: string, startDate: Date, endDate: Date) => Promise<PlayedTrack[]>;
@@ -48,5 +48,5 @@ export interface TrackHistoryStorage {
 
 export interface SpotifyTokenStorage {
     getRefreshToken: (userId: string) => Promise<SpotifyToken>;
-    saveToken: (userId: string, token: SpotifyToken) => Promise<any>;
+    saveToken: (userId: string, token: SpotifyToken) => Promise<void>;
 }

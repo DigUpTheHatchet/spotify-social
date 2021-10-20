@@ -60,6 +60,6 @@
         "ui": "bdd",
         "exit": true,
         "timeout": 60000,
-        "require": "./test/config"
+        "require": "./test/mocha-opts"
     }
 }

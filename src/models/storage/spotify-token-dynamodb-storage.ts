@@ -15,16 +15,16 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
             TableName: this.tableName,
             Key: {
                 'userId': { 'S' : userId }, // Partition Key
-                'tokenType': { 'S' : 'refresh:track-history' } // Range Key
+                'type': { 'S' : 'refresh:played-tracks' } // Range Key
             }
         };
 
         return this.dynamoDBClient.getItem(params);
     }
 
-    async saveToken(userId: string, token: SpotifyToken): Promise<any> {
+    async saveToken(userId: string, token: SpotifyToken): Promise<void> {
         const { type, value, scopes, createdAt } = token;
-        const createdAtTs: string = (createdAt.valueOf() / 1000).toString();
+        const createdAtTs: string = Math.floor(createdAt.valueOf() / 1000).toString();
 
         const params: PutItemInput = {
             TableName: this.tableName,
@@ -36,6 +36,7 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
                 createdAt: { 'N': createdAtTs }
             }
         };
+
         return this.dynamoDBClient.putItem(params);
     }
 }

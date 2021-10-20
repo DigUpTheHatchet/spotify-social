@@ -22,9 +22,9 @@ docker run -p 8000:8000 amazon/dynamodb-local
 
 Tables:
 
-TrackHistory
-    hashKey: userId
-    rangeKey: playedAt
+PlayedTracks
+    hashKey: userId: string
+    rangeKey: playedAt: number (secs/ epoch)
 
     userId
     playedAt
@@ -44,11 +44,11 @@ getTrackHistory(userId: string, startDate: Date, endDate: Date)
 
 
 SpotifyTokens
-    hashKey: userId  e.g. 'xdrk'
-    rangeKey: tokenType  e.g. 'refresh:track-history' 
+    hashKey: userId: string  e.g. 'xdrk'
+    rangeKey: type: string  e.g. 'refresh:track-history' 
     
     userId
-    tokenType
+    type
     scopes
     createdAt
 

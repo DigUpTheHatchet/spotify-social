@@ -1,5 +1,5 @@
-import { SaveTrackHistoryJob } from './save-track-history-job';
+import { SavePlayedTracksJob } from './save-played-tracks-job';
 import { spotifyClient  } from '../services';
-import { trackHistoryModel } from '../models';
+import { playedTracksModel } from '../models';
 
-export const saveSaveTrackHistoryJob: SaveTrackHistoryJob = new SaveTrackHistoryJob(spotifyClient, trackHistoryModel);
+export const savePlayedTracksJob: SavePlayedTracksJob = new SavePlayedTracksJob(spotifyClient, playedTracksModel);

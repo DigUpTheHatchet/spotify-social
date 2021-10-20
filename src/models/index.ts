@@ -1,10 +1,10 @@
-import { SpotifyTokenStorage, TrackHistoryStorage } from '../ts';
-import { TrackHistoryDynamoDBStorage } from './storage/track-history-dynamodb-storage';
-import { TrackHistoryModel } from './track-history-model';
+import { SpotifyTokenStorage, PlayedTracksStorage } from '../ts';
+import { PlayedTracksDynamoDBStorage } from './storage/played-tracks-dynamodb-storage';
+import { PlayedTracksModel } from './played-tracks-model';
 import { dynamoDBClient } from '../services';
 import { SpotifyTokenDynamoDBStorage } from './storage/spotify-token-dynamodb-storage';
 
-const trackHistoryDynamoDBStorage: TrackHistoryStorage = new TrackHistoryDynamoDBStorage('TestTable', dynamoDBClient);
-export const trackHistoryModel: TrackHistoryModel = new TrackHistoryModel(trackHistoryDynamoDBStorage);
+const trackHistoryDynamoDBStorage: PlayedTracksStorage = new PlayedTracksDynamoDBStorage('PlayedTracks', dynamoDBClient);
+export const playedTracksModel: PlayedTracksModel = new PlayedTracksModel(trackHistoryDynamoDBStorage);
 
-export const spotifyTokenStorage: SpotifyTokenStorage = new SpotifyTokenDynamoDBStorage('TestTable', dynamoDBClient);
+export const spotifyTokenStorage: SpotifyTokenStorage = new SpotifyTokenDynamoDBStorage('SpotifyTokens', dynamoDBClient);

@@ -60,7 +60,8 @@
     "linterOptions": {
       "exclude": [
           "./coverage/**/*.js",
-          "./test/config.js"
+          "./test/mocha-opts.js",
+          "app.js"
       ]
     }
   }
