@@ -1,5 +1,6 @@
-import { BatchWriteItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
+import { QueryInput } from '@aws-sdk/client-dynamodb';
 import { PlayedTrack, PlayedTracksStorage, DynamoDBClient } from '../../ts';
+import { convertDateToTs } from '../../utils/dynamodbUtils';
 
 export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     private dynamoDBClient: DynamoDBClient;
@@ -21,51 +22,29 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
             },
         };
 
-        const lastSavedTrack: PlayedTrack = await this.dynamoDBClient.query(params);
+        const items = await this.dynamoDBClient.query(params);
+        const lastSavedTrack: PlayedTrack = (items[0] as PlayedTrack);
 
         return lastSavedTrack;
     }
 
     async savePlayedTracks(userId: string, tracks: PlayedTrack[]): Promise<void> {
-        const items = tracks.map(track => {
-            const { spotifyUri, spotifyId, trackName, playedAt, artistNames } = track;
-            const playedAtTs: string = Math.floor(playedAt.valueOf() / 1000).toString();
-            return {
-                PutRequest: {
-                    Item: {
-                        userId: { 'S': userId },
-                        spotifyUri: { 'S': spotifyUri },
-                        spotifyId: { 'S': spotifyId },
-                        playedAt: { 'N': playedAtTs },
-                        artistNames: { 'SS': artistNames }
-                    }
-                }
-            };
-        });
+        const items = tracks.map(track => Object.assign({}, track, { userId, playedAt: convertDateToTs(track.playedAt) }));
 
-        const params: BatchWriteItemInput = {
-            RequestItems: {
-                [this.tableName]: items
-            }
-        };
-
-        return this.dynamoDBClient.batchWriteItem(params);
+        return this.dynamoDBClient.batchWriteItem(this.tableName, items);
     }
 
 
     async getPlayedTracks(userId: string, fromDate: Date, toDate: Date): Promise<PlayedTrack[]> {
-        const fromTs: string = (fromDate.valueOf() / 1000).toString();
-        const toTs: string = (toDate.valueOf() / 1000).toString();
-
         const params: QueryInput = {
             TableName: this.tableName,
             ScanIndexForward: true,
-            // Limit: 1,
+            // Limit: 10,
             KeyConditionExpression: 'userId = :v_pk AND playedAt BETWEEN :v_from AND :v_to',
             ExpressionAttributeValues: {
                 ':v_pk': { 'S': userId },
-                'v_from': { 'N': fromTs },
-                'v_to': { 'N': toTs },
+                'v_from': { 'N': convertDateToTs(fromDate).toString() },
+                'v_to': { 'N': convertDateToTs(toDate).toString() },
             },
         };
 

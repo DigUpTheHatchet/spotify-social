@@ -1,14 +1,20 @@
-import { playedTracksModel } from '../../../../src/models';
+import { savePlayedTracksJob } from '../../../../src/jobs';
 import { PlayedTrack } from '../../../ts';
 
-describe('integration/src/models/played-tracks-model.ts', () => {
+describe('integration/src/jobs/save-played-tracks-job.ts', () => {
+    describe('getTrackHistory', () => {
+        it.only('todo', async () => {
+            const lastPlayedTrack: PlayedTrack = await savePlayedTracksJob.getTrackHistory;
+        });
+    });
+
     describe('getLastSavedTrack', () => {
         it.only('todo', async () => {
             const lastPlayedTrack: PlayedTrack = await playedTracksModel.getLastSavedTrack('xdrk');
         });
     });
 
-    describe('savePlayedTracks', () => {
+    describe('run', () => {
         it('todo', async () => {
             const userId: string = 'xdrk';
 

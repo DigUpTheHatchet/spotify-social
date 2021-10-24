@@ -35,9 +35,9 @@ export interface DynamoDBClient {
     // query: (tableName: string, params: QueryParams) => any;
 
     getItem: (params: GetItemInput) => any;
-    putItem: (params: PutItemInput) => any;
+    putItem: (tableName: string, item: any) => any;
     query: (params: QueryInput) => any;
-    batchWriteItem: (params: BatchWriteItemInput) => any;
+    batchWriteItem: (tableName: string, items: any[]) => any;
 }
 
 export interface PlayedTracksStorage {
@@ -48,5 +48,5 @@ export interface PlayedTracksStorage {
 
 export interface SpotifyTokenStorage {
     getRefreshToken: (userId: string) => Promise<SpotifyToken>;
-    saveToken: (userId: string, token: SpotifyToken) => Promise<void>;
+    saveToken: (token: SpotifyToken) => Promise<void>;
 }

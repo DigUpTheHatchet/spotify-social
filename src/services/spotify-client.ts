@@ -1,8 +1,8 @@
 import * as querystring from 'querystring';
 
 import {
-    spotifyClientId,
-    spotifyClientSecret
+    SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET
 } from '../config';
 import { PlayedTrack, SpotifyToken, SpotifyTokenStorage } from '../ts';
 import HttpClient from './http-client';
@@ -30,7 +30,7 @@ export default class SpotifyClient {
 
     async getRefreshedAccessToken(userId: string): Promise<SpotifyToken> {
         const refreshToken: SpotifyToken = await this.tokenStorage.getRefreshToken(userId);
-        const options = { headers: { 'Authorization': 'Basic ' + (new Buffer(spotifyClientId + ':' + spotifyClientSecret).toString('base64')), 'Content-Type': 'application/x-www-form-urlencoded' } };
+        const options = { headers: { 'Authorization': 'Basic ' + (new Buffer(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')), 'Content-Type': 'application/x-www-form-urlencoded' } };
         const body: string = querystring.stringify({ grant_type: 'refresh_token', refresh_token: refreshToken.value });
 
         return this.httpClient.post(REFRESH_ACCESS_TOKEN_URL, body, options)
@@ -44,8 +44,6 @@ export default class SpotifyClient {
         return this.httpClient.get(CURRENTLY_PLAYING_URL, options);
     }
 }
-
-
 
 function parseRecentlyPlayedTracks(data): PlayedTrack[] {
     const rawItems = data.items;

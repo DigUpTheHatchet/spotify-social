@@ -1,5 +1,6 @@
 import { GetItemInput, PutItemInput } from '@aws-sdk/client-dynamodb';
 import { DynamoDBClient, SpotifyToken, SpotifyTokenStorage } from '../../ts';
+import { convertDateToTs } from '../../utils/dynamodbUtils';
 
 export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
     private dynamoDBClient: DynamoDBClient;
@@ -22,21 +23,9 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
         return this.dynamoDBClient.getItem(params);
     }
 
-    async saveToken(userId: string, token: SpotifyToken): Promise<void> {
-        const { type, value, scopes, createdAt } = token;
-        const createdAtTs: string = Math.floor(createdAt.valueOf() / 1000).toString();
+    async saveToken(token: SpotifyToken): Promise<void> {
+        const item = { ...token, createdAt: convertDateToTs(token.createdAt) };
 
-        const params: PutItemInput = {
-            TableName: this.tableName,
-            Item: {
-                userId: { 'S': userId },
-                type: { 'S': type },
-                value: { 'S': value },
-                scopes: { 'SS': scopes },
-                createdAt: { 'N': createdAtTs }
-            }
-        };
-
-        return this.dynamoDBClient.putItem(params);
+        return this.dynamoDBClient.putItem(this.tableName, item);
     }
 }

@@ -17,7 +17,7 @@ x Get dynamodb local running
 
 
 
-npm install -g dynamodb-admin 
+dynamodb-admin  //npm install -g dynamodb-admin 
 docker run -p 8000:8000 amazon/dynamodb-local
 
 Tables:

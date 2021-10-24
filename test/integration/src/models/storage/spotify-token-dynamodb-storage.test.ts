@@ -13,13 +13,13 @@ describe('integration/src/models/storage/spotify-token-dynamodb-storage.ts', () 
                 createdAt: new Date()
             };
 
-            await spotifyTokenStorage.saveToken(token.userId, token);
+            await spotifyTokenStorage.saveToken(token);
         });
     });
 
     describe('getRefreshToken', () => {
         it('todo', async () => {
-            const refreshToken = await spotifyTokenStorage.getRefreshToken('userXyz');
+            const refreshToken = await spotifyTokenStorage.getRefreshToken('userxXyz');
             console.log({refreshToken});
         });
     });

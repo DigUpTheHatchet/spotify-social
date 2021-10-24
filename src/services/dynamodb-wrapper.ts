@@ -1,7 +1,6 @@
 import { BatchWriteItemInput, DynamoDB, GetItemInput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
-import {
-    DynamoDBClient
-} from '../ts';
+import { unmarshall, marshall } from '../utils/dynamodbUtils';
+import { DynamoDBClient } from '../ts';
 
 export default class DynamoDBWrapper implements DynamoDBClient {
     private ddb: DynamoDB;
@@ -12,19 +11,27 @@ export default class DynamoDBWrapper implements DynamoDBClient {
 
     async getItem(params: GetItemInput): Promise<any> {
         return this.ddb.getItem(params)
-            .then(result => result.Item);
+            .then(result => result.Item ? unmarshall(result.Item) : undefined);
     }
 
     async query(params: QueryInput): Promise<any> {
         return this.ddb.query(params)
-            .then(result => result.Items);
+            .then(result => result.Items?.map(item => unmarshall(item)));
     }
 
-    async putItem(params: PutItemInput): Promise<any> {
+    async putItem(tableName: string, item: any): Promise<any> {
+        const params: PutItemInput = {
+            TableName: tableName,
+            Item: marshall(item)
+        };
+
         return this.ddb.putItem(params);
     }
 
-    async batchWriteItem(params: BatchWriteItemInput): Promise<any> {
+    async batchWriteItem(tableName: string, items: any[]): Promise<any> {
+        const marshalledItems = items.map(item => Object.assign({}, { PutRequest: { Item: marshall(item)} }));
+        const params: BatchWriteItemInput = { RequestItems: { [tableName]: marshalledItems }};
+
         return this.ddb.batchWriteItem(params);
     }
 }

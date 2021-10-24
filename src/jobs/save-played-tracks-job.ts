@@ -1,10 +1,7 @@
 import { uniqueId } from 'lodash';
 import SpotifyClient from '../services/spotify-client';
 import { PlayedTracksModel } from '../models/played-tracks-model';
-
-import {
-    PlayedTrack,
-} from '../ts';
+import { PlayedTrack } from '../ts';
 
 export class SavePlayedTracksJob {
     private jobId: string;
@@ -17,9 +14,18 @@ export class SavePlayedTracksJob {
         this.jobId = jobId;
     }
 
-    async run(userId: string) {
+    async run(userId: string): Promise<void> {
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyClient.getRecentlyPlayedTracks(userId);
         const lastSavedTrack: PlayedTrack = await this.getLastSavedTrack(userId);
+        const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedTrack);
+
+        await this.playedTracksModel.savePlayedTracks(userId, tracksToBeSaved);
+    }
+
+    filterOutTracksPreviouslySaved(recentlyPlayedTracks: PlayedTrack[], lastSavedTrack: PlayedTrack): PlayedTrack[] {
+        const tracksToSave: PlayedTrack[] = recentlyPlayedTracks.filter(track => track.playedAt > lastSavedTrack.playedAt);
+
+        return tracksToSave;
     }
 
     async getLastSavedTrack(userId: string): Promise<PlayedTrack> {
@@ -28,9 +34,7 @@ export class SavePlayedTracksJob {
         return lastSavedTrack;
     }
 
-    async getTrackHistory(userId: string, startDate: Date, endDate: Date): Promise<PlayedTrack[]> {
-        const playedTracks: PlayedTrack[] = await this.playedTracksModel.getPlayedTracks(userId, startDate, endDate);
+    async savePlayedTracks(userId: string, playedTracks: PlayedTrack[]): Promise<void> {
 
-        return playedTracks;
     }
 }
