@@ -11,9 +11,9 @@ Goal:
 
 - Start using dotenv for managing environment variables
 x Get dynamodb local running 
-- Create basic crud operations in TrackHistoryDynamoDBStorage
+x Create basic crud operations in TrackHistoryDynamoDBStorage
 - Create table definitions to start with 
-- Parameterise all functions by userId
+x Parameterise all functions by userId
 
 
 

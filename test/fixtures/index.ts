@@ -1,3 +1,26 @@
+import { PlayedTrack, SpotifyToken } from '../ts';
+import { uniqueId } from 'lodash';
+
+export function buildPlayedTrack(overrides?: any): PlayedTrack {
+    return Object.assign({
+        spotifyUri: 'spotify:track:091n9MH1VUepOdhnv7SLci',
+        spotifyId: '091n9MH1VUepOdhnv7SLci',
+        trackName: 'Who dunnit?',
+        playedAt: new Date(),
+        artistNames: ['Scooby Doo', 'Shaggy']
+    }, overrides);
+}
+
+export function buildSpotifyToken(overrides?: any): SpotifyToken {
+    return Object.assign({
+        type: 'refresh',
+        value: uniqueId(),
+        userId: 'rickJames',
+        scopes: ['user-do-something', 'user-do-something-else'],
+        createdAt: new Date()
+    }, overrides);
+}
+
 export const recentlyPlayedItems = [{
     track: {
         album: {

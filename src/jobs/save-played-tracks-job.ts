@@ -22,19 +22,19 @@ export class SavePlayedTracksJob {
         await this.playedTracksModel.savePlayedTracks(userId, tracksToBeSaved);
     }
 
-    filterOutTracksPreviouslySaved(recentlyPlayedTracks: PlayedTrack[], lastSavedTrack: PlayedTrack): PlayedTrack[] {
-        const tracksToSave: PlayedTrack[] = recentlyPlayedTracks.filter(track => track.playedAt > lastSavedTrack.playedAt);
+    filterOutTracksPreviouslySaved(recentlyPlayedTracks: PlayedTrack[], lastSavedTrack?: PlayedTrack): PlayedTrack[] {
+        if (lastSavedTrack) {
+            return recentlyPlayedTracks.filter(track => track.playedAt > lastSavedTrack.playedAt);
+        }
 
-        return tracksToSave;
+        return recentlyPlayedTracks;
     }
 
     async getLastSavedTrack(userId: string): Promise<PlayedTrack> {
-        const lastSavedTrack: PlayedTrack = await this.playedTracksModel.getLastSavedTrack(userId);
-
-        return lastSavedTrack;
+        return this.playedTracksModel.getLastSavedTrack(userId);
     }
 
     async savePlayedTracks(userId: string, playedTracks: PlayedTrack[]): Promise<void> {
-
+        return this.playedTracksModel.savePlayedTracks(userId, playedTracks);
     }
 }

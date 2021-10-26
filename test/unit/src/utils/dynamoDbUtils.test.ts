@@ -4,7 +4,7 @@ import { convertDateToTs, marshall, unmarshall } from '../../../../src/utils/dyn
 
 describe('unit/src/utils/dynamodbUtils.ts', () => {
     describe('marshall', () => {
-        it.only('should marshall objects into the expected format for persisting in DynamoDB', async () => {
+        it('should marshall objects into the expected format for persisting in DynamoDB', async () => {
             const input = {
                 type: 'refresh:played-tracks',
                 value: 'AQ4CVn6hRElju9DJD2Hy93cshfBFkzRplo9EY0edWYK53vbQCKtYR_AUk7oq4coZgNJDPvP3JXG1OwC98Hk5b488iVJ_vSE16poUUlh0Z-D4fTxuVKsOTbGQjS-br2xeSls',

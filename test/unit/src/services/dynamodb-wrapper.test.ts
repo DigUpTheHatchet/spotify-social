@@ -1,7 +1,7 @@
 import { playedTracksModel } from '../../../../src/models';
 import { PlayedTrack } from '../../../ts';
 
-describe('unit/src/servicers/dynamodb-wrapper.ts', () => {
+describe('unit/src/services/dynamodb-wrapper.ts', () => {
     describe('getItem', () => {
         it('todo', async () => {
 
