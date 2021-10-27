@@ -45,13 +45,12 @@ export default class SpotifyClient {
     }
 }
 
-function parseRecentlyPlayedTracks(data): PlayedTrack[] {
+function parseRecentlyPlayedTracks(data: any): PlayedTrack[] {
     const rawItems = data.items;
-
     const playedTracks: PlayedTrack[] = rawItems.map(item => {
         return {
-            id: item.track.id,
-            uri: item.track.uri,
+            spotifyId: item.track.id,
+            spotifyUri: item.track.uri,
             trackName: item.track.name,
             playedAt: new Date(item.played_at),
             artistNames: (item.track.artists || []).map(artist => artist.name)
