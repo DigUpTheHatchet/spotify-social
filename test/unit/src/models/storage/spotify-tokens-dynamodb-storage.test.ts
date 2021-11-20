@@ -1,4 +1,4 @@
-describe('unit/src/models/played-tracks-model.ts', () => {
+describe('unit/src/models/storage/spotify-tokens-dynamodb-storage.ts', () => {
     describe('todo', () => {
 
         it('todo', async () => {
