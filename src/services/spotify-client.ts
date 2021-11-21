@@ -21,7 +21,9 @@ export default class SpotifyClient {
     }
 
     async getRecentlyPlayedTracks(userId: string): Promise<PlayedTrack[]> {
+        console.log({userId})
         const accessToken: SpotifyToken = await this.getRefreshedAccessToken(userId);
+        console.log({accessToken})
         const options = { headers: { 'Authorization': `Bearer ${accessToken.value}` }, params: { limit: 50 }};
 
         return this.httpClient.get(RECENTLY_PLAYED_URL, options)
@@ -30,6 +32,7 @@ export default class SpotifyClient {
 
     async getRefreshedAccessToken(userId: string): Promise<SpotifyToken> {
         const refreshToken: SpotifyToken = await this.tokenStorage.getRefreshToken(userId);
+        console.log({refreshToken})
         const options = { headers: { 'Authorization': 'Basic ' + (new Buffer(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')), 'Content-Type': 'application/x-www-form-urlencoded' } };
         const body: string = querystring.stringify({ grant_type: 'refresh_token', refresh_token: refreshToken.value });
 

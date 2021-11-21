@@ -12,8 +12,12 @@ Goal:
 - Start using dotenv for managing environment variables
 x Get dynamodb local running 
 x Create basic crud operations in TrackHistoryDynamoDBStorage
-- Create table definitions to start with 
+- Create table definitions to start with, and scripts to setup/reset tables (e.g. for ITs)
 x Parameterise all functions by userId
+
+
+
+Circular dependency in models/index services/index between spotify client and the dynamodb client
 
 
 

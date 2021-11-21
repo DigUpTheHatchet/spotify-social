@@ -6,7 +6,7 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
     private dynamoDBClient: DynamoDBClient;
     private tableName: string;
 
-    constructor(tableName: string, dynamoDBClient: DynamoDBClient) {
+    constructor(dynamoDBClient: DynamoDBClient, tableName: string) {
         this.tableName = tableName;
         this.dynamoDBClient = dynamoDBClient;
     }
@@ -25,7 +25,8 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
 
     async saveToken(token: SpotifyToken): Promise<void> {
         const item = { ...token, createdAt: convertDateToTs(token.createdAt) };
-
+        console.log({item})
+        console.log({dynamoDBClient: this.dynamoDBClient})
         return this.dynamoDBClient.putItem(this.tableName, item);
     }
 }

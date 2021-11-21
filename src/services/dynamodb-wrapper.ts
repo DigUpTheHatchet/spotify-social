@@ -10,8 +10,14 @@ export default class DynamoDBWrapper implements DynamoDBClient {
     }
 
     async getItem(params: GetItemInput): Promise<any> {
-        return this.ddb.getItem(params)
-            .then(result => result.Item ? unmarshall(result.Item) : undefined);
+        // return this.ddb.getItem(params)
+        //     .then(result => result.Item ? unmarshall(result.Item) : undefined);
+        console.log('hello')
+        const result = await this.ddb.getItem(params);
+        console.log({result})
+        const parsed = result.Item ? unmarshall(result.Item) : undefined;
+        console.log({parsed})
+        return parsed
     }
 
     async query(params: QueryInput): Promise<any> {
@@ -20,11 +26,12 @@ export default class DynamoDBWrapper implements DynamoDBClient {
     }
 
     async putItem(tableName: string, item: any): Promise<any> {
+        console.log({tableName, item})
         const params: PutItemInput = {
             TableName: tableName,
             Item: marshall(item)
         };
-
+        console.log({params})
         return this.ddb.putItem(params);
     }
 

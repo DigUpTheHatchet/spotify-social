@@ -15,6 +15,7 @@ export class SavePlayedTracksJob {
     }
 
     async run(userId: string): Promise<void> {
+        console.log({userId})
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyClient.getRecentlyPlayedTracks(userId);
         const lastSavedTrack: PlayedTrack = await this.getLastSavedTrack(userId);
         const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedTrack);
