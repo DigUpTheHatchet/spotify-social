@@ -42,40 +42,69 @@ resource "aws_dynamodb_table" "played_tracks_ddb_table" {
   }
 }
 
-
-resource "aws_iam_role" "save_played_tracks_lambda_role" {
-  name = "iam_for_lambda"
+resource "aws_iam_role" "spt_lambda_role" {
+  name = "SavePlayedTracksLambdaRole"
 
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
+  "Statement": [{
+      "Effect": "Allow",
+      "Principal": {
+          "Service": "lambda.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+  }]
+}
+EOF
+}
+
+resource "aws_iam_policy" "spt_lambda_policy" {
+  name = "SavePlayedTracksLambdaPolicy"
+  description = "Policy for the SavePlayedTracks Lambda Function"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
   "Statement": [
     {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
       "Effect": "Allow",
-      "Sid": ""
+      "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+      ],
+      "Resource": "*"
     }
   ]
 }
 EOF
 }
 
-resource "aws_lambda_function" "save_played_tracks_lambda" {
+resource "aws_iam_role_policy_attachment" "spt_policy_attachment" {
+  role       = aws_iam_role.spt_lambda_role.name
+  policy_arn = aws_iam_policy.spt_lambda_policy.arn
+}
+
+resource "aws_lambda_function" "spt_lambda" {
   filename      = "../builds/spotify-api.zip"
   function_name = "save-played-tracks"
-  role          = aws_iam_role.save_played_tracks_lambda_role.arn
+  role          = aws_iam_role.spt_lambda_role.arn
   handler       = "src/index.savePlayedTracksJobHandler"
 
   source_code_hash = filebase64sha256("../builds/spotify-api.zip")
 
   runtime = "nodejs14.x"
   timeout = 10
+  memory_size = 128
+
   environment {
     variables = {
-      foo = "bar"
+      NODE_ENV = "prod"
+      REGION = "ap-southeast-2",
+      DYNAMODB_ENDPOINT = "TODO",
+      SPOTIFY_CLIENT_ID = data.aws_ssm_parameter.spotify_client_id_ssm.value,
+      SPOTIFY_CLIENT_SECRET = data.aws_ssm_parameter.spotify_client_secret_ssm.value
     }
   }
 }
