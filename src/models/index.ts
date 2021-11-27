@@ -1,4 +1,4 @@
-import { SpotifyTokenStorage, PlayedTracksStorage, DynamoDBClient } from '../ts';
+import { SpotifyTokenStorage, PlayedTracksStorage } from '../ts';
 import { PlayedTracksDynamoDBStorage } from './storage/played-tracks-dynamodb-storage';
 import { PlayedTracksModel } from './played-tracks-model';
 import { dynamoDBClient, httpClient } from '../services';

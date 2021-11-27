@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { convertDateToTs, marshall, unmarshall } from '../../../../src/utils/dynamoDbUtils';
+import { convertDateToTs, marshall, unmarshall } from '../../../utils/dynamoDBUtils';
 
 describe('unit/src/utils/dynamodbUtils.ts', () => {
     describe('marshall', () => {

@@ -7,6 +7,9 @@
 coverage
 .nyc_output
 
+# Terraform
+terraform/.terraform/providers
+
 # Eclipse
 .settings
 .classpath
@@ -28,6 +31,7 @@ nbactions-*.xml
 # Node and typescript
 dist/
 node_modules/
+builds/
 
 # local env files
 .env.local

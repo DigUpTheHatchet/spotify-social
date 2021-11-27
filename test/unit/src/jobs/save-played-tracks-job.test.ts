@@ -6,11 +6,11 @@ import { SavePlayedTracksJob } from '../../../../src/jobs/save-played-tracks-job
 import { PlayedTrack } from '../../../ts';
 import { buildPlayedTrack } from '../../../fixtures';
 import { PlayedTracksModel } from '../../../models/played-tracks-model';
-import SpotifyClient from '../../../services/spotify-client';
+import { SpotifyModel } from '../../../models/spotify-model';
 
-const mockSpotifyClient = stubInterface<SpotifyClient>();
+const mockSpotifyModel = stubInterface<SpotifyModel>();
 const mockPlayedTracksModel = stubInterface<PlayedTracksModel>();
-const savePlayedTracksJob: SavePlayedTracksJob = new SavePlayedTracksJob(mockSpotifyClient, mockPlayedTracksModel);
+const savePlayedTracksJob: SavePlayedTracksJob = new SavePlayedTracksJob(mockSpotifyModel, mockPlayedTracksModel);
 
 describe('unit/src/jobs/save-played-tracks-job.ts', () => {
     describe('run', () => {
@@ -22,14 +22,14 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
         ];
 
         beforeEach(() => {
-            mockSpotifyClient.getRecentlyPlayedTracks.resolves(recentlyPlayedTracks);
+            mockSpotifyModel.getRecentlyPlayedTracks.resolves(recentlyPlayedTracks);
             sinon.stub(savePlayedTracksJob, 'getLastSavedTrack').resolves(lastSavedTrack);
             sinon.stub(savePlayedTracksJob, 'filterOutTracksPreviouslySaved').returns(recentlyPlayedTracks);
             mockPlayedTracksModel.savePlayedTracks.resolves();
         });
 
         afterEach(() => {
-            mockSpotifyClient.getRecentlyPlayedTracks.reset();
+            mockSpotifyModel.getRecentlyPlayedTracks.reset();
             (savePlayedTracksJob.getLastSavedTrack as sinon.SinonStub).restore();
             (savePlayedTracksJob.filterOutTracksPreviouslySaved as sinon.SinonStub).restore();
             mockPlayedTracksModel.savePlayedTracks.reset();
@@ -38,7 +38,7 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
         it('should get & save the user\'s recently played tracks', async () => {
             await savePlayedTracksJob.run(userId);
 
-            expect(mockSpotifyClient.getRecentlyPlayedTracks).to.have.been.calledOnceWithExactly(userId);
+            expect(mockSpotifyModel.getRecentlyPlayedTracks).to.have.been.calledOnceWithExactly(userId);
             expect(savePlayedTracksJob.getLastSavedTrack).to.have.been.calledOnceWithExactly(userId);
             expect(savePlayedTracksJob.filterOutTracksPreviouslySaved).to.have.been.calledOnceWithExactly(recentlyPlayedTracks, lastSavedTrack);
             expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(userId, recentlyPlayedTracks);

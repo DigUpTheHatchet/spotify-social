@@ -15,14 +15,10 @@ export class SavePlayedTracksJob {
     }
 
     async run(userId: string): Promise<void> {
+        console.log({userId});
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyModel.getRecentlyPlayedTracks(userId);
-        console.log({numTracks: recentlyPlayedTracks.length });
-        console.log({track: recentlyPlayedTracks[0] });
-
         const lastSavedTrack: PlayedTrack = await this.getLastSavedTrack(userId);
-        console.log({lastSavedTrack});
         const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedTrack);
-        console.log({numTracksToBeSaved: recentlyPlayedTracks.length });
 
         await this.playedTracksModel.savePlayedTracks(userId, tracksToBeSaved);
     }
@@ -36,10 +32,14 @@ export class SavePlayedTracksJob {
     }
 
     async getLastSavedTrack(userId: string): Promise<PlayedTrack> {
-        return this.playedTracksModel.getLastSavedTrack(userId);
+        const lastSavedTrack: PlayedTrack = await this.playedTracksModel.getLastSavedTrack(userId);
+        console.log(`The last saved track was: ${lastSavedTrack.trackName} (${lastSavedTrack.playedAt})`);
+
+        return lastSavedTrack;
     }
 
     async savePlayedTracks(userId: string, playedTracks: PlayedTrack[]): Promise<void> {
+        console.log(`Saving ${playedTracks.length} played tracks..`);
         return this.playedTracksModel.savePlayedTracks(userId, playedTracks);
     }
 }

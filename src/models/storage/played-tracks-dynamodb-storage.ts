@@ -1,6 +1,6 @@
 import { QueryInput } from '@aws-sdk/client-dynamodb';
 import { PlayedTrack, PlayedTracksStorage, DynamoDBClient } from '../../ts';
-import { convertDateToTs } from '../../utils/dynamodbUtils';
+import { convertDateToTs } from '../../utils/dynamoDBUtils';
 
 export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     private dynamoDBClient: DynamoDBClient;
@@ -33,7 +33,6 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
 
         return this.dynamoDBClient.batchWriteItems(this.tableName, items);
     }
-
 
     async getPlayedTracks(userId: string, fromDate: Date, toDate: Date): Promise<PlayedTrack[]> {
         const params: QueryInput = {

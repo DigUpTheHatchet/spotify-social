@@ -10,11 +10,20 @@ Goal:
 
 
 - Start using dotenv for managing environment variables
-x Get dynamodb local running 
-x Create basic crud operations in TrackHistoryDynamoDBStorage
 - Create table definitions to start with, and scripts to setup/reset tables (e.g. for ITs)
-x Parameterise all functions by userId
 
+- TF Resource
+    * Dynamodb tables
+    * Lambda Function
+    * Lambda Fn role:
+        - DDb Get/Write access
+        - 
+    * Env Vars:
+        - NODE_ENV
+        - SPOTIFY_CLIENT_ID
+        - SPOTIFY_CLIENT_SECRET
+        - DYNAMODB_ENDPOINT
+        - AWS_REGION
 
 
 dynamodb-admin  //npm install -g dynamodb-admin 
@@ -45,7 +54,7 @@ getTrackHistory(userId: string, startDate: Date, endDate: Date)
 
 SpotifyTokens
     hashKey: userId: string  e.g. 'xdrk'
-    rangeKey: type: string  e.g. 'refresh:track-history' 
+    rangeKey: type: string  e.g. 'refresh' 
     
     userId
     type
