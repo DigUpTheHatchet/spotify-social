@@ -37,7 +37,7 @@ export interface DynamoDBClient {
     getItem: (params: GetItemInput) => any;
     putItem: (tableName: string, item: any) => any;
     query: (params: QueryInput) => any;
-    batchWriteItem: (tableName: string, items: any[]) => any;
+    batchWriteItems: (tableName: string, items: any[]) => any;
 }
 
 export interface PlayedTracksStorage {

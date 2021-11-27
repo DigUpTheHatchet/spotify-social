@@ -2,16 +2,16 @@ import { expect } from 'chai';
 import { stubInterface } from 'ts-sinon';
 import sinon from 'sinon';
 
-import SpotifyClient from '../../../../src/services/spotify-client';
+import { SpotifyModel } from '../../../../src/models/spotify-model';
 import HttpClient from '../../../../src/services/http-client';
 import { PlayedTrack, SpotifyToken, SpotifyTokenStorage } from '../../../../src/ts';
 import { buildPlayedTrack, buildSpotifyToken } from '../../../fixtures';
 
 const mockHttpClient = stubInterface<HttpClient>();
 const mockSpotifyTokenStorage = stubInterface<SpotifyTokenStorage>();
-const spotifyClient: SpotifyClient = new SpotifyClient(mockHttpClient, mockSpotifyTokenStorage);
+const spotifyModel: SpotifyModel = new SpotifyModel(mockHttpClient, mockSpotifyTokenStorage);
 
-describe('unit/src/services/spotify-client.ts', () => {
+describe('unit/src/models/spotify-model.ts', () => {
     const userId = 'wayne';
 
     describe('getRecentlyPlayedTracks', () => {
@@ -56,12 +56,12 @@ describe('unit/src/services/spotify-client.ts', () => {
         };
 
         beforeEach(() => {
-            sinon.stub(spotifyClient, 'getRefreshedAccessToken').resolves(accessToken);
+            sinon.stub(spotifyModel, 'getRefreshedAccessToken').resolves(accessToken);
             mockHttpClient.get.resolves(rawSpotifyReturn);
         });
 
         afterEach(() => {
-            (spotifyClient.getRefreshedAccessToken as sinon.SinonStub).restore();
+            (spotifyModel.getRefreshedAccessToken as sinon.SinonStub).restore();
             mockHttpClient.get.reset();
         });
 
@@ -70,10 +70,10 @@ describe('unit/src/services/spotify-client.ts', () => {
             const expectedGetOptions = { headers: { 'Authorization': `Bearer ${accessToken.value}` }, params: { limit: 50 }};
             const expectedResult: PlayedTrack[] = recentlyPlayedTracks;
 
-            const result: PlayedTrack[] = await spotifyClient.getRecentlyPlayedTracks(userId);
+            const result: PlayedTrack[] = await spotifyModel.getRecentlyPlayedTracks(userId);
 
             expect(result).to.deep.equal(expectedResult);
-            expect(spotifyClient.getRefreshedAccessToken).calledOnceWithExactly(userId);
+            expect(spotifyModel.getRefreshedAccessToken).calledOnceWithExactly(userId);
             expect(mockHttpClient.get).to.have.been.calledOnceWithExactly(expectedUrl, expectedGetOptions);
         });
     });
@@ -97,11 +97,11 @@ describe('unit/src/services/spotify-client.ts', () => {
     //     const accessToken: SpotifyToken = buildSpotifyToken({ type: 'access' });
 
     //     beforeEach(() => {
-    //         sinon.stub(spotifyClient, 'getRefreshedAccessToken').resolves(accessToken);
+    //         sinon.stub(spotifyModel, 'getRefreshedAccessToken').resolves(accessToken);
     //     });
 
     //     afterEach(() => {
-    //         (spotifyClient.getRefreshedAccessToken as sinon.SinonStub).restore();
+    //         (spotifyModel.getRefreshedAccessToken as sinon.SinonStub).restore();
     //     });
 
     //     it('should', async () => {

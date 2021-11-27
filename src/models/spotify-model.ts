@@ -5,13 +5,13 @@ import {
     SPOTIFY_CLIENT_SECRET
 } from '../config';
 import { PlayedTrack, SpotifyToken, SpotifyTokenStorage } from '../ts';
-import HttpClient from './http-client';
+import HttpClient from '../services/http-client';
 
 const RECENTLY_PLAYED_URL: string = 'https://api.spotify.com/v1/me/player/recently-played';
 const REFRESH_ACCESS_TOKEN_URL: string = 'https://accounts.spotify.com/api/token';
 const CURRENTLY_PLAYING_URL: string = 'https://api.spotify.com/v1/me/player/currently-playing';
 
-export default class SpotifyClient {
+export class SpotifyModel {
     private httpClient: HttpClient;
     private tokenStorage: SpotifyTokenStorage;
 
@@ -21,9 +21,7 @@ export default class SpotifyClient {
     }
 
     async getRecentlyPlayedTracks(userId: string): Promise<PlayedTrack[]> {
-        console.log({userId})
         const accessToken: SpotifyToken = await this.getRefreshedAccessToken(userId);
-        console.log({accessToken})
         const options = { headers: { 'Authorization': `Bearer ${accessToken.value}` }, params: { limit: 50 }};
 
         return this.httpClient.get(RECENTLY_PLAYED_URL, options)
@@ -32,12 +30,19 @@ export default class SpotifyClient {
 
     async getRefreshedAccessToken(userId: string): Promise<SpotifyToken> {
         const refreshToken: SpotifyToken = await this.tokenStorage.getRefreshToken(userId);
-        console.log({refreshToken})
-        const options = { headers: { 'Authorization': 'Basic ' + (new Buffer(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')), 'Content-Type': 'application/x-www-form-urlencoded' } };
+        const options = { headers: { 'Authorization': 'Basic ' + (Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')), 'Content-Type': 'application/x-www-form-urlencoded' } };
         const body: string = querystring.stringify({ grant_type: 'refresh_token', refresh_token: refreshToken.value });
 
         return this.httpClient.post(REFRESH_ACCESS_TOKEN_URL, body, options)
-            .then(response => response.data);
+            .then(data => {
+                return {
+                    value: data['access_token'],
+                    type: 'access',
+                    userId,
+                    createdAt: new Date(),
+                    scopes: data['scope'].split()
+                };
+            });
     }
 
     async getCurrentlyPlaying(userId: string) {

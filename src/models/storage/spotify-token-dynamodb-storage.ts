@@ -16,7 +16,7 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
             TableName: this.tableName,
             Key: {
                 'userId': { 'S' : userId }, // Partition Key
-                'type': { 'S' : 'refresh:played-tracks' } // Range Key
+                'type': { 'S' : 'refresh' } // Range Key
             }
         };
 
@@ -25,8 +25,7 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
 
     async saveToken(token: SpotifyToken): Promise<void> {
         const item = { ...token, createdAt: convertDateToTs(token.createdAt) };
-        console.log({item})
-        console.log({dynamoDBClient: this.dynamoDBClient})
+
         return this.dynamoDBClient.putItem(this.tableName, item);
     }
 }

@@ -7,7 +7,6 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     private tableName: string;
 
     constructor(dynamoDBClient: DynamoDBClient, tableName: string) {
-        console.log({eeee: dynamoDBClient })
         this.dynamoDBClient = dynamoDBClient;
         this.tableName = tableName;
     }
@@ -22,7 +21,7 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
                 ':v_pk': { 'S': userId }
             },
         };
-        console.log({ dd: this.dynamoDBClient })
+
         const items = await this.dynamoDBClient.query(params);
         const lastSavedTrack: PlayedTrack = (items[0] as PlayedTrack);
 
@@ -31,8 +30,8 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
 
     async savePlayedTracks(userId: string, tracks: PlayedTrack[]): Promise<void> {
         const items = tracks.map(track => Object.assign({}, track, { userId, playedAt: convertDateToTs(track.playedAt) }));
-        
-        return this.dynamoDBClient.batchWriteItem(this.tableName, items);
+
+        return this.dynamoDBClient.batchWriteItems(this.tableName, items);
     }
 
 

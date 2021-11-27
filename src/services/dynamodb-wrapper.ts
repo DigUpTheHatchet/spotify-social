@@ -1,6 +1,8 @@
 import { BatchWriteItemInput, DynamoDB, GetItemInput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
 import { unmarshall, marshall } from '../utils/dynamodbUtils';
 import { DynamoDBClient } from '../ts';
+import Bluebird from 'bluebird';
+import * as _ from 'lodash';
 
 export default class DynamoDBWrapper implements DynamoDBClient {
     private ddb: DynamoDB;
@@ -10,14 +12,8 @@ export default class DynamoDBWrapper implements DynamoDBClient {
     }
 
     async getItem(params: GetItemInput): Promise<any> {
-        // return this.ddb.getItem(params)
-        //     .then(result => result.Item ? unmarshall(result.Item) : undefined);
-        console.log('hello')
-        const result = await this.ddb.getItem(params);
-        console.log({result})
-        const parsed = result.Item ? unmarshall(result.Item) : undefined;
-        console.log({parsed})
-        return parsed
+        return this.ddb.getItem(params)
+            .then(result => result.Item ? unmarshall(result.Item) : undefined);
     }
 
     async query(params: QueryInput): Promise<any> {
@@ -26,18 +22,23 @@ export default class DynamoDBWrapper implements DynamoDBClient {
     }
 
     async putItem(tableName: string, item: any): Promise<any> {
-        console.log({tableName, item})
         const params: PutItemInput = {
             TableName: tableName,
             Item: marshall(item)
         };
-        console.log({params})
+
         return this.ddb.putItem(params);
     }
 
-    async batchWriteItem(tableName: string, items: any[]): Promise<any> {
+    async batchWriteItems(tableName: string, items: any[]): Promise<any> {
         const marshalledItems = items.map(item => Object.assign({}, { PutRequest: { Item: marshall(item)} }));
-        const params: BatchWriteItemInput = { RequestItems: { [tableName]: marshalledItems }};
+        const chunkedItems = _.chunk(marshalledItems, 25);
+
+        return Bluebird.map(chunkedItems, (chunk) => this.batchWriteItem(tableName, chunk));
+    }
+
+    private async batchWriteItem(tableName: string, chunk: any[]): Promise<any> {
+        const params: BatchWriteItemInput = { RequestItems: { [tableName]: chunk }};
 
         return this.ddb.batchWriteItem(params);
     }

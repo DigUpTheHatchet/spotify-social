@@ -5,7 +5,7 @@ describe('integration/src/models/played-tracks-model.ts', () => {
     describe('getLastSavedTrack', () => {
         it.only('todo', async () => {
             const lastPlayedTrack: PlayedTrack = await playedTracksModel.getLastSavedTrack('xdrk');
-            console.log({lastPlayedTrack})
+            console.log({lastPlayedTrack});
         });
     });
 

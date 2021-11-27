@@ -1,12 +1,12 @@
 // import { expect } from 'chai';
 // import sinon from 'sinon';
 
-// import { spotifyClient } from '../../../../src/services';
+// import { spotifyModel } from '../../../../src/models';
 
-// describe('integration/src/services/spotify-client.ts', () => {
+// describe('integration/src/models/spotify-model.ts', () => {
 //     describe('todo', () => {
 //         it('', () => {
-//             return spotifyClient.getRecentlyPlayedTracks()
+//             return spotifyModel.getRecentlyPlayedTracks()
 //                 .then(response => console.log(response));
 //         });
 //     });

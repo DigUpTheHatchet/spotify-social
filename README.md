@@ -17,10 +17,6 @@ x Parameterise all functions by userId
 
 
 
-Circular dependency in models/index services/index between spotify client and the dynamodb client
-
-
-
 dynamodb-admin  //npm install -g dynamodb-admin 
 docker run -p 8000:8000 amazon/dynamodb-local
 

@@ -6,8 +6,9 @@ describe('integration/src/models/storage/spotify-token-dynamodb-storage.ts', () 
         it('todo', async () => {
 
             const token: SpotifyToken = {
-                type: 'refresh:played-tracks',
-                value: 'AQ4CVn6hRElju9DJD2Hy93cshfBFkzRplo9EY0edWYK53vbQCKtYR_AUk7oq4coZgNJDPvP3JXG1OwC98Hk5b488iVJ_vSE16poUUlh0Z-D4fTxuVKsOTbGQjS-br2xeSls',
+                type: 'refresh',
+                // value: 'AQ4CVn6hRElju9DJD',
+                value: 'AQDA093ekl5O8hic9jcXLCM4906pIeqw80qedy0-Fmp7yC5A9M6lRoX_hAF6TG2-M_UKP_3z1liZwITOuaiR_NT4YDA3WVdQkBpRyzywXjvJxlSBqg5bKCAZXMry-XWfQbU',
                 userId: 'xdrk',
                 scopes: ['user-read-currently-playing', 'user-read-recently-played'],
                 createdAt: new Date()
@@ -19,7 +20,7 @@ describe('integration/src/models/storage/spotify-token-dynamodb-storage.ts', () 
 
     describe('getRefreshToken', () => {
         it('todo', async () => {
-            const refreshToken = await spotifyTokenStorage.getRefreshToken('userxXyz');
+            const refreshToken = await spotifyTokenStorage.getRefreshToken('xdrk');
             console.log({refreshToken});
         });
     });
