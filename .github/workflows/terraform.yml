@@ -20,6 +20,9 @@ jobs:
       uses: montudor/action-zip@v1
 
     - name: Zip output
+      run: npm install --prod
+
+    - name: Zip output
       run: zip -qq -r function.zip dist/src node_modules
 
     - name: ls
