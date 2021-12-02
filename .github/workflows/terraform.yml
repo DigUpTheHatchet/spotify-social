@@ -14,7 +14,7 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Create artifacts directory
-      run: mkdir -p ./artifacts/${{ github.repository }}
+      run: mkdir -p ./artifacts
 
     - name: Install zip
       uses: montudor/action-zip@v1
@@ -23,10 +23,7 @@ jobs:
       run: npm install --prod
 
     - name: Zip output
-      run: zip -qq -r function.zip dist/src node_modules
-
-    - name: ls
-      run: ls
+      run: zip -qq -r artifacts/spotify-api.zip dist/src node_modules
 
     - name: Verify Terraform version
       run: terraform --version
