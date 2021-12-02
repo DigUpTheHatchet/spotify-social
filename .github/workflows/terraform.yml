@@ -26,6 +26,9 @@ jobs:
     - name: Verify Terraform version
       run: terraform --version
 
+    - name: Verify Terraform version
+      run: cd terraform
+
     - name: Terraform init
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
