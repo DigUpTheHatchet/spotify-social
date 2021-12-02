@@ -16,11 +16,14 @@ jobs:
     - name: Create artifacts directory
       run: mkdir -p ./artifacts/${{ github.repository }}
 
-    # - name: Create Zip File
-    #   uses: montudor/action-zip@v0.1.0
-    #   with:
-    #   args: zip -r ./artifacts/${{ github.repository }}/${{ github.sha }}.zip ./src
+    - name: Install zip
+      uses: montudor/action-zip@v1
 
+    - name: Zip output
+      run: zip -qq -r function.zip dist/src node_modules
+
+    - name: ls
+      run: ls
 
     - name: Verify Terraform version
       run: terraform --version
