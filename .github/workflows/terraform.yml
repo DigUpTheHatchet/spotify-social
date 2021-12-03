@@ -10,16 +10,19 @@ jobs:
     name: Deploy to AWS
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Repo
+    - name: Checkout tepo
       uses: actions/checkout@v1
-
-    - name: Create artifacts directory
-      run: mkdir -p ./artifacts
 
     - name: Install zip
       uses: montudor/action-zip@v1
 
-    - name: Zip output
+    - name: Create artifacts directory
+      run: mkdir -p ./artifacts
+
+    - name: Compile typescript
+      run: npm run compile
+
+    - name: Install node dependencies
       run: npm install --prod
 
     - name: Zip output
