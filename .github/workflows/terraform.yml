@@ -1,4 +1,4 @@
-name: Deploy Infrastructure
+name: Build & Deploy
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - master
 
 jobs:
-  tf_fmt:
-    name: Deploy Site
+  terraform_deploy:
+    name: Deploy to AWS
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repo
