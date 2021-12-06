@@ -20,7 +20,7 @@ jobs:
       run: mkdir -p ./artifacts
 
     - name: Install node dependencies
-      run: npm run install
+      run: npm install
 
     - name: Compile typescript
       run: npm run compile
