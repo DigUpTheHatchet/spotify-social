@@ -31,8 +31,12 @@ jobs:
     - name: Clean and install prod node dependencies
       run: rm -rf node_modules && npm install --prod
 
-    - name: Zip output
-      run: zip -qq -r artifacts/spotify-api.zip dist/src node_modules
+    - name: Prepare files to be Zipped
+      run: rm -rf zipme && mkdir zipme && cp -r dist/src zipme && cp -r node_modules zipme
+
+    - name: Zip files
+      run: zip -qq -r artifacts/spotify-api.zip ./*
+      working-directory: ./zipme
 
     - name: Verify Terraform version
       run: terraform --version
