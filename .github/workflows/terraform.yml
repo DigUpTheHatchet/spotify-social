@@ -23,7 +23,7 @@ jobs:
       run: npm install
 
     - name: Compile typescript
-      run: tsc
+      run: npm run compile
 
     # - name: Run tests
     #   run: TODO
