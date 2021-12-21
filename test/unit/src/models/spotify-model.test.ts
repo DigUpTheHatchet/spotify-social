@@ -12,10 +12,9 @@ const mockSpotifyTokenStorage = stubInterface<SpotifyTokenStorage>();
 const spotifyModel: SpotifyModel = new SpotifyModel(mockHttpClient, mockSpotifyTokenStorage);
 
 describe('unit/src/models/spotify-model.ts', () => {
-    const userId = 'wayne';
-
     describe('getRecentlyPlayedTracks', () => {
-        const accessToken: SpotifyToken = buildSpotifyToken({ type: 'access' });
+        const userId = 'wayne';
+        const accessToken: SpotifyToken = buildSpotifyToken({ userId, type: 'access' });
 
         const recentlyPlayedTracks: PlayedTrack[] = [
             buildPlayedTrack({
@@ -23,14 +22,16 @@ describe('unit/src/models/spotify-model.ts', () => {
                 spotifyId: '091n9MH1VUepOdhnv7SLci',
                 trackName: 'YOLO',
                 artistNames: ['Drake'],
-                playedAt: new Date('2021-01-02T00:00:00.000Z')
+                playedAt: new Date('2021-01-02T00:00:00.000Z'),
+                userId
             }),
             buildPlayedTrack({
                 spotifyUri: 'spotify:track:fg04309dgfggd43434fff',
                 spotifyId: 'fg04309dgfggd43434fff',
                 trackName: 'Goodbye',
                 artistNames: ['The Beetles'],
-                playedAt: new Date('2021-01-02T01:03:55.000Z')
+                playedAt: new Date('2021-01-02T01:03:55.000Z'),
+                userId
             })
         ];
 

@@ -1,5 +1,5 @@
 describe('unit/src/models/played-tracks-model.ts', () => {
-    describe('getLastSavedTrack', () => {
+    describe('getLastSavedPlayedTrack', () => {
 
         it('todo', async () => {
 

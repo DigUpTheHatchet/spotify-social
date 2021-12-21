@@ -46,7 +46,7 @@ export interface DynamoDBClient {
 }
 
 export interface PlayedTracksStorage {
-    getLastSavedTrack: (userId: string) => Promise<PlayedTrack>;
+    getLastSavedPlayedTrack: (userId: string) => Promise<PlayedTrack>;
     savePlayedTracks: (tracks: PlayedTrack[]) => Promise<void>;
     getPlayedTracks: (userId: string, startDate: Date, endDate: Date) => Promise<PlayedTrack[]>;
 }

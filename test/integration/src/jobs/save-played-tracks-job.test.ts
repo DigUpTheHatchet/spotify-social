@@ -9,9 +9,9 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
         });
     });
 
-    describe('getLastSavedTrack', () => {
+    describe('getLastPlayedTrack', () => {
         it('todo', async () => {
-            const lastPlayedTrack: PlayedTrack = await savePlayedTracksJob.getLastSavedTrack('xdrk');
+            const lastSavedPlayedTrack: PlayedTrack = await savePlayedTracksJob.getLastSavedPlayedTrack('xdrk');
         });
     });
 

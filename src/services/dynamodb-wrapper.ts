@@ -3,7 +3,6 @@ import { unmarshall, marshall, isResourceNotFoundException } from '../utils/dyna
 import { DynamoDBClient } from '../ts';
 import Bluebird from 'bluebird';
 import * as _ from 'lodash';
-import { table } from 'console';
 
 export default class DynamoDBWrapper implements DynamoDBClient {
     private ddb: DynamoDB;
@@ -18,18 +17,8 @@ export default class DynamoDBWrapper implements DynamoDBClient {
     }
 
     async query(params: QueryInput): Promise<any> {
-        // return this.ddb.query(params)
-        //     .then(result => result.Items?.map(item => unmarshall(item)));
-
         return this.ddb.query(params)
-            .then(result => {
-                return result.Items?.map((item) => {
-                    console.log({item});
-                    const unmarshalled = unmarshall(item);
-                    console.log({unmarshalled});
-                    return unmarshalled;
-                });
-            });
+            .then(result => result.Items?.map(item => unmarshall(item)));
     }
 
     async putItem(tableName: string, item: any): Promise<any> {
