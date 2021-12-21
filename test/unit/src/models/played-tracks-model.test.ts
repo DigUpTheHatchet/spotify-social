@@ -1,5 +1,19 @@
 describe('unit/src/models/played-tracks-model.ts', () => {
-    describe('todo', () => {
+    describe('getLastSavedTrack', () => {
+
+        it('todo', async () => {
+
+        });
+    });
+
+    describe('savePlayedTracks', () => {
+
+        it('todo', async () => {
+
+        });
+    });
+
+    describe('getPlayedTracks', () => {
 
         it('todo', async () => {
 

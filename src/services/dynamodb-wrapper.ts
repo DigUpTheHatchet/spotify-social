@@ -1,5 +1,5 @@
 import { BatchWriteItemInput, DynamoDB, GetItemInput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
-import { unmarshall, marshall } from '../utils/dynamoDBUtils';
+import { unmarshall, marshall } from '../utils/dynamoDBUtils2';
 import { DynamoDBClient } from '../ts';
 import Bluebird from 'bluebird';
 import * as _ from 'lodash';

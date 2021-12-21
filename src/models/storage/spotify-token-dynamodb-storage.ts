@@ -1,6 +1,6 @@
 import { GetItemInput } from '@aws-sdk/client-dynamodb';
 import { DynamoDBClient, SpotifyToken, SpotifyTokenStorage } from '../../ts';
-import { convertDateToTs } from '../../utils/dynamoDBUtils';
+import { convertDateToTs } from '../../utils/dynamoDBUtils2';
 
 export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
     private dynamoDBClient: DynamoDBClient;

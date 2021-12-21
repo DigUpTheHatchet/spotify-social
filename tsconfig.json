@@ -16,5 +16,5 @@
     "lib": ["es6", "dom"],
     "moduleResolution": "node"
   },
-  "exclude": ["node_modules", "dist", "builds"]
+  "exclude": ["node_modules", "dist"]
 }

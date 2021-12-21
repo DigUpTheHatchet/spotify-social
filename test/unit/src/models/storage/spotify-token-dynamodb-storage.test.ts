@@ -1,7 +1,14 @@
 describe('unit/src/models/storage/spotify-token-dynamodb-storage.ts', () => {
-    describe('todo', () => {
+    describe('getRefreshToken', () => {
 
-        it('todo', async () => {
+        it('', async () => {
+
+        });
+    });
+
+    describe('saveToken', () => {
+
+        it('', async () => {
 
         });
     });

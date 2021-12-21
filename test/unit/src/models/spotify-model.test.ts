@@ -17,7 +17,6 @@ describe('unit/src/models/spotify-model.ts', () => {
     describe('getRecentlyPlayedTracks', () => {
         const accessToken: SpotifyToken = buildSpotifyToken({ type: 'access' });
 
-
         const recentlyPlayedTracks: PlayedTrack[] = [
             buildPlayedTrack({
                 spotifyUri: 'spotify:track:091n9MH1VUepOdhnv7SLci',
@@ -93,51 +92,13 @@ describe('unit/src/models/spotify-model.ts', () => {
         });
     });
 
-    // describe('getCurrentlyPlaying', () => {
-    //     const accessToken: SpotifyToken = buildSpotifyToken({ type: 'access' });
+    describe('getCurrentlyPlaying', () => {
+        it('should', async () => {
 
-    //     beforeEach(() => {
-    //         sinon.stub(spotifyModel, 'getRefreshedAccessToken').resolves(accessToken);
-    //     });
+        });
+    });
 
-    //     afterEach(() => {
-    //         (spotifyModel.getRefreshedAccessToken as sinon.SinonStub).restore();
-    //     });
+    describe('parseRecentlyPlayedTracks', () => {
 
-    //     it('should', async () => {
-
-    //     });
-    // });
-
-    describe('run', () => {
-        // const userId = 'ryangosling';
-        // const lastSavedTrack: PlayedTrack = buildPlayedTrack({ playedAt: new Date('2021-01-01T01:00:00.000Z') })
-        // const recentlyPlayedTracks: PlayedTrack[] = [
-        //     buildPlayedTrack({ playedAt: new Date('2021-01-02T00:00:00.000Z') }),
-        //     buildPlayedTrack({ playedAt: new Date('2021-01-02T01:00:00.000Z') })
-        // ];
-
-        // beforeEach(() => {
-        //     mockSpotifyClient.getRecentlyPlayedTracks.resolves(recentlyPlayedTracks);
-        //     sinon.stub(savePlayedTracksJob, 'getLastSavedTrack').resolves(lastSavedTrack);
-        //     sinon.stub(savePlayedTracksJob, 'filterOutTracksPreviouslySaved').returns(recentlyPlayedTracks);
-        //     mockPlayedTracksModel.savePlayedTracks.resolves();
-        // });
-
-        // afterEach(() => {
-        //     mockSpotifyClient.getRecentlyPlayedTracks.reset();
-        //     (savePlayedTracksJob.getLastSavedTrack as sinon.SinonStub).restore();
-        //     (savePlayedTracksJob.filterOutTracksPreviouslySaved as sinon.SinonStub).restore();
-        //     mockPlayedTracksModel.savePlayedTracks.reset();
-        // });
-
-        // it('should get & save the user\'s recently played tracks', async () => {
-        //     await savePlayedTracksJob.run(userId);
-
-        //     expect(mockSpotifyClient.getRecentlyPlayedTracks).to.have.been.calledOnceWithExactly(userId);
-        //     expect(savePlayedTracksJob.getLastSavedTrack).to.have.been.calledOnceWithExactly(userId);
-        //     expect(savePlayedTracksJob.filterOutTracksPreviouslySaved).to.have.been.calledOnceWithExactly(recentlyPlayedTracks, lastSavedTrack);
-        //     expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(userId, recentlyPlayedTracks);
-        // });
     });
 });

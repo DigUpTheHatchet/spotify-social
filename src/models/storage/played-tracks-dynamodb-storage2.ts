@@ -1,6 +1,6 @@
 import { QueryInput } from '@aws-sdk/client-dynamodb';
 import { PlayedTrack, PlayedTracksStorage, DynamoDBClient } from '../../ts';
-import { convertDateToTs } from '../../utils/dynamoDBUtils';
+import { convertDateToTs } from '../../utils/dynamoDBUtils2';
 
 export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     private dynamoDBClient: DynamoDBClient;

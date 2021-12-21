@@ -6,7 +6,7 @@ import { SavePlayedTracksJob } from '../../../../src/jobs/save-played-tracks-job
 import { PlayedTrack } from '../../../ts';
 import { buildPlayedTrack } from '../../../fixtures';
 import { PlayedTracksModel } from '../../../models/played-tracks-model';
-import { SpotifyModel } from '../../../models/spotify-model';
+import { SpotifyModel } from '../../../../src/models/spotify-model';
 
 const mockSpotifyModel = stubInterface<SpotifyModel>();
 const mockPlayedTracksModel = stubInterface<PlayedTracksModel>();
