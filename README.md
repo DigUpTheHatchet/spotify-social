@@ -10,7 +10,8 @@ Goal:
 
 
 - Start using dotenv for managing environment variables
-- Create table definitions to start with, and scripts to setup/reset tables (e.g. for ITs)
+- Parse ddb table specs from tf
+- Create serialize/deserialize functions for dates in dynamodb: see below this file
 
 - TF Resource
     * Dynamodb tables
@@ -26,7 +27,8 @@ Goal:
         - AWS_REGION
 
 
-dynamodb-admin  //npm install -g dynamodb-admin 
+AWS_SECRET_ACCESS_KEY=local AWS_ACCESS_KEY_ID=local dynamodb-admin  //npm install -g dynamodb-admin 
+//  requires the same region and creds as the ddb client
 docker run -p 8000:8000 amazon/dynamodb-local
 
 Tables:
@@ -65,3 +67,48 @@ SpotifyTokens
     saveToken()
 
     
+
+<!-- function serialize(values, { dateProperties = [] }) {
+    const overrides = {};
+  
+    dateProperties.forEach((prop) => {
+      if (values[prop] instanceof Date) {
+        overrides[prop] = values[prop].toISOString();
+      }
+    });
+  
+    return Object.assign({}, values, overrides);
+  }
+  
+  function deserialize(values, { dateProperties = [] }) {
+    if (values) {
+      const overrides = {};
+  
+      dateProperties.forEach((field) => {
+        if (values[field]) {
+          overrides[field] = new Date(values[field]);
+        }
+      });
+  
+      return Object.assign({}, values, overrides);
+    }
+  
+    return null;
+  }
+
+
+  function serialize(item) {
+    if (item) {
+      return dynamoUtil.serialize(item, { dateProperties });
+    }
+  
+    return null;
+  }
+  
+  function deserialize(item) {
+    if (item) {
+      return dynamoUtil.deserialize(_.omit(item, HASH_KEY, EXP_FIELD), { dateProperties });
+    }
+  
+    return null;
+  } -->

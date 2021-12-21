@@ -1,5 +1,5 @@
 import { SpotifyTokenStorage, PlayedTracksStorage } from '../ts';
-import { PlayedTracksDynamoDBStorage } from './storage/played-tracks-dynamodb-storage2';
+import { PlayedTracksDynamoDBStorage } from './storage/played-tracks-dynamodb-storage';
 import { PlayedTracksModel } from './played-tracks-model';
 import { dynamoDBClient, httpClient } from '../services';
 import { SpotifyTokenDynamoDBStorage } from './storage/spotify-token-dynamodb-storage';

@@ -17,8 +17,8 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
         const userId = 'ryangosling';
         const lastSavedTrack: PlayedTrack = buildPlayedTrack({ playedAt: new Date('2021-01-01T01:00:00.000Z') });
         const recentlyPlayedTracks: PlayedTrack[] = [
-            buildPlayedTrack({ playedAt: new Date('2021-01-02T00:00:00.000Z') }),
-            buildPlayedTrack({ playedAt: new Date('2021-01-02T01:00:00.000Z') })
+            buildPlayedTrack({ userId, playedAt: new Date('2021-01-02T00:00:00.000Z') }),
+            buildPlayedTrack({ userId, playedAt: new Date('2021-01-02T01:00:00.000Z') })
         ];
 
         beforeEach(() => {
@@ -41,16 +41,16 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
             expect(mockSpotifyModel.getRecentlyPlayedTracks).to.have.been.calledOnceWithExactly(userId);
             expect(savePlayedTracksJob.getLastSavedTrack).to.have.been.calledOnceWithExactly(userId);
             expect(savePlayedTracksJob.filterOutTracksPreviouslySaved).to.have.been.calledOnceWithExactly(recentlyPlayedTracks, lastSavedTrack);
-            expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(userId, recentlyPlayedTracks);
+            expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(recentlyPlayedTracks);
         });
     });
 
     describe('savePlayedTracks', () => {
         const userId = 'Slowthai';
         const playedTracks: PlayedTrack[] = [
-            buildPlayedTrack({ playedAt: new Date('2021-01-01T00:00:00.000Z') }),
-            buildPlayedTrack({ playedAt: new Date('2021-01-01T01:00:00.000Z') }),
-            buildPlayedTrack({ playedAt: new Date('2021-01-01T01:03:40.010Z') })
+            buildPlayedTrack({ userId, playedAt: new Date('2021-01-01T00:00:00.000Z') }),
+            buildPlayedTrack({ userId, playedAt: new Date('2021-01-01T01:00:00.000Z') }),
+            buildPlayedTrack({ userId, playedAt: new Date('2021-01-01T01:03:40.010Z') })
         ];
 
         beforeEach(() => {
@@ -62,9 +62,9 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
         });
 
         it('should call the playedTracks model to save the user\'s played tracks', async () => {
-            await savePlayedTracksJob.savePlayedTracks(userId, playedTracks);
+            await savePlayedTracksJob.savePlayedTracks(playedTracks);
 
-            expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(userId, playedTracks);
+            expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(playedTracks);
         });
     });
 

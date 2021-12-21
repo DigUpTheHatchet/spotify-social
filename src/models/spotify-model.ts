@@ -25,7 +25,7 @@ export class SpotifyModel {
         const options = { headers: { 'Authorization': `Bearer ${accessToken.value}` }, params: { limit: 50 }};
 
         return this.httpClient.get(RECENTLY_PLAYED_URL, options)
-            .then(data => this.parseRecentlyPlayedTracks(data));
+            .then(data => this.parseRecentlyPlayedTracks(userId, data));
     }
 
     async getRefreshedAccessToken(userId: string): Promise<SpotifyToken> {
@@ -52,7 +52,7 @@ export class SpotifyModel {
         return this.httpClient.get(CURRENTLY_PLAYING_URL, options);
     }
 
-    parseRecentlyPlayedTracks(data: any): PlayedTrack[] {
+    parseRecentlyPlayedTracks(userId: string, data: any): PlayedTrack[] {
         const rawItems = data.items;
         const playedTracks: PlayedTrack[] = rawItems.map(item => {
             return {
@@ -60,6 +60,7 @@ export class SpotifyModel {
                 spotifyUri: item.track.uri,
                 trackName: item.track.name,
                 playedAt: new Date(item.played_at),
+                userId,
                 artistNames: (item.track.artists || []).map(artist => artist.name)
             };
         });

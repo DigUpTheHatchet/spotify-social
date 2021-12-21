@@ -1,18 +1,19 @@
 import { savePlayedTracksJob } from '../../../../src/jobs';
 import { PlayedTrack } from '../../../ts';
+import { resetDynamoDBTables } from '../../../../src/utils/dynamoDBTableUtils';
 
 describe('integration/src/jobs/save-played-tracks-job.ts', () => {
-    // describe('getTrackHistory', () => {
-    //     it.only('todo', async () => {
-    //         const lastPlayedTrack: PlayedTrack = await savePlayedTracksJob.getTrackHistory;
-    //     });
-    // });
+    describe('getTrackHistory', () => {
+        it.only('todo', async () => {
+            await resetDynamoDBTables();
+        });
+    });
 
-    // describe('getLastSavedTrack', () => {
-    //     it.only('todo', async () => {
-    //         const lastPlayedTrack: PlayedTrack = await playedTracksModel.getLastSavedTrack('xdrk');
-    //     });
-    // });
+    describe('getLastSavedTrack', () => {
+        it('todo', async () => {
+            const lastPlayedTrack: PlayedTrack = await savePlayedTracksJob.getLastSavedTrack('xdrk');
+        });
+    });
 
     // describe('run', () => {
     //     it('todo', async () => {
