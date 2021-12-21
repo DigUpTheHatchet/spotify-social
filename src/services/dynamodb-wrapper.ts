@@ -1,8 +1,9 @@
-import { BatchWriteItemInput, DynamoDB, GetItemInput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
-import { unmarshall, marshall } from '../utils/dynamoDBUtils2';
+import { BatchWriteItemInput, DynamoDB, GetItemInput, PutItemInput, QueryInput, CreateTableInput, DeleteTableInput } from '@aws-sdk/client-dynamodb';
+import { unmarshall, marshall, isResourceNotFoundException } from '../utils/dynamoDBUtils';
 import { DynamoDBClient } from '../ts';
 import Bluebird from 'bluebird';
 import * as _ from 'lodash';
+import { table } from 'console';
 
 export default class DynamoDBWrapper implements DynamoDBClient {
     private ddb: DynamoDB;
@@ -17,8 +18,18 @@ export default class DynamoDBWrapper implements DynamoDBClient {
     }
 
     async query(params: QueryInput): Promise<any> {
+        // return this.ddb.query(params)
+        //     .then(result => result.Items?.map(item => unmarshall(item)));
+
         return this.ddb.query(params)
-            .then(result => result.Items?.map(item => unmarshall(item)));
+            .then(result => {
+                return result.Items?.map((item) => {
+                    console.log({item});
+                    const unmarshalled = unmarshall(item);
+                    console.log({unmarshalled});
+                    return unmarshalled;
+                });
+            });
     }
 
     async putItem(tableName: string, item: any): Promise<any> {
@@ -41,5 +52,16 @@ export default class DynamoDBWrapper implements DynamoDBClient {
         const params: BatchWriteItemInput = { RequestItems: { [tableName]: chunk }};
 
         return this.ddb.batchWriteItem(params);
+    }
+
+    async createTable(params: CreateTableInput): Promise<any> {
+        return this.ddb.createTable(params);
+    }
+
+    async deleteTable(tableName: string): Promise<any> {
+        const params: DeleteTableInput = { TableName: tableName };
+
+        return this.ddb.deleteTable(params)
+            .catch(err => { if (!isResourceNotFoundException(err)) { throw err; } });
     }
 }

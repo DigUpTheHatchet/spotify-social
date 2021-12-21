@@ -7,7 +7,8 @@ export function buildPlayedTrack(overrides?: any): PlayedTrack {
         spotifyId: '091n9MH1VUepOdhnv7SLci',
         trackName: 'Who dunnit?',
         playedAt: new Date(),
-        artistNames: ['Scooby Doo', 'Shaggy']
+        artistNames: ['Scooby Doo', 'Shaggy'],
+        userId: 'bob'
     }, overrides);
 }
 

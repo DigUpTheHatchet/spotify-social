@@ -1,10 +1,11 @@
-import { AttributeValue, BatchWriteItemInput, GetItemInput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
+import { AttributeValue, BatchWriteItemInput, CreateTableInput, DeleteTableInput, GetItemInput, PutItemCommandOutput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
 
 export type PlayedTrack = {
     spotifyUri: string;
     spotifyId: string;
     trackName: string;
     playedAt: Date;
+    userId: string;
     artistNames: string[];
 };
 
@@ -30,6 +31,7 @@ export type DynamoItem = {
 export type QueryParams = any;
 
 export interface DynamoDBClient {
+    // TODO: I'd rather expose less DDB internals (e.g. types) on this interface
     // getItem: (tableName: string, key: Key) => any;
     // putItem: (tableName: string, item: DynamoItem) => any;
     // query: (tableName: string, params: QueryParams) => any;
@@ -38,11 +40,14 @@ export interface DynamoDBClient {
     putItem: (tableName: string, item: any) => Promise<any>;
     query: (params: QueryInput) => Promise<any>;
     batchWriteItems: (tableName: string, items: any[]) => Promise<any>;
+
+    createTable: (params: CreateTableInput) => Promise<any>;
+    deleteTable: (tableName: string) => Promise<any>;
 }
 
 export interface PlayedTracksStorage {
     getLastSavedTrack: (userId: string) => Promise<PlayedTrack>;
-    savePlayedTracks: (userId: string, tracks: PlayedTrack[]) => Promise<void>;
+    savePlayedTracks: (tracks: PlayedTrack[]) => Promise<void>;
     getPlayedTracks: (userId: string, startDate: Date, endDate: Date) => Promise<PlayedTrack[]>;
 }
 

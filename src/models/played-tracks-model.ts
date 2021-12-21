@@ -11,8 +11,8 @@ export class PlayedTracksModel {
         return this.playedTracksStorage.getLastSavedTrack(userId);
     }
 
-    async savePlayedTracks(userId: string, tracks: PlayedTrack[]): Promise<any> {
-        return this.playedTracksStorage.savePlayedTracks(userId, tracks);
+    async savePlayedTracks(tracks: PlayedTrack[]): Promise<any> {
+        return this.playedTracksStorage.savePlayedTracks(tracks);
     }
 
     async getPlayedTracks(userId: string, startDate: Date, endDate: Date): Promise<PlayedTrack[]> {

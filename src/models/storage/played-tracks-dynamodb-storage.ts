@@ -1,6 +1,6 @@
 import { QueryInput } from '@aws-sdk/client-dynamodb';
 import { PlayedTrack, PlayedTracksStorage, DynamoDBClient } from '../../ts';
-import { convertDateToTs } from '../../utils/dynamoDBUtils2';
+import { convertDateToTs, convertTsToDate } from '../../utils/dynamoDBUtils';
 
 export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     private dynamoDBClient: DynamoDBClient;
@@ -23,13 +23,15 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
         };
 
         const items = await this.dynamoDBClient.query(params);
-        const lastSavedTrack: PlayedTrack = (items[0] as PlayedTrack);
+        const track = items[0];
+        const lastSavedTrack: PlayedTrack = Object.assign({}, items[0], { playedAt: convertTsToDate(track.playedAt) });
+
 
         return lastSavedTrack;
     }
 
-    async savePlayedTracks(userId: string, tracks: PlayedTrack[]): Promise<void> {
-        const items = tracks.map(track => Object.assign({}, track, { userId, playedAt: convertDateToTs(track.playedAt) }));
+    async savePlayedTracks(tracks: PlayedTrack[]): Promise<void> {
+        const items = tracks.map(track => Object.assign({}, track, { playedAt: convertDateToTs(track.playedAt) }));
 
         return this.dynamoDBClient.batchWriteItems(this.tableName, items);
     }
