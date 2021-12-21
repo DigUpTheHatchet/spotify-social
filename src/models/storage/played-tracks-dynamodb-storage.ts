@@ -11,7 +11,7 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
         this.tableName = tableName;
     }
 
-    async getLastSavedTrack(userId: string): Promise<PlayedTrack> {
+    async getLastSavedPlayedTrack(userId: string): Promise<PlayedTrack> {
         const params: QueryInput = {
             TableName: this.tableName,
             ScanIndexForward: true,
@@ -23,11 +23,9 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
         };
 
         const items = await this.dynamoDBClient.query(params);
-        const track = items[0];
-        const lastSavedTrack: PlayedTrack = Object.assign({}, items[0], { playedAt: convertTsToDate(track.playedAt) });
+        const lastSavedPlayedTrack: PlayedTrack = Object.assign({}, items[0], { playedAt: convertTsToDate(items[0].playedAt) });
 
-
-        return lastSavedTrack;
+        return lastSavedPlayedTrack;
     }
 
     async savePlayedTracks(tracks: PlayedTrack[]): Promise<void> {
@@ -44,12 +42,16 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
             KeyConditionExpression: 'userId = :v_pk AND playedAt BETWEEN :v_from AND :v_to',
             ExpressionAttributeValues: {
                 ':v_pk': { 'S': userId },
-                'v_from': { 'N': convertDateToTs(fromDate).toString() },
-                'v_to': { 'N': convertDateToTs(toDate).toString() },
+                ':v_from': { 'N': convertDateToTs(fromDate).toString() },
+                ':v_to': { 'N': convertDateToTs(toDate).toString() },
             },
         };
 
-        const playedTracks: PlayedTrack[] = await this.dynamoDBClient.query(params);
+        const items = await this.dynamoDBClient.query(params);
+
+        const playedTracks: PlayedTrack[] = items.map(item => {
+            return Object.assign({}, item, { playedAt: convertTsToDate(item.playedAt) });
+        });
 
         return playedTracks;
     }

@@ -15,7 +15,7 @@ const savePlayedTracksJob: SavePlayedTracksJob = new SavePlayedTracksJob(mockSpo
 describe('unit/src/jobs/save-played-tracks-job.ts', () => {
     describe('run', () => {
         const userId = 'ryangosling';
-        const lastSavedTrack: PlayedTrack = buildPlayedTrack({ playedAt: new Date('2021-01-01T01:00:00.000Z') });
+        const lastSavedPlayedTrack: PlayedTrack = buildPlayedTrack({ playedAt: new Date('2021-01-01T01:00:00.000Z') });
         const recentlyPlayedTracks: PlayedTrack[] = [
             buildPlayedTrack({ userId, playedAt: new Date('2021-01-02T00:00:00.000Z') }),
             buildPlayedTrack({ userId, playedAt: new Date('2021-01-02T01:00:00.000Z') })
@@ -23,14 +23,14 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
 
         beforeEach(() => {
             mockSpotifyModel.getRecentlyPlayedTracks.resolves(recentlyPlayedTracks);
-            sinon.stub(savePlayedTracksJob, 'getLastSavedTrack').resolves(lastSavedTrack);
+            sinon.stub(savePlayedTracksJob, 'getLastSavedPlayedTrack').resolves(lastSavedPlayedTrack);
             sinon.stub(savePlayedTracksJob, 'filterOutTracksPreviouslySaved').returns(recentlyPlayedTracks);
             mockPlayedTracksModel.savePlayedTracks.resolves();
         });
 
         afterEach(() => {
             mockSpotifyModel.getRecentlyPlayedTracks.reset();
-            (savePlayedTracksJob.getLastSavedTrack as sinon.SinonStub).restore();
+            (savePlayedTracksJob.getLastSavedPlayedTrack as sinon.SinonStub).restore();
             (savePlayedTracksJob.filterOutTracksPreviouslySaved as sinon.SinonStub).restore();
             mockPlayedTracksModel.savePlayedTracks.reset();
         });
@@ -39,8 +39,8 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
             await savePlayedTracksJob.run(userId);
 
             expect(mockSpotifyModel.getRecentlyPlayedTracks).to.have.been.calledOnceWithExactly(userId);
-            expect(savePlayedTracksJob.getLastSavedTrack).to.have.been.calledOnceWithExactly(userId);
-            expect(savePlayedTracksJob.filterOutTracksPreviouslySaved).to.have.been.calledOnceWithExactly(recentlyPlayedTracks, lastSavedTrack);
+            expect(savePlayedTracksJob.getLastSavedPlayedTrack).to.have.been.calledOnceWithExactly(userId);
+            expect(savePlayedTracksJob.filterOutTracksPreviouslySaved).to.have.been.calledOnceWithExactly(recentlyPlayedTracks, lastSavedPlayedTrack);
             expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(recentlyPlayedTracks);
         });
     });
@@ -68,23 +68,23 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
         });
     });
 
-    describe('getLastSavedTrack', () => {
+    describe('getLastSavedPlayedTrack', () => {
         const userId = 'tywin-lannister';
         const mockPlayedTrack: PlayedTrack = buildPlayedTrack();
 
         beforeEach(() => {
-            mockPlayedTracksModel.getLastSavedTrack.resolves(mockPlayedTrack);
+            mockPlayedTracksModel.getLastSavedPlayedTrack.resolves(mockPlayedTrack);
         });
 
         afterEach(() => {
-            mockPlayedTracksModel.getLastSavedTrack.reset();
+            mockPlayedTracksModel.getLastSavedPlayedTrack.reset();
         });
 
-        it('should call the playedTracksModel to get the user\'s last saved track, and return it', async () => {
-            const lastSavedTrack: PlayedTrack = await savePlayedTracksJob.getLastSavedTrack(userId);
+        it('should call the playedTracksModel to get the user\'s last played track, and return it', async () => {
+            const lastSavedPlayedTrack: PlayedTrack = await savePlayedTracksJob.getLastSavedPlayedTrack(userId);
 
-            expect(lastSavedTrack).to.eql(mockPlayedTrack);
-            expect(mockPlayedTracksModel.getLastSavedTrack).to.have.been.calledOnceWithExactly(userId);
+            expect(lastSavedPlayedTrack).to.eql(mockPlayedTrack);
+            expect(mockPlayedTracksModel.getLastSavedPlayedTrack).to.have.been.calledOnceWithExactly(userId);
         });
     });
 

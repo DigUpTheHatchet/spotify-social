@@ -16,25 +16,25 @@ export class SavePlayedTracksJob {
 
     async run(userId: string): Promise<void> {
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyModel.getRecentlyPlayedTracks(userId);
-        const lastSavedTrack: PlayedTrack = await this.getLastSavedTrack(userId);
-        const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedTrack);
+        const lastSavedPlayedTrack: PlayedTrack = await this.getLastSavedPlayedTrack(userId);
+        const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedPlayedTrack);
 
         await this.playedTracksModel.savePlayedTracks(tracksToBeSaved);
     }
 
-    filterOutTracksPreviouslySaved(recentlyPlayedTracks: PlayedTrack[], lastSavedTrack?: PlayedTrack): PlayedTrack[] {
-        if (lastSavedTrack) {
-            return recentlyPlayedTracks.filter(track => track.playedAt > lastSavedTrack.playedAt);
+    filterOutTracksPreviouslySaved(recentlyPlayedTracks: PlayedTrack[], lastPlayedTrack?: PlayedTrack): PlayedTrack[] {
+        if (lastPlayedTrack) {
+            return recentlyPlayedTracks.filter(track => track.playedAt > lastPlayedTrack.playedAt);
         }
 
         return recentlyPlayedTracks;
     }
 
-    async getLastSavedTrack(userId: string): Promise<PlayedTrack> {
-        const lastSavedTrack: PlayedTrack = await this.playedTracksModel.getLastSavedTrack(userId);
-        console.log(`The last saved track was: ${lastSavedTrack.trackName} (${lastSavedTrack.playedAt})`);
+    async getLastSavedPlayedTrack(userId: string): Promise<PlayedTrack> {
+        const lastSavedPlayedTrack: PlayedTrack = await this.playedTracksModel.getLastSavedPlayedTrack(userId);
+        console.log(`The last played track was: ${lastSavedPlayedTrack.trackName} (${lastSavedPlayedTrack.playedAt})`);
 
-        return lastSavedTrack;
+        return lastSavedPlayedTrack;
     }
 
     async savePlayedTracks(playedTracks: PlayedTrack[]): Promise<void> {

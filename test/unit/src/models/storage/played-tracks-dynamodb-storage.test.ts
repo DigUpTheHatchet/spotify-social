@@ -13,8 +13,8 @@
 // describe.only('unit/src/models/storage/played-tracks-dynamodb-storage.ts', () => {
 //     const userId = 'brian123';
 
-//     describe('getLastSavedTrack', async () => {
-//         const expectedLastPlayedTrack: PlayedTrack = buildPlayedTrack();
+//     describe('getLastSavedPlayedTrack', async () => {
+//         const expectedLastSavedPlayedTrack: PlayedTrack = buildPlayedTrack({ userId });
 
 //         beforeEach(() => {
 //             mockDynamoDBClient.query.resolves(expectedLastPlayedTrack);
@@ -25,9 +25,9 @@
 //         });
 
 //         it.only('should construct & execute the DynamoDB query for the user\'s last saved track', async () => {
-//             const lastSavedTrack: PlayedTrack = await playedTracksDynamoDBStorage.getLastSavedTrack(userId);
+//             const retrievedTrack: PlayedTrack = await playedTracksDynamoDBStorage.getLastSavedPlayedTrack(userId);
 
-//             expect(lastSavedTrack).to.eql(expectedLastPlayedTrack);
+//             expect(retrievedTrack).to.eql(expectedLastSavedPlayedTrack);
 //             expect(mockDynamoDBClient).to.have.been.calledOnceWithExactly();
 //         });
 //     });
