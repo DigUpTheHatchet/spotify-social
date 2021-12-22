@@ -11,10 +11,10 @@ import {
 
 const dynamoDBConfig: DynamoDBClientConfig = {
     region: AWS_REGION,
-    credentials: {
-        accessKeyId: AWS_ACCESS_KEY_ID,
-        secretAccessKey: AWS_SECRET_ACCESS_KEY,
-    },
+    // credentials: {
+    //     accessKeyId: AWS_ACCESS_KEY_ID,
+    //     secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    // },
     endpoint: DYNAMODB_ENDPOINT
 };
 const ddb: DynamoDB = new DynamoDB(dynamoDBConfig);
