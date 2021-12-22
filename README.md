@@ -8,7 +8,7 @@ Goal:
     I'll need to store the access token in a db instead of an env variable because we will want to save this when this happens
 
 
-
+- Run (unit?) tests in CI/CD
 - Start using dotenv for managing environment variables
 - Parse ddb table specs from tf
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
