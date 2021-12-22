@@ -20,7 +20,7 @@ async function prepareTestTables(tokensData: TokenData[], playedTracks?: PlayedT
     }
 }
 
-describe.only('integration/src/jobs/save-played-tracks-job.ts', () => {
+describe('integration/src/jobs/save-played-tracks-job.ts', () => {
     describe('run', () => {
         const userId: string = 'kanye';
         const tokenData: TokenData[] = [{
@@ -52,7 +52,7 @@ describe.only('integration/src/jobs/save-played-tracks-job.ts', () => {
             }
         });
 
-        it.only('should retrieve and save the user\'s recently played tracks', async () => {
+        it('should retrieve and save the user\'s recently played tracks', async () => {
             const playedTrackInTheFuture: PlayedTrack = buildPlayedTrack({ userId, playedAt: new Date('2099-01-01T00:00:00.000Z')});
             const playedTracks: PlayedTrack[] = [playedTrackInTheFuture];
             await prepareTestTables(tokenData, playedTracks);
@@ -64,6 +64,8 @@ describe.only('integration/src/jobs/save-played-tracks-job.ts', () => {
             const savedPlayedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
 
             expect(savedPlayedTracks).to.be.an('array').and.to.have.length(1);
+            expect(savedPlayedTracks).to.eql(playedTracks);
+
             expect(numPlayedTracksSaved).to.eql(0);
         });
     });

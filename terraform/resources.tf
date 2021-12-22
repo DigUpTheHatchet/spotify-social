@@ -102,7 +102,6 @@ resource "aws_lambda_function" "spt_lambda" {
     variables = {
       NODE_ENV = "prod"
       REGION = "ap-southeast-2",
-      DYNAMODB_ENDPOINT = "TODO",
       SPOTIFY_CLIENT_ID = data.aws_ssm_parameter.spotify_client_id_ssm.value,
       SPOTIFY_CLIENT_SECRET = data.aws_ssm_parameter.spotify_client_secret_ssm.value
     }
