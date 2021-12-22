@@ -17,6 +17,12 @@ export interface SpotifyToken {
     createdAt: Date;
 }
 
+export interface TokenData {
+    userId: string;
+    value: string;
+    scopes: string[];
+}
+
 // export declare type AttributeDataType = 'S' | 'SS' | 'N' | 'NS' | 'B' | 'BS' | 'BOOL' | 'NULL' | 'L' | 'M';
 
 // export type Key = {

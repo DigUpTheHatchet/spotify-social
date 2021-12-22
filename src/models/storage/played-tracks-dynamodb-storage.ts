@@ -1,4 +1,5 @@
 import { QueryInput } from '@aws-sdk/client-dynamodb';
+
 import { PlayedTrack, PlayedTracksStorage, DynamoDBClient } from '../../ts';
 import { convertDateToTs, convertTsToDate } from '../../utils/dynamoDBUtils';
 
@@ -14,21 +15,22 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     async getLastSavedPlayedTrack(userId: string): Promise<PlayedTrack> {
         const params: QueryInput = {
             TableName: this.tableName,
-            ScanIndexForward: true,
+            ScanIndexForward: false,
             Limit: 1,
-            KeyConditionExpression: 'userId = :v_pk',
+            KeyConditionExpression: 'userId = :v_pk', // Partition Key
             ExpressionAttributeValues: {
                 ':v_pk': { 'S': userId }
             },
         };
 
         const items = await this.dynamoDBClient.query(params);
-        const lastSavedPlayedTrack: PlayedTrack = Object.assign({}, items[0], { playedAt: convertTsToDate(items[0].playedAt) });
+        const lastSavedPlayedTrack: PlayedTrack = items.map(item => Object.assign({}, items[0], { playedAt: convertTsToDate(items[0].playedAt) }))[0];
 
         return lastSavedPlayedTrack;
     }
 
     async savePlayedTracks(tracks: PlayedTrack[]): Promise<void> {
+        console.log({savePlayedTracks: tracks});
         const items = tracks.map(track => Object.assign({}, track, { playedAt: convertDateToTs(track.playedAt) }));
 
         return this.dynamoDBClient.batchWriteItems(this.tableName, items);
@@ -41,9 +43,9 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
             // Limit: 10,
             KeyConditionExpression: 'userId = :v_pk AND playedAt BETWEEN :v_from AND :v_to',
             ExpressionAttributeValues: {
-                ':v_pk': { 'S': userId },
-                ':v_from': { 'N': convertDateToTs(fromDate).toString() },
-                ':v_to': { 'N': convertDateToTs(toDate).toString() },
+                ':v_pk': { 'S': userId }, // Partition Key
+                ':v_from': { 'N': convertDateToTs(fromDate).toString() }, // Range Key
+                ':v_to': { 'N': convertDateToTs(toDate).toString() }, // Range Key
             },
         };
 

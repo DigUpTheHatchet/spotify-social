@@ -12,6 +12,7 @@ Goal:
 - Start using dotenv for managing environment variables
 - Parse ddb table specs from tf
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
+- Implement a proper logger inplace of console.log
 
 - TF Resource
     * Dynamodb tables
@@ -27,7 +28,8 @@ Goal:
         - AWS_REGION
 
 
-AWS_SECRET_ACCESS_KEY=local AWS_ACCESS_KEY_ID=local dynamodb-admin  //npm install -g dynamodb-admin 
+AWS_SECRET_ACCESS_KEY=local AWS_ACCESS_KEY_ID=local dynamodb-admin  
+//npm install -g dynamodb-admin 
 //  requires the same region and creds as the ddb client
 docker run -p 8000:8000 amazon/dynamodb-local
 
