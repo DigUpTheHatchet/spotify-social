@@ -1,4 +1,5 @@
 import { QueryInput } from '@aws-sdk/client-dynamodb';
+
 import { PlayedTrack, PlayedTracksStorage, DynamoDBClient } from '../../ts';
 import { convertDateToTs, convertTsToDate } from '../../utils/dynamoDBUtils';
 
@@ -14,7 +15,7 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     async getLastSavedPlayedTrack(userId: string): Promise<PlayedTrack> {
         const params: QueryInput = {
             TableName: this.tableName,
-            ScanIndexForward: true,
+            ScanIndexForward: false,
             Limit: 1,
             KeyConditionExpression: 'userId = :v_pk',
             ExpressionAttributeValues: {

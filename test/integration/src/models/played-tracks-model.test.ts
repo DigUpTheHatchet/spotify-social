@@ -4,7 +4,7 @@ import { buildPlayedTrack } from '../../../fixtures';
 import { PlayedTrack } from '../../../ts';
 import { resetDynamoDBTables } from '../../../../src/utils/dynamoDBTableUtils';
 
-async function prepareDynamoDBTable(playedTracks: PlayedTrack[]): Promise<void> {
+async function prepareTestTables(playedTracks: PlayedTrack[]): Promise<void> {
     await resetDynamoDBTables();
 
     if (playedTracks) {
@@ -16,14 +16,14 @@ describe('integration/src/models/played-tracks-model.ts', () => {
     describe('getLastSavedPlayedTrack', () => {
         const userId = 'spidey100';
         const playedTracks: PlayedTrack[] = [
-            buildPlayedTrack({ userId, playedAt: new Date('2021-12-20T01:00:00.000Z') }),
-            buildPlayedTrack({ userId, playedAt: new Date('2021-12-31T07:00:00.000Z') }),
-            buildPlayedTrack({ userId: 'someOtherUser', playedAt: new Date('2022-01-01T01:00:00.000Z')}),
-            buildPlayedTrack({ userId, playedAt: new Date('2021-12-20T23:00:00.000Z') })
+            buildPlayedTrack({ userId, trackName: 'abc', playedAt: new Date('2021-12-20T01:00:00.000Z') }),
+            buildPlayedTrack({ userId, trackName: 'xyz', playedAt: new Date('2021-12-31T07:00:00.000Z') }),
+            buildPlayedTrack({ userId: 'someOtherUser', trackName: 'red', playedAt: new Date('2022-01-01T01:00:00.000Z')}),
+            buildPlayedTrack({ userId, trackName: 'blue', playedAt: new Date('2021-12-20T23:00:00.000Z') })
         ];
 
         beforeEach(async () => {
-            await prepareDynamoDBTable(playedTracks);
+            await prepareTestTables(playedTracks);
         });
 
         it('should retrieve the user\'s most recently played track from the database', async () => {
@@ -43,7 +43,7 @@ describe('integration/src/models/played-tracks-model.ts', () => {
         ];
 
         beforeEach(async () => {
-            await prepareDynamoDBTable([]);
+            await prepareTestTables([]);
         });
 
         it('should save the user\'s played tacks in the database', async () => {
@@ -67,14 +67,24 @@ describe('integration/src/models/played-tracks-model.ts', () => {
         ];
 
         beforeEach(async () => {
-            await prepareDynamoDBTable(playedTracks);
+            await prepareTestTables(playedTracks);
         });
 
-        it('should retrieve the user\'s played tracks for the time period specified', async () => {
+        it('should retrieve the user\'s played tracks', async () => {
             const expectedPlayedTracks: PlayedTrack[] = [playedTracks[2], playedTracks[0]];
 
             const startDate = new Date('1999-01-01T00:00:00.000Z');
             const endDate = new Date('2099-01-01T00:00:00.000Z');
+            const retrievedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
+
+            expect(retrievedTracks).to.eql(expectedPlayedTracks);
+        });
+
+        it('should only retrieve played tracks within the specified time range', async () => {
+            const expectedPlayedTracks: PlayedTrack[] = [playedTracks[2]];
+
+            const startDate = new Date('2021-03-01T00:00:00.000Z');
+            const endDate = new Date('2021-04-01T00:00:00.000Z');
             const retrievedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
 
             expect(retrievedTracks).to.eql(expectedPlayedTracks);

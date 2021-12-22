@@ -9,14 +9,14 @@ const ddbTableSpecs: CreateTableInput[] = [{
         'AttributeName': 'userId',
         'AttributeType': 'S'
     }, {
-        'AttributeName': 'tokenType',
+        'AttributeName': 'type',
         'AttributeType': 'S'
     }],
     KeySchema: [{
         'AttributeName': 'userId',
         'KeyType': 'HASH'
     }, {
-        'AttributeName': 'tokenType',
+        'AttributeName': 'type',
         'KeyType': 'RANGE'
     }],
     ProvisionedThroughput: {

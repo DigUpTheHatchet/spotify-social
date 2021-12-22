@@ -4,7 +4,7 @@ import { resetDynamoDBTables } from '../../../../src/utils/dynamoDBTableUtils';
 
 describe('integration/src/jobs/save-played-tracks-job.ts', () => {
     describe('getTrackHistory', () => {
-        it.only('todo', async () => {
+        it('todo', async () => {
             await resetDynamoDBTables();
         });
     });

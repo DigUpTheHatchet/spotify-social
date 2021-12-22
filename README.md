@@ -27,7 +27,8 @@ Goal:
         - AWS_REGION
 
 
-AWS_SECRET_ACCESS_KEY=local AWS_ACCESS_KEY_ID=local dynamodb-admin  //npm install -g dynamodb-admin 
+AWS_SECRET_ACCESS_KEY=local AWS_ACCESS_KEY_ID=local dynamodb-admin  
+//npm install -g dynamodb-admin 
 //  requires the same region and creds as the ddb client
 docker run -p 8000:8000 amazon/dynamodb-local
 

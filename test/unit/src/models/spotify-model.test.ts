@@ -88,18 +88,20 @@ describe('unit/src/models/spotify-model.ts', () => {
 
         });
 
-        it('should', async () => {
-
-        });
-    });
-
-    describe('getCurrentlyPlaying', () => {
-        it('should', async () => {
+        it.skip('should', async () => {
 
         });
     });
 
     describe('parseRecentlyPlayedTracks', () => {
+        it.skip('should', async () => {
 
+        });
+    });
+
+    describe('saveRefreshToken', () => {
+        it.skip('should', async () => {
+
+        });
     });
 });
