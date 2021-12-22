@@ -54,6 +54,21 @@ resource "aws_iam_role" "spt_lambda_role" {
           "Service": "lambda.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
+  }, {
+    "Effect": "Allow",
+    "Action": [
+     "dynamodb:BatchGetItem",
+     "dynamodb:GetItem",
+     "dynamodb:Query",
+     "dynamodb:Scan",
+     "dynamodb:BatchWriteItem",
+     "dynamodb:PutItem",
+     "dynamodb:UpdateItem"
+    ],
+    "Resource": [
+      "${aws_dynamodb_table.played_tracks_ddb_table.stream_arn}",
+      "${aws_dynamodb_table.spotify_tokens_ddb_table.stream_arn}"
+    ]
   }]
 }
 EOF
