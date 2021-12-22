@@ -17,6 +17,6 @@ function buildDynamoDBClientConfig(): DynamoDBClientConfig {
     return {
         region: AWS_REGION,
         endpoint: isProdEnv ? `https://dynamodb.${AWS_REGION}.amazonaws.com` : 'http://localhost:8000',
-        ...(isProdEnv) && { credentials: { accessKeyId: AWS_ACCESS_KEY_ID, secretAccessKey: AWS_SECRET_ACCESS_KEY }}
+        ...(!isProdEnv) && { credentials: { accessKeyId: AWS_ACCESS_KEY_ID, secretAccessKey: AWS_SECRET_ACCESS_KEY }}
     };
 }

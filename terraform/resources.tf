@@ -127,7 +127,7 @@ resource "aws_lambda_function" "spt_lambda" {
 resource "aws_cloudwatch_event_rule" "every_thirty_minutes" {
   name                = "every-thirty-minutes"
   description         = "Fires every 30 minutes"
-  schedule_expression = "rate(30 minutes)"
+  schedule_expression = "cron(0/30 * * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "spt_lambda_every_thirty_minutes" {
