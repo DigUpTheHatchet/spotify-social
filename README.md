@@ -13,6 +13,7 @@ Goal:
 - Parse ddb table specs from tf
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
 - Implement a proper logger inplace of console.log
+- Give love to the CI/CD build, e.g. add a manual approval for the terraform apply step
 
 - TF Resource
     * Dynamodb tables
