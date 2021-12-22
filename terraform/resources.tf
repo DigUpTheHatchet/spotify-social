@@ -87,10 +87,7 @@ resource "aws_iam_policy" "spt_lambda_policy" {
       "dynamodb:PutItem",
       "dynamodb:UpdateItem"
       ],
-      "Resource": [
-        "${aws_dynamodb_table.played_tracks_ddb_table.stream_arn}",
-        "${aws_dynamodb_table.spotify_tokens_ddb_table.stream_arn}"
-      ]
+      "Resource": "${aws_dynamodb_table.played_tracks_ddb_table.stream_arn}"
     }
   ]
 }
