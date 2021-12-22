@@ -32,8 +32,12 @@ export class SavePlayedTracksJob {
 
     async getLastSavedPlayedTrack(userId: string): Promise<PlayedTrack> {
         const lastSavedPlayedTrack: PlayedTrack = await this.playedTracksModel.getLastSavedPlayedTrack(userId);
-        console.log(`The last played track was: ${lastSavedPlayedTrack.trackName} (${lastSavedPlayedTrack.playedAt})`);
 
+        if (lastSavedPlayedTrack) {
+            console.log(`The last saved played track for \'${userId}\' was: ${lastSavedPlayedTrack.trackName} (${lastSavedPlayedTrack.playedAt})..`);
+        } else {
+            console.log(`User \'${userId}\' did not have any previously saved played track..`);
+        }
         return lastSavedPlayedTrack;
     }
 

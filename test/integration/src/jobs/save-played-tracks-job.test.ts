@@ -1,41 +1,55 @@
+import Bluebird from 'bluebird';
+import { expect } from 'chai';
+
 import { savePlayedTracksJob } from '../../../../src/jobs';
-import { PlayedTrack } from '../../../ts';
+import { PlayedTrack, TokenData } from '../../../ts';
 import { resetDynamoDBTables } from '../../../../src/utils/dynamoDBTableUtils';
+import { playedTracksModel, spotifyModel } from '../../../../src/models';
+import { SPOTIFY_REFRESH_TOKEN_ITS } from '../../../../src/config';
+
+async function prepareTestTables(tokensData: TokenData[], playedTracks?: PlayedTrack[]): Promise<void> {
+    await resetDynamoDBTables();
+
+    if (tokensData) {
+        await Bluebird.map(tokensData, (tokenData) => spotifyModel.saveRefreshToken(tokenData));
+    }
+
+    if (playedTracks) {
+        await playedTracksModel.savePlayedTracks(playedTracks);
+    }
+}
 
 describe('integration/src/jobs/save-played-tracks-job.ts', () => {
-    describe('getTrackHistory', () => {
-        it('todo', async () => {
-            await resetDynamoDBTables();
+    describe('run', () => {
+        const userId: string = 'kanye';
+        const tokenData: TokenData[] = [{
+            userId,
+            value: SPOTIFY_REFRESH_TOKEN_ITS!,
+            scopes: ['dummy']
+        }];
+
+        beforeEach(async () => {
+            await prepareTestTables(tokenData);
+        });
+
+        it.only('should retrieve and save the user\'s recently played tracks', async () => {
+            await savePlayedTracksJob.run(userId);
+
+            const startDate = new Date('1999-01-01T00:00:00.000Z');
+            const endDate = new Date('2099-01-01T00:00:00.000Z');
+            const savedPlayedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
+
+            expect(savedPlayedTracks).to.be.an('array').and.to.have.length(50);
+
+            // TODO: Make this functional
+            for (const track of savedPlayedTracks) {
+                expect(track['spotifyUri']).to.be.a.string;
+                expect(track['spotifyId']).to.be.a.string;
+                expect(track['trackName']).to.be.a.string;
+                expect(track['userId']).to.be.a.string;
+                expect(track['playedAt']).to.be.an.instanceOf(Date);
+                expect(track['artistNames'].length).to.be.greaterThanOrEqual(1);
+            }
         });
     });
-
-    describe('getLastPlayedTrack', () => {
-        it('todo', async () => {
-            const lastSavedPlayedTrack: PlayedTrack = await savePlayedTracksJob.getLastSavedPlayedTrack('xdrk');
-        });
-    });
-
-    // describe('run', () => {
-    //     it('todo', async () => {
-    //         const userId: string = 'xdrk';
-
-    //         const playedTracks: PlayedTrack[] = [{
-    //             spotifyUri: 'spotify:track:091n9MH1VUepOdhnv7SLci',
-    //             spotifyId: '091n9MH1VUepOdhnv7SLci',
-    //             artistNames: ['Denzel Curry'],
-    //             playedAt: new Date('2021-08-16T07:04:05.701Z'),
-    //             trackName: 'The Game'
-    //         }];
-
-    //         await playedTracksModel.savePlayedTracks(userId, playedTracks);
-    //     });
-    // });
-
-    // describe('run', () => {
-    //     it.only('todo', async () => {
-    //         const userId: string = 'xdrk';
-
-    //         await savePlayedTracksJob.run(userId);
-    //     });
-    // });
 });

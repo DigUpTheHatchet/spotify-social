@@ -12,6 +12,7 @@ Goal:
 - Start using dotenv for managing environment variables
 - Parse ddb table specs from tf
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
+- Implement a proper logger inplace of console.log
 
 - TF Resource
     * Dynamodb tables

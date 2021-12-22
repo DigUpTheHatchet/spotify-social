@@ -1,7 +1,5 @@
 import Bluebird from 'bluebird';
 import { expect } from 'chai';
-import { uniqueId } from 'lodash';
-import sinon from 'sinon';
 
 import { spotifyModel } from '../../../../src/models';
 import { SPOTIFY_REFRESH_TOKEN_ITS } from '../../../../src/config';
@@ -19,17 +17,18 @@ async function prepareTestTables(tokensData: TokenData[]): Promise<void> {
 describe('integration/src/models/spotify-model.ts', () => {
     describe('getRecentlyPlayedTracks', () => {
         const userId = 'bobthebuilder';
+        // TODO: Move this expectedScopes var to a common place
         // These are the scopes from the (SPOTIFY_REFRESH_TOKEN_ITS) refresh token used by the ITs
         const expectedScopes = ['user-modify-playback-state', 'user-read-currently-playing', 'user-read-email', 'user-read-recently-played', 'user-read-private'];
 
-        const tokenData: TokenData = {
+        const tokensData: TokenData[] = [{
             userId,
             value: SPOTIFY_REFRESH_TOKEN_ITS!,
             scopes: expectedScopes
-        };
+        }];
 
         beforeEach(async () => {
-            await prepareTestTables([tokenData]);
+            await prepareTestTables(tokensData);
         });
 
         it('should retrieve the user\'s recently played tracks from Spotify', async () => {
@@ -54,14 +53,14 @@ describe('integration/src/models/spotify-model.ts', () => {
         // These are the scopes from the (SPOTIFY_REFRESH_TOKEN_ITS) refresh token used by the ITs
         const expectedScopes = ['user-modify-playback-state', 'user-read-currently-playing', 'user-read-email', 'user-read-recently-played', 'user-read-private'];
 
-        const tokenData: TokenData = {
+        const tokensData: TokenData[] = [{
             userId,
             value: SPOTIFY_REFRESH_TOKEN_ITS!,
             scopes: expectedScopes
-        };
+        }];
 
         beforeEach(async () => {
-            await prepareTestTables([tokenData]);
+            await prepareTestTables(tokensData);
         });
 
         it('should retrieve a refreshed access token for the user from Spotify', async () => {
