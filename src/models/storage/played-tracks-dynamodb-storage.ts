@@ -30,7 +30,6 @@ export class PlayedTracksDynamoDBStorage implements PlayedTracksStorage {
     }
 
     async savePlayedTracks(tracks: PlayedTrack[]): Promise<void> {
-        console.log({savePlayedTracks: tracks});
         const items = tracks.map(track => Object.assign({}, track, { playedAt: convertDateToTs(track.playedAt) }));
 
         return this.dynamoDBClient.batchWriteItems(this.tableName, items);

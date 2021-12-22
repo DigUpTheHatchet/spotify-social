@@ -14,12 +14,12 @@ export class SavePlayedTracksJob {
         this.jobId = jobId;
     }
 
-    async run(userId: string): Promise<void> {
+    async run(userId: string): Promise<number> {
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyModel.getRecentlyPlayedTracks(userId);
         const lastSavedPlayedTrack: PlayedTrack = await this.getLastSavedPlayedTrack(userId);
         const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedPlayedTrack);
 
-        await this.playedTracksModel.savePlayedTracks(tracksToBeSaved);
+        return this.playedTracksModel.savePlayedTracks(tracksToBeSaved);
     }
 
     filterOutTracksPreviouslySaved(recentlyPlayedTracks: PlayedTrack[], lastPlayedTrack?: PlayedTrack): PlayedTrack[] {
@@ -41,7 +41,7 @@ export class SavePlayedTracksJob {
         return lastSavedPlayedTrack;
     }
 
-    async savePlayedTracks(playedTracks: PlayedTrack[]): Promise<void> {
+    async savePlayedTracks(playedTracks: PlayedTrack[]): Promise<number> {
         console.log(`Saving ${playedTracks.length} played tracks..`);
         return this.playedTracksModel.savePlayedTracks(playedTracks);
     }

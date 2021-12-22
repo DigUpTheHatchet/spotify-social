@@ -6,6 +6,7 @@ import { PlayedTrack, TokenData } from '../../../ts';
 import { resetDynamoDBTables } from '../../../../src/utils/dynamoDBTableUtils';
 import { playedTracksModel, spotifyModel } from '../../../../src/models';
 import { SPOTIFY_REFRESH_TOKEN_ITS } from '../../../../src/config';
+import { buildPlayedTrack } from '../../../fixtures';
 
 async function prepareTestTables(tokensData: TokenData[], playedTracks?: PlayedTrack[]): Promise<void> {
     await resetDynamoDBTables();
@@ -19,7 +20,7 @@ async function prepareTestTables(tokensData: TokenData[], playedTracks?: PlayedT
     }
 }
 
-describe('integration/src/jobs/save-played-tracks-job.ts', () => {
+describe.only('integration/src/jobs/save-played-tracks-job.ts', () => {
     describe('run', () => {
         const userId: string = 'kanye';
         const tokenData: TokenData[] = [{
@@ -28,18 +29,17 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
             scopes: ['dummy']
         }];
 
-        beforeEach(async () => {
+        it('should retrieve and save the user\'s recently played tracks', async () => {
             await prepareTestTables(tokenData);
-        });
 
-        it.only('should retrieve and save the user\'s recently played tracks', async () => {
-            await savePlayedTracksJob.run(userId);
+            const numPlayedTracksSaved: number = await savePlayedTracksJob.run(userId);
 
             const startDate = new Date('1999-01-01T00:00:00.000Z');
             const endDate = new Date('2099-01-01T00:00:00.000Z');
             const savedPlayedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
 
             expect(savedPlayedTracks).to.be.an('array').and.to.have.length(50);
+            expect(numPlayedTracksSaved).to.eql(50);
 
             // TODO: Make this functional
             for (const track of savedPlayedTracks) {
@@ -50,6 +50,21 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
                 expect(track['playedAt']).to.be.an.instanceOf(Date);
                 expect(track['artistNames'].length).to.be.greaterThanOrEqual(1);
             }
+        });
+
+        it.only('should retrieve and save the user\'s recently played tracks', async () => {
+            const playedTrackInTheFuture: PlayedTrack = buildPlayedTrack({ userId, playedAt: new Date('2099-01-01T00:00:00.000Z')});
+            const playedTracks: PlayedTrack[] = [playedTrackInTheFuture];
+            await prepareTestTables(tokenData, playedTracks);
+
+            const numPlayedTracksSaved: number = await savePlayedTracksJob.run(userId);
+
+            const startDate = new Date('1999-01-01T00:00:00.000Z');
+            const endDate = new Date('2200-01-01T00:00:00.000Z');
+            const savedPlayedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
+
+            expect(savedPlayedTracks).to.be.an('array').and.to.have.length(1);
+            expect(numPlayedTracksSaved).to.eql(0);
         });
     });
 });
