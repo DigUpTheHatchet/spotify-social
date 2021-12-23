@@ -8,3 +8,10 @@ export async function savePlayedTracksJobHandler(event: any, context: any) {
 
     console.log(`Saved ${numPlayedTracksSaved} played tracks for user: ${userId}.`);
 }
+
+export async function registerSpotifyUser(event: any, context: any) {
+    return {
+        statusCode: 200,
+        body: 'Hello!!'
+    };
+}

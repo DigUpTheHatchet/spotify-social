@@ -143,3 +143,33 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_spt_lambda" {
   principal     = "events.amazonaws.com"
   source_arn    = "${aws_cloudwatch_event_rule.every_thirty_minutes.arn}"
 }
+
+resource "aws_iam_role" "rsu_lambda_role" {
+  name = "RegisterSpotifyUserLambdaRole"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+      "Effect": "Allow",
+      "Principal": {
+          "Service": "lambda.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+  }]
+}
+EOF
+}
+
+resource "aws_lambda_function" "rsu_lambda" {
+  filename      = "../artifacts/spotify-api.zip"
+  function_name = "register-spotify-user"
+  role          = aws_iam_role.rsu_lambda_role.arn
+  handler       = "src/index.registerSpotifyUser"
+
+  source_code_hash = filebase64sha256("../artifacts/spotify-api.zip")
+
+  runtime = "nodejs14.x"
+  timeout = 10
+  memory_size = 128
+}

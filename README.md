@@ -9,8 +9,13 @@ Goal:
 
 
 - Run (unit?) tests in CI/CD
+- Create URL to add new users
+- Modify job to run for all users
 - Start using dotenv for managing environment variables
 - Parse ddb table specs from tf
+- CW Alarms for function errors
+- Create startup script for dynamodb-local for ITs
+- Get dynamodb local working in CI/CD for ITs
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
 - Implement a proper logger inplace of console.log
 - Give love to the CI/CD build, e.g. add a manual approval for the terraform apply step

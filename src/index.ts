@@ -1,1 +1,4 @@
-export { savePlayedTracksJobHandler } from './handlers';
+export {
+    savePlayedTracksJobHandler,
+    registerSpotifyUser
+} from './handlers';
