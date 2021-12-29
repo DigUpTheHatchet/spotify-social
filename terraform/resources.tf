@@ -192,7 +192,7 @@ resource "aws_lambda_function" "rsu_lambda" {
   filename      = "../artifacts/spotify-api.zip"
   function_name = "register-spotify-user"
   role          = aws_iam_role.rsu_lambda_role.arn
-  handler       = "src/index.registerSpotifyUser"
+  handler       = "src/index.registerSpotifyUserHandler"
 
   source_code_hash = filebase64sha256("../artifacts/spotify-api.zip")
 
