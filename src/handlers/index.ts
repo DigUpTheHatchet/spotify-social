@@ -10,6 +10,7 @@ export async function savePlayedTracksJobHandler(event: any, context: any) {
 }
 
 export async function registerSpotifyUser(event: any, context: any) {
+    console.log({payload: JSON.stringify(event)});
     return {
         statusCode: 200,
         body: 'Hello!!'
