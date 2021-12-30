@@ -11,11 +11,11 @@ async function prepareTestTables(usersData?: SpotifyUserData[], users?: SpotifyU
     await resetDynamoDBTables();
 
     if (usersData) {
-        await Bluebird.map(usersData, (userData) => spotifyModel.registerUser(userData));
+        await Bluebird.each(usersData, (userData) => spotifyModel.registerUser(userData));
     }
 
     if (users) {
-        await Bluebird.map(users, (user) => spotifyUserStorage.saveUser(user));
+        await Bluebird.each(users, (user) => spotifyUserStorage.saveUser(user));
     }
 }
 

@@ -27,6 +27,7 @@ export interface SpotifyUser {
 export interface SpotifyUserData {
     userId: string;
     email: string;
+    name: string;
     refreshToken: string;
     scopes: string[];
     registeredAt: Date;

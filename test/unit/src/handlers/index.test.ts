@@ -10,4 +10,10 @@ describe('unit/src/handlers/index.ts', () => {
 
         });
     });
+
+    describe.skip('parseSpotifyUserData', () => {
+        it('', async () => {
+
+        });
+    });
 });

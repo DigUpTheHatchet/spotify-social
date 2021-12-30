@@ -13,7 +13,14 @@ const mockPlayedTracksModel = stubInterface<PlayedTracksModel>();
 const savePlayedTracksJob: SavePlayedTracksJob = new SavePlayedTracksJob(mockSpotifyModel, mockPlayedTracksModel);
 
 describe('unit/src/jobs/save-played-tracks-job.ts', () => {
+
     describe('run', () => {
+        it.skip('TODO', async () => {
+
+        });
+    });
+
+    describe('runForUser', () => {
         const userId = 'ryangosling';
         const lastSavedPlayedTrack: PlayedTrack = buildPlayedTrack({ playedAt: new Date('2021-01-01T01:00:00.000Z') });
         const recentlyPlayedTracks: PlayedTrack[] = [
@@ -36,7 +43,7 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
         });
 
         it('should get & save the user\'s recently played tracks', async () => {
-            await savePlayedTracksJob.run(userId);
+            await savePlayedTracksJob.runForUser(userId);
 
             expect(mockSpotifyModel.getRecentlyPlayedTracks).to.have.been.calledOnceWithExactly(userId);
             expect(savePlayedTracksJob.getLastSavedPlayedTrack).to.have.been.calledOnceWithExactly(userId);
