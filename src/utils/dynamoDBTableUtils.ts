@@ -2,7 +2,7 @@ import { CreateTableInput } from '@aws-sdk/client-dynamodb';
 import Bluebird from 'bluebird';
 import { dynamoDBClient } from '../services';
 
-// TODO: I'd rather parse these specs from the terraform code instead of duplicating the config here and there
+// TODO: I'd rather parse these specs from the terraform code instead of duplicating the table specs here
 const ddbTableSpecs: CreateTableInput[] = [{
     TableName: 'SpotifyTokens',
     AttributeDefinitions: [{
@@ -19,11 +19,19 @@ const ddbTableSpecs: CreateTableInput[] = [{
         'AttributeName': 'type',
         'KeyType': 'RANGE'
     }],
-    ProvisionedThroughput: {
-        'ReadCapacityUnits': 3,
-        'WriteCapacityUnits': 3
-    }
-}, {
+    ProvisionedThroughput: { 'ReadCapacityUnits': 3, 'WriteCapacityUnits': 3 }
+    }, {
+        TableName: 'SpotifyUsers',
+        AttributeDefinitions: [{
+            'AttributeName': 'userId',
+            'AttributeType': 'S'
+        }],
+        KeySchema: [{
+            'AttributeName': 'userId',
+            'KeyType': 'HASH'
+        }],
+        ProvisionedThroughput: { 'ReadCapacityUnits': 3, 'WriteCapacityUnits': 3 }
+    }, {
     TableName: 'PlayedTracks',
     AttributeDefinitions: [{
         'AttributeName': 'userId',
@@ -39,10 +47,7 @@ const ddbTableSpecs: CreateTableInput[] = [{
         'AttributeName': 'playedAt',
         'KeyType': 'RANGE'
     }],
-    ProvisionedThroughput: {
-        'ReadCapacityUnits': 3,
-        'WriteCapacityUnits': 3
-    }
+    ProvisionedThroughput: { 'ReadCapacityUnits': 3, 'WriteCapacityUnits': 3 }
 }];
 
 export async function createDynamoDBTables(): Promise<void> {

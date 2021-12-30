@@ -1,4 +1,4 @@
 export {
     savePlayedTracksJobHandler,
-    registerSpotifyUser
+    registerSpotifyUserHandler
 } from './handlers';

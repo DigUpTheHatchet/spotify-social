@@ -1,4 +1,4 @@
-import { BatchWriteItemInput, DynamoDB, GetItemInput, PutItemInput, QueryInput, CreateTableInput, DeleteTableInput } from '@aws-sdk/client-dynamodb';
+import { BatchWriteItemInput, DynamoDB, GetItemInput, PutItemInput, QueryInput, CreateTableInput, DeleteTableInput, ScanInput } from '@aws-sdk/client-dynamodb';
 import { unmarshall, marshall, isResourceNotFoundException } from '../utils/dynamoDBUtils';
 import { DynamoDBClient } from '../ts';
 import Bluebird from 'bluebird';
@@ -18,6 +18,11 @@ export default class DynamoDBWrapper implements DynamoDBClient {
 
     async query(params: QueryInput): Promise<any> {
         return this.ddb.query(params)
+            .then(result => result.Items?.map(item => unmarshall(item)));
+    }
+
+    async scan(params: ScanInput): Promise<any> {
+        return this.ddb.scan(params)
             .then(result => result.Items?.map(item => unmarshall(item)));
     }
 

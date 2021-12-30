@@ -4,19 +4,20 @@ import {
     SPOTIFY_CLIENT_ID,
     SPOTIFY_CLIENT_SECRET
 } from '../config';
-import { PlayedTrack, SpotifyToken, SpotifyTokenStorage, TokenData } from '../ts';
+import { PlayedTrack, SpotifyToken, SpotifyTokenStorage, SpotifyUser, SpotifyUserData, SpotifyUserStorage } from '../ts';
 import HttpClient from '../services/http-client';
 
 const RECENTLY_PLAYED_URL: string = 'https://api.spotify.com/v1/me/player/recently-played';
 const REFRESH_ACCESS_TOKEN_URL: string = 'https://accounts.spotify.com/api/token';
-const CURRENTLY_PLAYING_URL: string = 'https://api.spotify.com/v1/me/player/currently-playing';
 
 export class SpotifyModel {
     private httpClient: HttpClient;
+    private userStorage: SpotifyUserStorage;
     private tokenStorage: SpotifyTokenStorage;
 
-    constructor(httpClient: HttpClient, tokenStorage: SpotifyTokenStorage) {
+    constructor(httpClient: HttpClient, userStorage: SpotifyUserStorage, tokenStorage: SpotifyTokenStorage) {
         this.httpClient = httpClient;
+        this.userStorage = userStorage;
         this.tokenStorage = tokenStorage;
     }
 
@@ -43,20 +44,28 @@ export class SpotifyModel {
                     scopes: data['scope'].split(' ')
                 };
             });
+
     }
 
-    async saveRefreshToken(tokenData: TokenData): Promise<void> {
-        const { userId, value, scopes } = tokenData;
+    async registerUser(userData: SpotifyUserData): Promise<void> {
+        const { userId, email, scopes, registeredAt } = userData;
 
-        const refreshToken: SpotifyToken = {
-            userId,
-            value,
-            scopes,
-            createdAt: new Date(),
-            type: 'refresh'
-        };
+        const refreshToken: SpotifyToken = { userId, value: userData.refreshToken, scopes, createdAt: registeredAt, type: 'refresh' };
+        const user: SpotifyUser = { userId, email, registeredAt, isEnabled: true };
 
         await this.tokenStorage.saveToken(refreshToken);
+        await this.userStorage.saveUser(user);
+    }
+
+    async getUser(userId: string): Promise<SpotifyUser> {
+        return this.userStorage.getUser(userId);
+    }
+
+    async getEnabledUsers(): Promise<SpotifyUser[]> {
+        const allUsers: SpotifyUser[] = await this.userStorage.getAllUsers();
+        const enabledUsers: SpotifyUser[] = allUsers.filter(user => user.isEnabled);
+
+        return enabledUsers;
     }
 
     parseRecentlyPlayedTracks(userId: string, data: any): PlayedTrack[] {
@@ -75,10 +84,3 @@ export class SpotifyModel {
         return playedTracks;
     }
 }
-
-    // async getCurrentlyPlaying(userId: string) {
-    //     const accessToken: SpotifyToken = await this.getRefreshedAccessToken(userId);
-    //     const options = { headers: { 'Authorization': `Bearer ${accessToken.value}` } };
-
-    //     return this.httpClient.get(CURRENTLY_PLAYING_URL, options);
-    // }

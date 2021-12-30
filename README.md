@@ -9,8 +9,6 @@ Goal:
 
 
 - Run (unit?) tests in CI/CD
-- Create URL to add new users
-- Modify job to run for all users
 - Start using dotenv for managing environment variables
 - Parse ddb table specs from tf
 - CW Alarms for function errors
@@ -19,6 +17,16 @@ Goal:
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
 - Implement a proper logger inplace of console.log
 - Give love to the CI/CD build, e.g. add a manual approval for the terraform apply step
+
+
+(SA) - Switch ITs to use the new spotify account for CI/CD
+(DD) - Fix reading list for 2022 sheet
+(SA) - Deploy the API gateway + CW Role for Register Spotify User with Terraform
+(DD) - Upgrade/style the `/spotify` endpoint
+
+(SA) - CW alarms for AWS
+
+
 
 - TF Resource
     * Dynamodb tables

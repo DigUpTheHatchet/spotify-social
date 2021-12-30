@@ -1,4 +1,4 @@
-import { PlayedTrack, SpotifyToken } from '../ts';
+import { PlayedTrack, SpotifyToken, SpotifyUser, SpotifyUserData } from '../ts';
 import { uniqueId } from 'lodash';
 
 export function buildPlayedTrack(overrides?: any): PlayedTrack {
@@ -19,6 +19,27 @@ export function buildSpotifyToken(overrides?: any): SpotifyToken {
         userId: 'rickJames',
         scopes: ['user-do-something', 'user-do-something-else'],
         createdAt: new Date()
+    }, overrides);
+}
+
+export function buildSpotifyUser(overrides?: any): SpotifyUser {
+    return Object.assign({
+        userId: 'bubbles',
+        email: 'bub1@gmail.com',
+        name: 'Michael Longbottom',
+        registeredAt: new Date('2021-08-16T07:04:05.701Z'),
+        isEnabled: true
+    }, overrides);
+}
+
+export function buildSpotifyUserData(overrides?: any): SpotifyUserData {
+    return Object.assign({
+        userId: 'wheelbarrow',
+        email: 'wb1997@hotmail.com',
+        name: 'Michael Longbottom',
+        registeredAt: new Date('2021-01-01T00:00:00.000Z'),
+        scopes: ['user-modify-playback-state', 'user-read-currently-playing', 'user-read-email', 'user-read-recently-played', 'user-read-private'],
+        refreshToken: uniqueId(),
     }, overrides);
 }
 

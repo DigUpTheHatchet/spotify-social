@@ -1,20 +1,28 @@
 import { uniqueId } from 'lodash';
 import { SpotifyModel } from '../models/spotify-model';
 import { PlayedTracksModel } from '../models/played-tracks-model';
-import { PlayedTrack } from '../ts';
+import { PlayedTrack, SpotifyUser } from '../ts';
+import Bluebird from 'bluebird';
 
 export class SavePlayedTracksJob {
-    private jobId: string;
     private spotifyModel: SpotifyModel;
     private playedTracksModel: PlayedTracksModel;
 
-    constructor(spotifyModel: SpotifyModel, playedTracksModel: PlayedTracksModel, jobId: string = uniqueId()) {
+    constructor(spotifyModel: SpotifyModel, playedTracksModel: PlayedTracksModel) {
         this.spotifyModel = spotifyModel;
         this.playedTracksModel = playedTracksModel;
-        this.jobId = jobId;
     }
 
-    async run(userId: string): Promise<number> {
+    async run(): Promise<number> {
+        const enabledUsers: SpotifyUser[] = await this.spotifyModel.getEnabledUsers();
+
+        // TODO: Decide how we want to deal with one of these promises rejecting? Unit test this scenario
+        await Bluebird.map(enabledUsers, (user) => this.runForUser(user.userId), { concurrency: 2 });
+
+        return enabledUsers.length;
+    }
+
+    async runForUser(userId: string): Promise<number> {
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyModel.getRecentlyPlayedTracks(userId);
         const lastSavedPlayedTrack: PlayedTrack = await this.getLastSavedPlayedTrack(userId);
         const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedPlayedTrack);
