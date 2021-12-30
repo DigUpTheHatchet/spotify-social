@@ -48,10 +48,10 @@ export class SpotifyModel {
     }
 
     async registerUser(userData: SpotifyUserData): Promise<void> {
-        const { userId, email, scopes, registeredAt } = userData;
+        const { userId, email, scopes, registeredAt, name } = userData;
 
         const refreshToken: SpotifyToken = { userId, value: userData.refreshToken, scopes, createdAt: registeredAt, type: 'refresh' };
-        const user: SpotifyUser = { userId, email, registeredAt, isEnabled: true };
+        const user: SpotifyUser = { userId, email, name, registeredAt, isEnabled: true };
 
         await this.tokenStorage.saveToken(refreshToken);
         await this.userStorage.saveUser(user);

@@ -20,6 +20,7 @@ export interface SpotifyToken {
 export interface SpotifyUser {
     userId: string;
     email: string;
+    name: string;
     registeredAt: Date;
     isEnabled: boolean;
 }
