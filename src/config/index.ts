@@ -6,6 +6,7 @@ const isProdEnv: boolean = nodeEnv === 'prod';
 export const SPOTIFY_CLIENT_ID = process.env['SPOTIFY_CLIENT_ID'];
 export const SPOTIFY_CLIENT_SECRET = process.env['SPOTIFY_CLIENT_SECRET'];
 export const SPOTIFY_REFRESH_TOKEN_ITS = process.env['SPOTIFY_REFRESH_TOKEN_ITS'];
+export const SPOTIFY_REFRESH_TOKEN_SCOPES_ITS = process.env['SPOTIFY_REFRESH_TOKEN_SCOPES_ITS'];
 
 const AWS_SECRET_ACCESS_KEY: string = process.env['AWS_SECRET_ACCESS_KEY'] || 'local';
 const AWS_ACCESS_KEY_ID: string = process.env['AWS_ACCESS_KEY_ID'] || 'local';

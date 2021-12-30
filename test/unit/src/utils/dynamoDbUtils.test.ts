@@ -51,8 +51,8 @@ describe('unit/src/utils/dynamodbUtils.ts', () => {
         });
     });
 
-    describe('convertDateToTs', () => {
-        it('todo', () => {
+    describe.skip('convertDateToTs', () => {
+        it('TODO', () => {
 
         });
     });

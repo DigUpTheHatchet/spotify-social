@@ -3,8 +3,8 @@ import { PlayedTrack, PlayedTracksStorage } from '../ts';
 export class PlayedTracksModel {
     private playedTracksStorage: PlayedTracksStorage;
 
-    constructor(TrackHistoryStorage: PlayedTracksStorage) {
-        this.playedTracksStorage = TrackHistoryStorage;
+    constructor(playedTracksStorage: PlayedTracksStorage) {
+        this.playedTracksStorage = playedTracksStorage;
     }
 
     async getLastSavedPlayedTrack(userId: string): Promise<PlayedTrack> {

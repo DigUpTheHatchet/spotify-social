@@ -20,6 +20,22 @@ resource "aws_dynamodb_table" "spotify_tokens_ddb_table" {
   }
 }
 
+resource "aws_dynamodb_table" "spotify_users_ddb_table" {
+  name           = "SpotifyUsers"
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "userId"
+
+  attribute {
+    name = "userId"
+    type = "S"
+  }
+
+  tags = {
+    Name        = "SpotifyUsers"
+    Environment = "prod"
+  }
+}
+
 resource "aws_dynamodb_table" "played_tracks_ddb_table" {
   name           = "PlayedTracks"
   billing_mode   = "PAY_PER_REQUEST"
@@ -89,7 +105,8 @@ resource "aws_iam_policy" "spt_lambda_policy" {
       ],
       "Resource": [
         "${aws_dynamodb_table.played_tracks_ddb_table.arn}",
-        "${aws_dynamodb_table.spotify_tokens_ddb_table.arn}"
+        "${aws_dynamodb_table.spotify_tokens_ddb_table.arn}",
+        "${aws_dynamodb_table.spotify_users_ddb_table.arn}"
       ]
     }
   ]
@@ -177,6 +194,22 @@ resource "aws_iam_policy" "rsu_lambda_policy" {
           "logs:PutLogEvents"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+      "dynamodb:BatchGetItem",
+      "dynamodb:GetItem",
+      "dynamodb:Query",
+      "dynamodb:Scan",
+      "dynamodb:BatchWriteItem",
+      "dynamodb:PutItem",
+      "dynamodb:UpdateItem"
+      ],
+      "Resource": [
+        "${aws_dynamodb_table.spotify_tokens_ddb_table.arn}",
+        "${aws_dynamodb_table.spotify_users_ddb_table.arn}"
+      ]
     }
   ]
 }

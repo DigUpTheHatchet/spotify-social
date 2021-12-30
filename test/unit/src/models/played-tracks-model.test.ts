@@ -1,4 +1,4 @@
-describe('unit/src/models/played-tracks-model.ts', () => {
+describe.skip('unit/src/models/played-tracks-model.ts', () => {
     describe('getLastSavedPlayedTrack', () => {
 
         it('todo', async () => {

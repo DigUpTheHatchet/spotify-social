@@ -2,17 +2,17 @@ import Bluebird from 'bluebird';
 import { expect } from 'chai';
 
 import { savePlayedTracksJob } from '../../../../src/jobs';
-import { PlayedTrack, TokenData } from '../../../ts';
+import { PlayedTrack, SpotifyUserData } from '../../../ts';
 import { resetDynamoDBTables } from '../../../../src/utils/dynamoDBTableUtils';
 import { playedTracksModel, spotifyModel } from '../../../../src/models';
 import { SPOTIFY_REFRESH_TOKEN_ITS } from '../../../../src/config';
-import { buildPlayedTrack } from '../../../fixtures';
+import { buildPlayedTrack, buildSpotifyUserData } from '../../../fixtures';
 
-async function prepareTestTables(tokensData: TokenData[], playedTracks?: PlayedTrack[]): Promise<void> {
+async function prepareTestTables(usersData: SpotifyUserData[], playedTracks?: PlayedTrack[]): Promise<void> {
     await resetDynamoDBTables();
 
-    if (tokensData) {
-        await Bluebird.map(tokensData, (tokenData) => spotifyModel.saveRefreshToken(tokenData));
+    if (usersData) {
+        await Bluebird.map(usersData, (userData) => spotifyModel.registerUser(userData));
     }
 
     if (playedTracks) {
@@ -23,15 +23,13 @@ async function prepareTestTables(tokensData: TokenData[], playedTracks?: PlayedT
 describe('integration/src/jobs/save-played-tracks-job.ts', () => {
     describe('run', () => {
         const userId: string = 'kanye';
-        const tokenData: TokenData[] = [{
+        const userData: SpotifyUserData[] = [buildSpotifyUserData({
             userId,
-            value: SPOTIFY_REFRESH_TOKEN_ITS!,
-            scopes: ['dummy']
-        }];
+            refreshToken: SPOTIFY_REFRESH_TOKEN_ITS!
+        })];
 
         it('should retrieve and save the user\'s recently played tracks', async () => {
-            await prepareTestTables(tokenData);
-
+            await prepareTestTables(userData);
             const numPlayedTracksSaved: number = await savePlayedTracksJob.run(userId);
 
             const startDate = new Date('1999-01-01T00:00:00.000Z');
@@ -55,7 +53,7 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
         it('should retrieve and save the user\'s recently played tracks', async () => {
             const playedTrackInTheFuture: PlayedTrack = buildPlayedTrack({ userId, playedAt: new Date('2099-01-01T00:00:00.000Z')});
             const playedTracks: PlayedTrack[] = [playedTrackInTheFuture];
-            await prepareTestTables(tokenData, playedTracks);
+            await prepareTestTables(userData, playedTracks);
 
             const numPlayedTracksSaved: number = await savePlayedTracksJob.run(userId);
 

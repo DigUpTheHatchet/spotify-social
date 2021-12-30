@@ -1,4 +1,6 @@
 import { savePlayedTracksJob } from '../jobs';
+import { spotifyModel } from '../models';
+import { SpotifyUserData } from '../ts';
 
 export async function savePlayedTracksJobHandler(event: any, context: any) {
     console.log(`savePlayedTracksJobHandler executing at: ${new Date()}`);
@@ -13,12 +15,12 @@ export async function registerSpotifyUserHandler(event: any, context: any) {
     console.log(`registerSpotifyUserHandler executing at: ${new Date()}`);
 
     try {
-        const parsed = parseRegisterSpotifyUserPayload(event);
-        console.log({ parsed });
+        const userData: SpotifyUserData = parseSpotifyUserData(event);
+        await spotifyModel.registerUser(userData);
 
         return { statusCode: 200 };
     } catch (err) {
-        console.error({ err })
+        console.error({ err });
     }
 
     return { statusCode: 500 };
@@ -26,16 +28,18 @@ export async function registerSpotifyUserHandler(event: any, context: any) {
 
 
 // TODO: Decrypt the request body here, and return a 403? if the decrypted payload is corrupted
-// TODO: Type this return
-function parseRegisterSpotifyUserPayload(event: any) {
+function parseSpotifyUserData(event: any): SpotifyUserData {
     console.log(`Raw payload: ${JSON.stringify(event)}.`);
 
-    const parsed = {
-        value: event.refreshToken,
-        scopes: event.scopes.split(' '),
+    const userData: SpotifyUserData = {
         userId: event.userId,
-        email: event.email
+        email: event.email,
+        refreshToken: event.refreshToken,
+        scopes: event.scopes.split(' '),
+        registeredAt: new Date()
     };
 
-    return parsed;
+    console.log(`Parsed User Data: ${JSON.stringify(userData)}.`);
+
+    return userData;
 }

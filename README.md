@@ -9,7 +9,6 @@ Goal:
 
 
 - Run (unit?) tests in CI/CD
-- Create URL to add new users
 - Modify job to run for all users
 - Start using dotenv for managing environment variables
 - Parse ddb table specs from tf

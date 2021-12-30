@@ -1,6 +1,6 @@
-import { GetItemInput, PutItemCommandOutput } from '@aws-sdk/client-dynamodb';
+import { GetItemInput } from '@aws-sdk/client-dynamodb';
 import { DynamoDBClient, SpotifyToken, SpotifyTokenStorage } from '../../ts';
-import { convertDateToTs } from '../../utils/dynamoDBUtils';
+import { convertDateToTs, convertTsToDate } from '../../utils/dynamoDBUtils';
 
 export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
     private dynamoDBClient: DynamoDBClient;
@@ -20,7 +20,10 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
             }
         };
 
-        return this.dynamoDBClient.getItem(params);
+        const item = await this.dynamoDBClient.getItem(params);
+        const refreshToken: SpotifyToken = Object.assign({}, item, { createdAt: convertTsToDate(item.createdAt) });
+
+        return refreshToken;
     }
 
     async saveToken(token: SpotifyToken): Promise<void> {

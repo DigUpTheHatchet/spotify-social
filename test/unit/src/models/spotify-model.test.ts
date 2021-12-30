@@ -4,12 +4,13 @@ import sinon from 'sinon';
 
 import { SpotifyModel } from '../../../../src/models/spotify-model';
 import HttpClient from '../../../../src/services/http-client';
-import { PlayedTrack, SpotifyToken, SpotifyTokenStorage } from '../../../../src/ts';
+import { PlayedTrack, SpotifyToken, SpotifyTokenStorage, SpotifyUserStorage } from '../../../../src/ts';
 import { buildPlayedTrack, buildSpotifyToken } from '../../../fixtures';
 
 const mockHttpClient = stubInterface<HttpClient>();
 const mockSpotifyTokenStorage = stubInterface<SpotifyTokenStorage>();
-const spotifyModel: SpotifyModel = new SpotifyModel(mockHttpClient, mockSpotifyTokenStorage);
+const mockSpotifyUserStorage = stubInterface<SpotifyUserStorage>();
+const spotifyModel: SpotifyModel = new SpotifyModel(mockHttpClient, mockSpotifyUserStorage, mockSpotifyTokenStorage);
 
 describe('unit/src/models/spotify-model.ts', () => {
     describe('getRecentlyPlayedTracks', () => {
@@ -65,7 +66,7 @@ describe('unit/src/models/spotify-model.ts', () => {
             mockHttpClient.get.reset();
         });
 
-        it('should', async () => {
+        it('should get a refreshed access token and use it to retrieve the user\'s recently played tracks', async () => {
             const expectedUrl = 'https://api.spotify.com/v1/me/player/recently-played';
             const expectedGetOptions = { headers: { 'Authorization': `Bearer ${accessToken.value}` }, params: { limit: 50 }};
             const expectedResult: PlayedTrack[] = recentlyPlayedTracks;
@@ -78,7 +79,7 @@ describe('unit/src/models/spotify-model.ts', () => {
         });
     });
 
-    describe('getRefreshedAccessToken', () => {
+    describe.skip('getRefreshedAccessToken', () => {
 
         beforeEach(() => {
 
@@ -88,19 +89,31 @@ describe('unit/src/models/spotify-model.ts', () => {
 
         });
 
-        it.skip('should', async () => {
+        it('should', async () => {
 
         });
     });
 
-    describe('parseRecentlyPlayedTracks', () => {
-        it.skip('should', async () => {
+    describe.skip('parseRecentlyPlayedTracks', () => {
+        it('should', async () => {
 
         });
     });
 
-    describe('saveRefreshToken', () => {
-        it.skip('should', async () => {
+    describe.skip('registerUser', () => {
+        it('should', async () => {
+
+        });
+    });
+
+    describe.skip('getUser', () => {
+        it('should', async () => {
+
+        });
+    });
+
+    describe.skip('getEnabledUsers', () => {
+        it('should', async () => {
 
         });
     });

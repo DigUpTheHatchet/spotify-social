@@ -1,4 +1,4 @@
-import { AttributeValue, BatchWriteItemInput, CreateTableInput, DeleteTableInput, GetItemInput, PutItemCommandOutput, PutItemInput, QueryInput } from '@aws-sdk/client-dynamodb';
+import { AttributeValue, BatchWriteItemInput, CreateTableInput, DeleteTableInput, GetItemInput, PutItemCommandOutput, PutItemInput, QueryInput, ScanInput } from '@aws-sdk/client-dynamodb';
 
 export type PlayedTrack = {
     spotifyUri: string;
@@ -17,10 +17,19 @@ export interface SpotifyToken {
     createdAt: Date;
 }
 
-export interface TokenData {
+export interface SpotifyUser {
     userId: string;
-    value: string;
+    email: string;
+    registeredAt: Date;
+    isEnabled: boolean;
+}
+
+export interface SpotifyUserData {
+    userId: string;
+    email: string;
+    refreshToken: string;
     scopes: string[];
+    registeredAt: Date;
 }
 
 // export declare type AttributeDataType = 'S' | 'SS' | 'N' | 'NS' | 'B' | 'BS' | 'BOOL' | 'NULL' | 'L' | 'M';
@@ -43,8 +52,10 @@ export interface DynamoDBClient {
     // query: (tableName: string, params: QueryParams) => any;
 
     getItem: (params: GetItemInput) => Promise<any>;
-    putItem: (tableName: string, item: any) => Promise<any>;
+    scan: (params: ScanInput) => Promise<any>;
     query: (params: QueryInput) => Promise<any>;
+
+    putItem: (tableName: string, item: any) => Promise<any>;
     batchWriteItems: (tableName: string, items: any[]) => Promise<any>;
 
     createTable: (params: CreateTableInput) => Promise<any>;
@@ -60,4 +71,10 @@ export interface PlayedTracksStorage {
 export interface SpotifyTokenStorage {
     getRefreshToken: (userId: string) => Promise<SpotifyToken>;
     saveToken: (token: SpotifyToken) => Promise<void>;
+}
+
+export interface SpotifyUserStorage {
+    saveUser: (user: SpotifyUser) => Promise<void>;
+    getUser: (userId: string) => Promise<SpotifyUser>;
+    getAllUsers: () => Promise<SpotifyUser[]>;
 }
