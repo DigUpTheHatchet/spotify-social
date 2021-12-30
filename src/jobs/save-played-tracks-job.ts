@@ -23,6 +23,8 @@ export class SavePlayedTracksJob {
     }
 
     async runForUser(userId: string): Promise<number> {
+        console.log(`Running save played tracks job for user: \'${userId}\'..`);
+
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyModel.getRecentlyPlayedTracks(userId);
         const lastSavedPlayedTrack: PlayedTrack = await this.getLastSavedPlayedTrack(userId);
         const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedPlayedTrack);
@@ -42,15 +44,15 @@ export class SavePlayedTracksJob {
         const lastSavedPlayedTrack: PlayedTrack = await this.playedTracksModel.getLastSavedPlayedTrack(userId);
 
         if (lastSavedPlayedTrack) {
-            console.log(`The last saved played track for \'${userId}\' was: ${lastSavedPlayedTrack.trackName} (${lastSavedPlayedTrack.playedAt})..`);
+            console.log(`The last saved played track for \'${userId}\' was: ${lastSavedPlayedTrack.trackName} (${lastSavedPlayedTrack.playedAt}).`);
         } else {
-            console.log(`User \'${userId}\' did not have any previously saved played track..`);
+            console.log(`User \'${userId}\' did not have any previously saved played track.`);
         }
         return lastSavedPlayedTrack;
     }
 
     async savePlayedTracks(playedTracks: PlayedTrack[]): Promise<number> {
-        console.log(`Saving ${playedTracks.length} played tracks..`);
+        console.log(`Saving ${playedTracks.length} recently played tracks..`);
         return this.playedTracksModel.savePlayedTracks(playedTracks);
     }
 }
