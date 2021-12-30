@@ -19,7 +19,6 @@ Goal:
 - Give love to the CI/CD build, e.g. add a manual approval for the terraform apply step
 
 
-(SA) - Switch ITs to use the new spotify account for CI/CD
 (DD) - Fix reading list for 2022 sheet
 (SA) - Deploy the API gateway + CW Role for Register Spotify User with Terraform
 (DD) - Upgrade/style the `/spotify` endpoint
