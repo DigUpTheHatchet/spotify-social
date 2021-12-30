@@ -232,4 +232,13 @@ resource "aws_lambda_function" "rsu_lambda" {
   runtime = "nodejs14.x"
   timeout = 10
   memory_size = 128
+
+  environment {
+    variables = {
+      NODE_ENV = "prod"
+      REGION = "ap-southeast-2",
+      SPOTIFY_CLIENT_ID = data.aws_ssm_parameter.spotify_client_id_ssm.value,
+      SPOTIFY_CLIENT_SECRET = data.aws_ssm_parameter.spotify_client_secret_ssm.value
+    }
+  }
 }
