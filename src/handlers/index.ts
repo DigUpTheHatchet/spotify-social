@@ -3,7 +3,6 @@ import { spotifyModel } from '../models';
 import { SpotifyUserData } from '../ts';
 
 export async function savePlayedTracksJobHandler(event: any, context: any) {
-    console.log(event.notexist.notexist);
     console.log(`savePlayedTracksJobHandler executing at: ${new Date()}`);
     const numEnabledUsers: number = await savePlayedTracksJob.run();
 
@@ -12,7 +11,7 @@ export async function savePlayedTracksJobHandler(event: any, context: any) {
 
 export async function registerSpotifyUserHandler(event: any, context: any) {
     console.log(`registerSpotifyUserHandler executing at: ${new Date()}`);
-    
+
     try {
         const userData: SpotifyUserData = parseSpotifyUserData(event);
         await spotifyModel.registerUser(userData);
