@@ -243,6 +243,7 @@ resource "aws_lambda_function" "rsu_lambda" {
   }
 }
 
+// TODO: Create a module for these CW alarms
 resource "aws_cloudwatch_metric_alarm" "rsu-function-errors" {
   alarm_name                = "register-spotify-user Function Errors"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -260,9 +261,27 @@ resource "aws_cloudwatch_metric_alarm" "rsu-function-errors" {
   alarm_actions = ["${aws_sns_topic.cloudwatch_alert_topic.arn}"]
 }
 
+resource "aws_cloudwatch_metric_alarm" "spt-function-errors" {
+  alarm_name                = "save-played-tracks Function Errors"
+  comparison_operator       = "GreaterThanOrEqualToThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "Errors"
+  namespace                 = "AWS/Lambda"
+  period                    = "300"
+  statistic                 = "Sum"
+  threshold                 = "1"
+  alarm_description         = "This metric monitors save-played-tracks function errors"
+  treat_missing_data        = "notBreaching"
+  dimensions = {
+		FunctionName = "${aws_lambda_function.spt_lambda.function_name}"
+	}
+  alarm_actions = ["${aws_sns_topic.cloudwatch_alert_topic.arn}"]
+}
+
 resource "aws_sns_topic" "cloudwatch_alert_topic" {
   name = "cw-alert-topic"
 }
+
 resource "aws_sns_topic_subscription" "dylan_email_target" {
   topic_arn = "${aws_sns_topic.cloudwatch_alert_topic.arn}"
   protocol  = "email"
