@@ -263,3 +263,8 @@ resource "aws_cloudwatch_metric_alarm" "rsu-function-errors" {
 resource "aws_sns_topic" "cloudwatch_alert_topic" {
   name = "cw-alert-topic"
 }
+resource "aws_sns_topic_subscription" "dylan_email_target" {
+  topic_arn = "${aws_sns_topic.cloudwatch_alert_topic.arn}"
+  protocol  = "email"
+  endpoint  = "dylankelly@live.ie"
+}

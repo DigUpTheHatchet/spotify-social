@@ -12,6 +12,9 @@ export async function savePlayedTracksJobHandler(event: any, context: any) {
 export async function registerSpotifyUserHandler(event: any, context: any) {
     console.log(`registerSpotifyUserHandler executing at: ${new Date()}`);
 
+    // TODO - Manually triggering an error to test 
+    console.log(event.notexist.notexist);
+
     try {
         const userData: SpotifyUserData = parseSpotifyUserData(event);
         await spotifyModel.registerUser(userData);
