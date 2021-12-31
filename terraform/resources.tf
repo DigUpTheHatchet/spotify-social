@@ -254,7 +254,7 @@ resource "aws_cloudwatch_metric_alarm" "rsu-function-errors" {
   threshold                 = "1"
   alarm_description         = "This metric monitors register-spotify-user function errors"
   treat_missing_data        = "notBreaching"
-  dimensions {
+  dimensions = {
 		FunctionName = "${aws_lambda_function.rsu_lambda.function_name}"
 	}
   alarm_actions = ["${aws_sns_topic.cloudwatch_alert_topic.arn}"]
