@@ -257,7 +257,7 @@ resource "aws_cloudwatch_metric_alarm" "rsu-function-errors" {
   dimensions {
 		FunctionName = "${aws_lambda_function.rsu_lambda.function_name}"
 	}
-  alarm_actions = ["${aws_sns_topic.cloudwatch_alert_topic.sns_topic_arn}"]
+  alarm_actions = ["${aws_sns_topic.cloudwatch_alert_topic.arn}"]
 }
 
 resource "aws_sns_topic" "cloudwatch_alert_topic" {
