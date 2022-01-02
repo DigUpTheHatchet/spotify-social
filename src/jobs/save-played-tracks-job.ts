@@ -13,23 +13,21 @@ export class SavePlayedTracksJob {
         this.playedTracksModel = playedTracksModel;
     }
 
-    async run(): Promise<number> {
+    async run(): Promise<void> {
         const enabledUsers: SpotifyUser[] = await this.spotifyModel.getEnabledUsers();
+        console.log(`Found: ${enabledUsers.length} enabled users.`);
 
-        // TODO: Decide how we want to deal with one of these promises rejecting? Unit test this scenario
         await Bluebird.map(enabledUsers, (user) => this.runForUser(user.userId), { concurrency: 2 });
-
-        return enabledUsers.length;
     }
 
-    async runForUser(userId: string): Promise<number> {
-        console.log(`Running save played tracks job for user: \'${userId}\'..`);
+    async runForUser(userId: string): Promise<void> {
+        console.log(`Running save-played-tracks job for user: \'${userId}\'..`);
 
         const recentlyPlayedTracks: PlayedTrack[] = await this.spotifyModel.getRecentlyPlayedTracks(userId);
         const lastSavedPlayedTrack: PlayedTrack = await this.getLastSavedPlayedTrack(userId);
         const tracksToBeSaved: PlayedTrack[] = this.filterOutTracksPreviouslySaved(recentlyPlayedTracks, lastSavedPlayedTrack);
 
-        return this.playedTracksModel.savePlayedTracks(tracksToBeSaved);
+        return this.savePlayedTracks(tracksToBeSaved);
     }
 
     filterOutTracksPreviouslySaved(recentlyPlayedTracks: PlayedTrack[], lastPlayedTrack?: PlayedTrack): PlayedTrack[] {
@@ -51,7 +49,7 @@ export class SavePlayedTracksJob {
         return lastSavedPlayedTrack;
     }
 
-    async savePlayedTracks(playedTracks: PlayedTrack[]): Promise<number> {
+    async savePlayedTracks(playedTracks: PlayedTrack[]): Promise<void> {
         console.log(`Saving ${playedTracks.length} recently played tracks..`);
         return this.playedTracksModel.savePlayedTracks(playedTracks);
     }

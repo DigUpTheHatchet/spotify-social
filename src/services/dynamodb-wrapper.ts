@@ -17,6 +17,7 @@ export default class DynamoDBWrapper implements DynamoDBClient {
     }
 
     async query(params: QueryInput): Promise<any> {
+        // TODO: Is there a built in limit to the num items returned? Check this and add pagination if required
         return this.ddb.query(params)
             .then(result => result.Items?.map(item => unmarshall(item)));
     }

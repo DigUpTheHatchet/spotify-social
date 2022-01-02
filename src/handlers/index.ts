@@ -4,9 +4,7 @@ import { SpotifyUserData } from '../ts';
 
 export async function savePlayedTracksJobHandler(event: any, context: any) {
     console.log(`savePlayedTracksJobHandler executing at: ${new Date()}`);
-    const numEnabledUsers: number = await savePlayedTracksJob.run();
-
-    console.log(`Saved played tracks for: ${numEnabledUsers} users.`);
+    await savePlayedTracksJob.run();
 }
 
 export async function registerSpotifyUserHandler(event: any, context: any) {

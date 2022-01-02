@@ -48,14 +48,13 @@ describe('integration/src/models/played-tracks-model.ts', () => {
 
         it('should save the user\'s played tacks in the database', async () => {
             const expectedPlayedTracks: PlayedTrack[] = [playedTracks[2], playedTracks[0]];
-            const numPlayedTracksSaved: number = await playedTracksModel.savePlayedTracks(playedTracks);
+            await playedTracksModel.savePlayedTracks(playedTracks);
 
             const startDate = new Date('1999-01-01T00:00:00.000Z');
             const endDate = new Date('2099-01-01T00:00:00.000Z');
             const retrievedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
 
             expect(retrievedTracks).to.eql(expectedPlayedTracks);
-            expect(numPlayedTracksSaved).to.eql(playedTracks.length);
         });
     });
 

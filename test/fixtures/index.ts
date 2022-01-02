@@ -43,7 +43,7 @@ export function buildSpotifyUserData(overrides?: any): SpotifyUserData {
     }, overrides);
 }
 
-export const recentlyPlayedItems = [{
+export const rawRecentlyPlayedTracks = [{
     track: {
         album: {
             album_type: 'single',

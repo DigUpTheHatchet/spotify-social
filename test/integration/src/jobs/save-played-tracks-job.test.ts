@@ -34,13 +34,12 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
         });
 
         it('should call runForUser for each (enabled) user in the database', async () => {
-            const numEnabledUsers: number = await savePlayedTracksJob.run();
+            await savePlayedTracksJob.run();
 
             const startDate = new Date('1999-01-01T00:00:00.000Z');
             const endDate = new Date('2099-01-01T00:00:00.000Z');
             const savedPlayedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
 
-            expect(numEnabledUsers).to.eql(1);
             expect(savedPlayedTracks).to.be.an('array').and.to.have.length(50);
 
             // TODO: Make this functional
@@ -64,14 +63,14 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
 
         it('should retrieve and save the user\'s recently played tracks', async () => {
             await prepareTestTables(userData);
-            const numPlayedTracksSaved: number = await savePlayedTracksJob.runForUser(userId);
+
+            await savePlayedTracksJob.runForUser(userId);
 
             const startDate = new Date('1999-01-01T00:00:00.000Z');
             const endDate = new Date('2099-01-01T00:00:00.000Z');
             const savedPlayedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
 
             expect(savedPlayedTracks).to.be.an('array').and.to.have.length(50);
-            expect(numPlayedTracksSaved).to.eql(50);
 
             // TODO: Make this functional
             for (const track of savedPlayedTracks) {
@@ -89,7 +88,7 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
             const playedTracks: PlayedTrack[] = [playedTrackInTheFuture];
             await prepareTestTables(userData, playedTracks);
 
-            const numPlayedTracksSaved: number = await savePlayedTracksJob.runForUser(userId);
+            await savePlayedTracksJob.runForUser(userId);
 
             const startDate = new Date('1999-01-01T00:00:00.000Z');
             const endDate = new Date('2200-01-01T00:00:00.000Z');
@@ -97,8 +96,6 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
 
             expect(savedPlayedTracks).to.be.an('array').and.to.have.length(1);
             expect(savedPlayedTracks).to.eql(playedTracks);
-
-            expect(numPlayedTracksSaved).to.eql(0);
         });
     });
 });

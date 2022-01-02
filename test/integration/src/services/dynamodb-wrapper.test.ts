@@ -1,7 +1,7 @@
 import { dynamoDBClient } from '../../../../src/services';
 
 describe.skip('integration/src/services/dynamodb-client.ts', () => {
-    describe('todo', () => {
+    describe('TODO', () => {
         it('', async () => {
 
         });
