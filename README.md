@@ -9,22 +9,16 @@ Goal:
 
 
 - Run (unit?) tests in CI/CD
-- Start using dotenv for managing environment variables
 - Parse ddb table specs from tf
-- CW Alarms for function errors
+- Error Handling in handlers, handle partial failures for SPT lambda
 - Create startup script for dynamodb-local for ITs
 - Get dynamodb local working in CI/CD for ITs
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
 - Implement a proper logger inplace of console.log
 - Give love to the CI/CD build, e.g. add a manual approval for the terraform apply step
-
-
-(DD) - Fix reading list for 2022 sheet
-(SA) - Deploy the API gateway + CW Role for Register Spotify User with Terraform
-(DD) - Upgrade/style the `/spotify` endpoint
-
-(SA) - CW alarms for AWS
-
+- Deploy the API gateway + CW Role for Register Spotify User with Terraform
+- Upgrade/style the `/spotify` endpoint
+- Encrypt payload for RSU lambda
 
 
 - TF Resource

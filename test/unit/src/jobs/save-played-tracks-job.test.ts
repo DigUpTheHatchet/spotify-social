@@ -3,20 +3,40 @@ import { stubInterface } from 'ts-sinon';
 import sinon from 'sinon';
 
 import { SavePlayedTracksJob } from '../../../../src/jobs/save-played-tracks-job';
-import { PlayedTrack } from '../../../ts';
-import { buildPlayedTrack } from '../../../fixtures';
+import { PlayedTrack, SpotifyUser } from '../../../ts';
+import { buildPlayedTrack, buildSpotifyUser } from '../../../fixtures';
 import { PlayedTracksModel } from '../../../models/played-tracks-model';
 import { SpotifyModel } from '../../../../src/models/spotify-model';
 
 const mockSpotifyModel = stubInterface<SpotifyModel>();
 const mockPlayedTracksModel = stubInterface<PlayedTracksModel>();
-const savePlayedTracksJob: SavePlayedTracksJob = new SavePlayedTracksJob(mockSpotifyModel, mockPlayedTracksModel);
+const savePlayedTracksJob = new SavePlayedTracksJob(mockSpotifyModel, mockPlayedTracksModel);
 
 describe('unit/src/jobs/save-played-tracks-job.ts', () => {
-
     describe('run', () => {
-        it.skip('TODO', async () => {
+        const enabledUsers: SpotifyUser[] = [
+            buildSpotifyUser({ userId: 'harry3' }),
+            buildSpotifyUser({ userId: 'brian90' }),
+            buildSpotifyUser({ userId: 'felix_fell_off' })
+        ];
 
+        beforeEach(() => {
+            mockSpotifyModel.getEnabledUsers.resolves(enabledUsers);
+            sinon.stub(savePlayedTracksJob, 'runForUser').resolves();
+        });
+
+        afterEach(() => {
+            mockSpotifyModel.getEnabledUsers.reset();
+            (savePlayedTracksJob.runForUser as sinon.SinonStub).restore();
+        });
+
+        it('should call runForUser once for each enabled user', async () => {
+            const expectedUserIds: string[] = enabledUsers.map(u => u.userId);
+
+            await savePlayedTracksJob.run();
+
+            expect(savePlayedTracksJob.runForUser).to.have.calledThrice();
+            expect((savePlayedTracksJob.runForUser as sinon.SinonStub).getCalls().map(spyCall => spyCall.args[0])).to.eql(expectedUserIds);
         });
     });
 
