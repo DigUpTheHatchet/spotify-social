@@ -4,23 +4,16 @@ import { SpotifyUserData } from '../ts';
 
 export async function savePlayedTracksJobHandler(event: any, context: any) {
     console.log(`savePlayedTracksJobHandler executing at: ${new Date()}`);
+
     await savePlayedTracksJob.run();
 }
 
 export async function registerSpotifyUserHandler(event: any, context: any) {
     console.log(`registerSpotifyUserHandler executing at: ${new Date()}`);
 
-    try {
-        const userData: SpotifyUserData = parseSpotifyUserData(event);
-        await spotifyModel.registerUser(userData);
-
-        return { statusCode: 200 };
-    } catch (err) {
-        console.error({ err });
-        throw err;
-    }
+    const userData: SpotifyUserData = parseSpotifyUserData(event);
+    await spotifyModel.registerUser(userData);
 }
-
 
 // TODO: Decrypt the request body here, and return a 403? if the decrypted payload is corrupted
 function parseSpotifyUserData(event: any): SpotifyUserData {
