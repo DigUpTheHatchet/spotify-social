@@ -46,7 +46,7 @@ describe('integration/src/models/played-tracks-model.ts', () => {
             await prepareTestTables([]);
         });
 
-        it('should save the user\'s played tacks in the database', async () => {
+        it.only('should save the user\'s played tacks in the database', async () => {
             const expectedPlayedTracks: PlayedTrack[] = [playedTracks[2], playedTracks[0]];
             await playedTracksModel.savePlayedTracks(playedTracks);
 

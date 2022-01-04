@@ -14,7 +14,7 @@ Goal:
 - Create startup script for dynamodb-local for ITs
 - Get dynamodb local working in CI/CD for ITs
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
-- Implement a proper logger inplace of console.log
+- Implement a logging library inplace of console.log
 - Give love to the CI/CD build, e.g. add a manual approval for the terraform apply step
 - Deploy the API gateway + CW Role for Register Spotify User with Terraform
 - Upgrade/style the `/spotify` endpoint

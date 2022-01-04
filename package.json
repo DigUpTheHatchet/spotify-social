@@ -29,7 +29,8 @@
         "querystring": "~0.2.0",
         "request": "~2.83.0",
         "retry-axios": "^2.2.1",
-        "uuid": "^8.0.0"
+        "uuid": "^8.0.0",
+        "winston": "^3.3.3"
     },
     "devDependencies": {
         "@types/bluebird": "^3.5.30",
