@@ -10,7 +10,7 @@ Goal:
 
 - Run (unit?) tests in CI/CD
 - Parse ddb table specs from tf
-- Error Handling in handlers, handle partial failures for SPT lambda
+- Handle partial failures for SPT lambda
 - Create startup script for dynamodb-local for ITs
 - Get dynamodb local working in CI/CD for ITs
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
