@@ -141,14 +141,14 @@ resource "aws_lambda_function" "spt_lambda" {
   }
 }
 
-resource "aws_cloudwatch_event_rule" "every_thirty_minutes" {
-  name                = "every-thirty-minutes"
-  description         = "Fires every 30 minutes"
-  schedule_expression = "cron(0/30 * * * ? *)"
+resource "aws_cloudwatch_event_rule" "every_twenty_minutes" {
+  name                = "every-twenty-minutes"
+  description         = "Fires every 20 minutes"
+  schedule_expression = "cron(0/20 * * * ? *)"
 }
 
-resource "aws_cloudwatch_event_target" "spt_lambda_every_thirty_minutes" {
-  rule      = "${aws_cloudwatch_event_rule.every_thirty_minutes.name}"
+resource "aws_cloudwatch_event_target" "spt_lambda_every_twenty_minutes" {
+  rule      = "${aws_cloudwatch_event_rule.every_twenty_minutes.name}"
   target_id = "lambda"
   arn       = "${aws_lambda_function.spt_lambda.arn}"
 }
@@ -158,7 +158,7 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_spt_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.spt_lambda.function_name}"
   principal     = "events.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_event_rule.every_thirty_minutes.arn}"
+  source_arn    = "${aws_cloudwatch_event_rule.every_twenty_minutes.arn}"
 }
 
 resource "aws_iam_role" "rsu_lambda_role" {
