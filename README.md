@@ -19,6 +19,8 @@ Goal:
 - Deploy the API gateway + CW Role for Register Spotify User with Terraform
 - Upgrade/style the `/spotify` endpoint
 - Encrypt payload for RSU lambda
+- Create a dev environment on AWS
+- Create diagrams 
 
 
 - TF Resource
