@@ -22,19 +22,18 @@ async function prepareTestTables(usersData?: SpotifyUserData[], users?: SpotifyU
 describe('integration/src/models/spotify-model.ts', () => {
     describe('getRecentlyPlayedTracks', () => {
         const userId = 'bobthebuilder';
-        const expectedScopes = SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ');
 
         const usersData: SpotifyUserData[] = [buildSpotifyUserData({
             userId,
             refreshToken: SPOTIFY_REFRESH_TOKEN_ITS!,
-            scopes: expectedScopes
+            scopes: SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ')
         })];
 
         beforeEach(async () => {
             await prepareTestTables(usersData);
         });
 
-        it('should retrieve the user\'s recently played tracks from Spotify', async () => {
+        it.only('should retrieve the user\'s recently played tracks from Spotify', async () => {
             const playedTracks: PlayedTrack[] = await spotifyModel.getRecentlyPlayedTracks(userId);
 
             expect(playedTracks).to.be.an('array').and.to.have.length(50);

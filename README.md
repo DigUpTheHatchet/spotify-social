@@ -10,7 +10,7 @@ Goal:
 
 - Run (unit?) tests in CI/CD
 - Parse ddb table specs from tf
-- Handle partial failures for SPT lambda
+- Handle partial failures for SPT lambda, e.g. if one person revokes their token
 - Create startup script for dynamodb-local for ITs
 - Get dynamodb local working in CI/CD for ITs
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
@@ -20,7 +20,17 @@ Goal:
 - Upgrade/style the `/spotify` endpoint
 - Encrypt payload for RSU lambda
 - Create a dev environment on AWS
-- Create diagrams 
+- Create diagrams, README.md
+
+
+- Start the dynamodb-local container
+- Set the required env vars for ITs:
+  - SPOTIFY_CLIENT_ID=xxx
+  - SPOTIFY_CLIENT_SECRET=xxx
+  - SPOTIFY_REFRESH_TOKEN_ITS=xxx
+  - SPOTIFY_REFRESH_TOKEN_SCOPES_ITS='user-read-currently-playing user-read-recently-played' 
+
+
 
 
 - TF Resource
