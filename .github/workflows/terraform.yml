@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - run-unit-tests-cicd
+      - run-unit-tests-cicd # TODO: Remove this
 
 jobs:
   terraform_deploy:
@@ -33,6 +33,7 @@ jobs:
       run: docker run -p 8000:8000 amazon/dynamodb-local &
 
     - name:
+      run: npm run test:integration
 
     # - name: Clean and install prod node dependencies
     #   run: rm -rf node_modules && npm install --prod
