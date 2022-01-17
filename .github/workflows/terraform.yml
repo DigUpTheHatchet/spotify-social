@@ -29,6 +29,11 @@ jobs:
     - name: Run unit tests
       run: npm run test:unit
 
+    - name: Start DynamoDB local
+      run: docker run -p 8000:8000 amazon/dynamodb-local &
+
+    - name:
+
     # - name: Clean and install prod node dependencies
     #   run: rm -rf node_modules && npm install --prod
 

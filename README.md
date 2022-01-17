@@ -40,11 +40,10 @@ Goal:
         - DDb Get/Write access
         - 
     * Env Vars:
-        - NODE_ENV
         - SPOTIFY_CLIENT_ID
         - SPOTIFY_CLIENT_SECRET
-        - DYNAMODB_ENDPOINT
-        - AWS_REGION
+        - SPOTIFY_REFRESH_TOKEN_ITS
+        - SPOTIFY_REFRESH_TOKEN_SCOPES_ITS
 
 
 AWS_SECRET_ACCESS_KEY=local AWS_ACCESS_KEY_ID=local dynamodb-admin  

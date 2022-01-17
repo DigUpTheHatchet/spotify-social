@@ -33,7 +33,7 @@ describe('integration/src/models/spotify-model.ts', () => {
             await prepareTestTables(usersData);
         });
 
-        it.only('should retrieve the user\'s recently played tracks from Spotify', async () => {
+        it('should retrieve the user\'s recently played tracks from Spotify', async () => {
             const playedTracks: PlayedTrack[] = await spotifyModel.getRecentlyPlayedTracks(userId);
 
             expect(playedTracks).to.be.an('array').and.to.have.length(50);
@@ -64,7 +64,7 @@ describe('integration/src/models/spotify-model.ts', () => {
             await prepareTestTables(usersData);
         });
 
-        it('should retrieve a refreshed access token for the user from Spotify', async () => {
+        it.only('should retrieve a refreshed access token for the user from Spotify', async () => {
             const accessToken: SpotifyToken = await spotifyModel.getRefreshedAccessToken(userId);
 
             expect(accessToken.userId).to.eql(userId);
