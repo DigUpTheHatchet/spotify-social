@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - run-unit-tests-cicd # TODO: Remove this
 
 jobs:
   terraform_deploy:
@@ -35,9 +34,6 @@ jobs:
     - name: Run unit tests
       run: npm run test:unit
 
-    # - name: Start DynamoDB local
-    #   run: docker run -p 8000:8000 amazon/dynamodb-local &
-
     - name: Run integration tests
       env:
         SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
@@ -46,33 +42,33 @@ jobs:
         SPOTIFY_REFRESH_TOKEN_SCOPES_ITS: ${{ secrets.SPOTIFY_REFRESH_TOKEN_SCOPES_ITS }}
       run: npm run test:integration
 
-    # - name: Clean and install prod node dependencies
-    #   run: rm -rf node_modules && npm install --prod
+    - name: Clean and install prod node dependencies
+      run: rm -rf node_modules && npm install --prod
 
-    # - name: Prepare files to be Zipped
-    #   run: rm -rf zipme && mkdir zipme && cp -r dist/src zipme && cp -r node_modules zipme
+    - name: Prepare files to be Zipped
+      run: rm -rf zipme && mkdir zipme && cp -r dist/src zipme && cp -r node_modules zipme
 
-    # - name: Zip files
-    #   run: zip -qq -r ../artifacts/spotify-api.zip ./*
-    #   working-directory: ./zipme
+    - name: Zip files
+      run: zip -qq -r ../artifacts/spotify-api.zip ./*
+      working-directory: ./zipme
 
-    # - name: Verify Terraform version
-    #   run: terraform --version
+    - name: Verify Terraform version
+      run: terraform --version
 
-    # - name: Terraform init
-    #   working-directory: ./terraform
-    #   env:
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #   run: terraform init -input=false
+    - name: Terraform init
+      working-directory: ./terraform
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: terraform init -input=false
 
-    # - name: Terraform validation
-    #   run: terraform validate
-    #   working-directory: ./terraform
+    - name: Terraform validation
+      run: terraform validate
+      working-directory: ./terraform
 
-    # - name: Terraform apply
-    #   working-directory: ./terraform
-    #   env:
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #   run: terraform apply -auto-approve -input=false
+    - name: Terraform apply
+      working-directory: ./terraform
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: terraform apply -auto-approve -input=false

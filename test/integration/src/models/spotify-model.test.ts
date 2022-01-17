@@ -50,7 +50,7 @@ describe('integration/src/models/spotify-model.ts', () => {
         });
     });
 
-    describe('getRefreshedAccessToken', () => {
+    describe.only('getRefreshedAccessToken', () => {
         const userId = 'yellowcanary';
         const expectedScopes = SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ');
 
@@ -64,7 +64,7 @@ describe('integration/src/models/spotify-model.ts', () => {
             await prepareTestTables(usersData);
         });
 
-        it.only('should retrieve a refreshed access token for the user from Spotify', async () => {
+        it('should retrieve a refreshed access token for the user from Spotify', async () => {
             const accessToken: SpotifyToken = await spotifyModel.getRefreshedAccessToken(userId);
 
             expect(accessToken.userId).to.eql(userId);
