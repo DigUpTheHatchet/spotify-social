@@ -15,7 +15,7 @@ jobs:
         image: amazon/dynamodb-local
         ports:
           - 8000:8000
-          
+
     steps:
     - name: Checkout repo
       uses: actions/checkout@v1
@@ -35,8 +35,8 @@ jobs:
     - name: Run unit tests
       run: npm run test:unit
 
-    - name: Start DynamoDB local
-      run: docker run -p 8000:8000 amazon/dynamodb-local &
+    # - name: Start DynamoDB local
+    #   run: docker run -p 8000:8000 amazon/dynamodb-local &
 
     - name: Run integration tests
       env:
