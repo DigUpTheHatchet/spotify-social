@@ -7,6 +7,9 @@ import { PlayedTrack, SpotifyToken, SpotifyUser, SpotifyUserData } from '../../.
 import { resetDynamoDBTables } from '../../../../src/utils/dynamoDBTableUtils';
 import { buildSpotifyUser, buildSpotifyUserData } from '../../../fixtures';
 
+console.log({SPOTIFY_REFRESH_TOKEN_ITS});
+console.log({SPOTIFY_REFRESH_TOKEN_SCOPES_ITS});
+
 async function prepareTestTables(usersData?: SpotifyUserData[], users?: SpotifyUser[]): Promise<void> {
     await resetDynamoDBTables();
 
@@ -51,8 +54,6 @@ describe('integration/src/models/spotify-model.ts', () => {
     });
 
     describe('getRefreshedAccessToken', () => {
-        console.log({SPOTIFY_REFRESH_TOKEN_ITS});
-        console.log({SPOTIFY_REFRESH_TOKEN_SCOPES_ITS});
         const userId = 'yellowcanary';
         const expectedScopes = SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ');
 
