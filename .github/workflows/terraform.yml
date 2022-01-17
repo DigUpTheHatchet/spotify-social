@@ -33,6 +33,11 @@ jobs:
       run: docker run -p 8000:8000 amazon/dynamodb-local &
 
     - name: Run integration tests
+      env:
+        SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+        SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        SPOTIFY_REFRESH_TOKEN_ITS: ${{ secrets.SPOTIFY_REFRESH_TOKEN_ITS }}
+        SPOTIFY_REFRESH_TOKEN_SCOPES_ITS: ${{ secrets.SPOTIFY_REFRESH_TOKEN_SCOPES_ITS }}
       run: npm run test:integration
 
     # - name: Clean and install prod node dependencies
