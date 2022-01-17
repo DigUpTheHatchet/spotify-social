@@ -22,12 +22,11 @@ async function prepareTestTables(usersData?: SpotifyUserData[], users?: SpotifyU
 describe('integration/src/models/spotify-model.ts', () => {
     describe('getRecentlyPlayedTracks', () => {
         const userId = 'bobthebuilder';
-        const expectedScopes = SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ');
 
         const usersData: SpotifyUserData[] = [buildSpotifyUserData({
             userId,
             refreshToken: SPOTIFY_REFRESH_TOKEN_ITS!,
-            scopes: expectedScopes
+            scopes: SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ')
         })];
 
         beforeEach(async () => {
@@ -51,7 +50,7 @@ describe('integration/src/models/spotify-model.ts', () => {
         });
     });
 
-    describe('getRefreshedAccessToken', () => {
+    describe.only('getRefreshedAccessToken', () => {
         const userId = 'yellowcanary';
         const expectedScopes = SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ');
 

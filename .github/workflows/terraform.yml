@@ -9,6 +9,12 @@ jobs:
   terraform_deploy:
     name: Deploy to AWS
     runs-on: ubuntu-latest
+    services:
+      dynamodb:
+        image: amazon/dynamodb-local
+        ports:
+          - 8000:8000
+
     steps:
     - name: Checkout repo
       uses: actions/checkout@v1
@@ -25,8 +31,16 @@ jobs:
     - name: Compile typescript
       run: npm run compile
 
-    # - name: Run tests
-    #   run: TODO
+    - name: Run unit tests
+      run: npm run test:unit
+
+    - name: Run integration tests
+      env:
+        SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+        SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+        SPOTIFY_REFRESH_TOKEN_ITS: ${{ secrets.SPOTIFY_REFRESH_TOKEN_ITS }}
+        SPOTIFY_REFRESH_TOKEN_SCOPES_ITS: ${{ secrets.SPOTIFY_REFRESH_TOKEN_SCOPES_ITS }}
+      run: npm run test:integration
 
     - name: Clean and install prod node dependencies
       run: rm -rf node_modules && npm install --prod
