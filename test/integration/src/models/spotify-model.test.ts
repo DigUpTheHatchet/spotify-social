@@ -51,6 +51,8 @@ describe('integration/src/models/spotify-model.ts', () => {
     });
 
     describe('getRefreshedAccessToken', () => {
+        console.log({SPOTIFY_REFRESH_TOKEN_ITS});
+        console.log({SPOTIFY_REFRESH_TOKEN_SCOPES_ITS});
         const userId = 'yellowcanary';
         const expectedScopes = SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ');
 
