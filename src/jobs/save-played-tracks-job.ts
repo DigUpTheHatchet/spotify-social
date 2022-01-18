@@ -1,4 +1,3 @@
-import { uniqueId } from 'lodash';
 import { SpotifyModel } from '../models/spotify-model';
 import { PlayedTracksModel } from '../models/played-tracks-model';
 import { PlayedTrack, SpotifyUser } from '../ts';
