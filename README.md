@@ -8,7 +8,6 @@ Goal:
     I'll need to store the access token in a db instead of an env variable because we will want to save this when this happens
 
 - Parse ddb table specs from tf
-- Run all ITs after 50 songs have been played
 - Handle partial failures for SPT lambda, e.g. if one person revokes their token
 - Create startup script for dynamodb-local for ITs
 - Create serialize/deserialize functions for dates in dynamodb: see below this file
@@ -46,35 +45,9 @@ PlayedTracks
     hashKey: userId: string
     rangeKey: playedAt: number (secs/ epoch)
 
-    userId
-    playedAt
-    spotifyUri
-    spotifyId
-    trackName
-    artistNames
-
-
-getLastPlayedTrack(userId: string)
-    query(key={userId}, ScanIndexForward=True, limit=1)
-    
-saveTracks(userId: string, tracks: PlayedTrack[])
-
-getTrackHistory(userId: string, startDate: Date, endDate: Date)
-
-
-
 SpotifyTokens
     hashKey: userId: string  e.g. 'xdrk'
     rangeKey: type: string  e.g. 'refresh' 
-    
-    userId
-    type
-    scopes
-    createdAt
-
-    getRefreshToken()
-    saveToken()
-
     
 
 <!-- function serialize(values, { dateProperties = [] }) {

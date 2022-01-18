@@ -36,7 +36,7 @@ describe('integration/src/models/spotify-model.ts', () => {
         it('should retrieve the user\'s recently played tracks from Spotify', async () => {
             const playedTracks: PlayedTrack[] = await spotifyModel.getRecentlyPlayedTracks(userId);
 
-            expect(playedTracks).to.be.an('array').and.to.have.length(50);
+            expect(playedTracks).to.be.an('array').and.to.have.length.greaterThan(10);
 
             // TODO: Make this functional
             for (const track of playedTracks) {
@@ -50,7 +50,7 @@ describe('integration/src/models/spotify-model.ts', () => {
         });
     });
 
-    describe.only('getRefreshedAccessToken', () => {
+    describe('getRefreshedAccessToken', () => {
         const userId = 'yellowcanary';
         const expectedScopes = SPOTIFY_REFRESH_TOKEN_SCOPES_ITS!.split(' ');
 

@@ -128,7 +128,7 @@ resource "aws_lambda_function" "spt_lambda" {
   source_code_hash = filebase64sha256("../artifacts/spotify-api.zip")
 
   runtime = "nodejs14.x"
-  timeout = 10
+  timeout = 15
   memory_size = 128
 
   environment {
