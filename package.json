@@ -1,5 +1,5 @@
 {
-    "name": "spotify-api",
+    "name": "spotify-social",
     "version": "0.5.0",
     "main": "index.js",
     "scripts": {

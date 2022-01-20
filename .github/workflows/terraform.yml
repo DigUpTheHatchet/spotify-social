@@ -49,7 +49,7 @@ jobs:
       run: rm -rf zipme && mkdir zipme && cp -r dist/src zipme && cp -r node_modules zipme
 
     - name: Zip files
-      run: zip -qq -r ../artifacts/spotify-api.zip ./*
+      run: zip -qq -r ../artifacts/spotify-social.zip ./*
       working-directory: ./zipme
 
     - name: Verify Terraform version
