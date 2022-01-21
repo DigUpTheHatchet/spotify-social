@@ -1,4 +1,10 @@
-import { AttributeValue, BatchWriteItemInput, CreateTableInput, DeleteTableInput, GetItemInput, PutItemCommandOutput, PutItemInput, QueryInput, ScanInput } from '@aws-sdk/client-dynamodb';
+import {
+    AttributeValue,
+    CreateTableInput,
+    GetItemInput,
+    QueryInput,
+    ScanInput
+} from '@aws-sdk/client-dynamodb';
 
 export type PlayedTrack = {
     spotifyUri: string;
@@ -34,24 +40,14 @@ export interface SpotifyUserData {
     registeredAt: Date;
 }
 
-// export declare type AttributeDataType = 'S' | 'SS' | 'N' | 'NS' | 'B' | 'BS' | 'BOOL' | 'NULL' | 'L' | 'M';
-
-// export type Key = {
-//     field: string;
-//     value: any
-//     type: AttributeDataType
-// };
-
 export type DynamoItem = {
     [key: string]: AttributeValue;
 } | undefined;
-export type QueryParams = any;
 
 export interface DynamoDBClient {
     // TODO: I'd rather expose less DDB internals (e.g. types) on this interface
-    // getItem: (tableName: string, key: Key) => any;
-    // putItem: (tableName: string, item: DynamoItem) => any;
-    // query: (tableName: string, params: QueryParams) => any;
+    // getItem should be: `(tableName: string, key: Key) => Promise<any>`;
+    // instead of the caller needing to know the `params: GetItemInput` detail
 
     getItem: (params: GetItemInput) => Promise<any>;
     scan: (params: ScanInput) => Promise<any>;

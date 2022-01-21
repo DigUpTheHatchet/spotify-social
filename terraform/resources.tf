@@ -120,12 +120,12 @@ resource "aws_iam_role_policy_attachment" "spt_policy_attachment" {
 }
 
 resource "aws_lambda_function" "spt_lambda" {
-  filename      = "../artifacts/spotify-api.zip"
+  filename      = "../artifacts/spotify-social.zip"
   function_name = "save-played-tracks"
   role          = aws_iam_role.spt_lambda_role.arn
   handler       = "src/index.savePlayedTracksJobHandler"
 
-  source_code_hash = filebase64sha256("../artifacts/spotify-api.zip")
+  source_code_hash = filebase64sha256("../artifacts/spotify-social.zip")
 
   runtime = "nodejs14.x"
   timeout = 15
