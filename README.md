@@ -1,4 +1,5 @@
 # Spotify Social
+A for-fun project that uses the [Spotify Developer API](https://developer.spotify.com/discover/), built with Typescript and deployed on AWS.
 
 # Overview
 - Motivations
@@ -18,8 +19,8 @@
 
 
 # Contribution
-This project is currently not open to contributors, but it is something I'm open to... get in touch :)
+This project is currently not open to contributors but it is something I'm open to... so get in touch :)
 
 
 # Licensing
-Please first review the [License](LICENSE.md), then proceed to go wild! 
+Please review the [License](LICENSE.md), then proceed to go wild! 

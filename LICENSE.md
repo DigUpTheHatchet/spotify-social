@@ -1,2 +1,2 @@
-Feel free to re-use parts of this codebase and/or use this project as inspiration for your own!
-If you do end up using any of my code (particularly if your project is public-facing) crediting the author would be appreciated :)
+* Feel free to re-use parts of this codebase and/or use this project as inspiration for your own!
+* If you do end up using any of my code (particularly if your project is public-facing) crediting the author would be appreciated :)
