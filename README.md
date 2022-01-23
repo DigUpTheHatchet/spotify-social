@@ -25,7 +25,9 @@ Spotify have exposed a bunch of really cool information through their [Spotify W
 
 This application allows Spotify users to "register" via an OAuth authentication flow on [dyl.dev](https://www.dyl.dev/spotify-authorize), which creates (and persists in the database) an 'authentication' token and a 'refresh' token for the user. These authentication tokens expire after one hour, but the refresh token can be used to generate new authentication tokens. This application uses the (persisted) refresh token of registered users to obtain a fresh authentication token, which can then be used to access the user-related API endpoints on behalf of the user.
 
-![Spotify Auth Flow](/media/screenshots/auth-flow.png?raw=true)
+<p align="center">
+  <img src="/media/screenshots/auth-flow.png?raw=true" alt="Spotify Auth Flow"/>
+</p>
 
 
 ### Current Features:
