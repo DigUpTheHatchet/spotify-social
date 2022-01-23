@@ -44,7 +44,9 @@ This application allows Spotify users to "register" via an OAuth authentication 
 - TODO
 
 ### Deployment
-This project is currently deployed on AWS. The AWS infrastructure is defined and managed using [Terraform](https://github.com/DigUpTheHatchet/spotify-social/tree/main/terraform). Note: See [Issue #19](https://github.com/DigUpTheHatchet/spotify-social/issues/19).
+This project is currently deployed on AWS. The AWS infrastructure is defined and managed using [Terraform](https://github.com/DigUpTheHatchet/spotify-social/tree/main/terraform).
+
+Note: See [Issue #19](https://github.com/DigUpTheHatchet/spotify-social/issues/19).
 
 I'm using a Github Actions pipeline for CI/CD. This pipeline runs the unit and integration [tests](#testing) before each deployment to AWS.
 
@@ -53,7 +55,7 @@ This project is fully unit and integration tested :)
 
 ### Unit Tests
 The unit tests for this project can be run using the following command: `npm run test:unit`. 
-There are no dependencies for running the unit tests, so they can be run from anywhere.
+There are no dependencies for running the unit tests, so they can be run from anywhere. Obviously, you'll have to have first run `npm install` to install the required node dependencies.
 The testing packages used are:
  - Test Runner: [Mocha](https://www.npmjs.com/package/mocha)
  - Mocks/Stubs: [Sinon](https://www.npmjs.com/package/sinon)
@@ -63,19 +65,19 @@ The testing packages used are:
 There are a number of dependencies required to run the integrations tests in this project:
 - An instance of [dynamodb-local](https://hub.docker.com/r/amazon/dynamodb-local) must be running on localhost port `8000`.
 - A number of environment variables must be defined (as the ITs hit the actual Spotify API):
- - `SPOTIFY_CLIENT_ID` - The actual `SPOTIFY_CLIENT_ID` of my Spotify Application
- - `SPOTIFY_CLIENT_SECRET` - The actual `SPOTIFY_CLIENT_SECRET` of my Spotify Application
- - `SPOTIFY_REFRESH_TOKEN_ITS` - The refresh token from a Spotify account I created for running the ITs
- - `SPOTIFY_REFRESH_TOKEN_SCOPES_ITS` - The scopes authorized on the above refresh token
+  - `SPOTIFY_CLIENT_ID` - The actual `SPOTIFY_CLIENT_ID` of my [Spotify App](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/).
+  - `SPOTIFY_CLIENT_SECRET` - The actual `SPOTIFY_CLIENT_SECRET` of my [Spotify App](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/).
+  - `SPOTIFY_REFRESH_TOKEN_ITS` - The refresh token from a Spotify account I created for running the ITs.
+  - `SPOTIFY_REFRESH_TOKEN_SCOPES_ITS` - The scopes authorized on the above refresh token.
 
-Because the required environment variables include credentials from my own Spotify application, I can't expose them here. 
-If you want to run the ITs, you will need to create your own Spotify application (+ credentials) and generate a refresh token for your Spotify user.
+Because the required environment variables include credentials from my own Spotify App, I can't expose them here. 
+If you want to run the ITs, you will need to create your own [Spotify App](https://developer.spotify.com/documentation/general/guides/authorization/app-settings/) (+ credentials) and generate a refresh token for your Spotify user.
 
-Once the above dependencies have been provided, the integration tests can be run with `npm run test:integration`.
+Once the above dependencies have been met, run the ITs with `npm run test:integration`.
 
 You can see an example of the ITs being run in the [Github Actions Pipeline](https://github.com/DigUpTheHatchet/spotify-social/blob/add-project-readme/.github/workflows/terraform.yml). An instance of dynamodb-local is started as a Service on port `8000`, and the required environment variables are passed to the `Run integration tests` step.
 
-Before each IT, a `prepareTestTables()` function is called. This function will destroy and re-create the dynamodb tables, before inserting any test data that is required. You can see an example of this [here](https://github.com/DigUpTheHatchet/spotify-social/blob/add-project-readme/test/integration/src/models/played-tracks-model.test.ts#L26).
+Before each integration test, a `prepareTestTables()` function is called. This function will destroy and re-create all dynamodb tables, before inserting any test data that is required for the IT. You can see an example of this [here](https://github.com/DigUpTheHatchet/spotify-social/blob/add-project-readme/test/integration/src/models/played-tracks-model.test.ts#L26).
 
 # Future Enhancements
 - TODO
