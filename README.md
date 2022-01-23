@@ -44,9 +44,7 @@ This application allows Spotify users to "register" via an OAuth authentication 
 - TODO
 
 ### Deployment
-This project is currently deployed on AWS. The AWS infrastructure is defined and managed using [Terraform](https://github.com/DigUpTheHatchet/spotify-social/tree/main/terraform).
-
-Note: See [Issue #19](https://github.com/DigUpTheHatchet/spotify-social/issues/19).
+This project is currently deployed on AWS. The AWS infrastructure required is defined and managed using [Terraform](https://github.com/DigUpTheHatchet/spotify-social/tree/main/terraform). Note: see [Issue #19](https://github.com/DigUpTheHatchet/spotify-social/issues/19).
 
 I'm using a Github Actions pipeline for CI/CD. This pipeline runs the unit and integration [tests](#testing) before each deployment to AWS.
 
