@@ -222,12 +222,12 @@ resource "aws_iam_role_policy_attachment" "rsu_policy_attachment" {
 }
 
 resource "aws_lambda_function" "rsu_lambda" {
-  filename      = "../artifacts/spotify-api.zip"
+  filename      = "../artifacts/spotify-social.zip"
   function_name = "register-spotify-user"
   role          = aws_iam_role.rsu_lambda_role.arn
   handler       = "src/index.registerSpotifyUserHandler"
 
-  source_code_hash = filebase64sha256("../artifacts/spotify-api.zip")
+  source_code_hash = filebase64sha256("../artifacts/spotify-social.zip")
 
   runtime = "nodejs14.x"
   timeout = 10
