@@ -1,6 +1,7 @@
 import { GetItemInput, ScanInput } from '@aws-sdk/client-dynamodb';
 import { SpotifyUserStorage, DynamoDBClient, SpotifyUser } from '../../ts';
-import { convertDateToTs, convertTsToDate } from '../../utils/dynamoDBUtils';
+
+const DATE_FIELDS: string[] = ['registeredAt'];
 
 export class SpotifyUserDynamoDBStorage implements SpotifyUserStorage {
     private dynamoDBClient: DynamoDBClient;
@@ -12,9 +13,7 @@ export class SpotifyUserDynamoDBStorage implements SpotifyUserStorage {
     }
 
     async saveUser(user: SpotifyUser): Promise<void> {
-        const item = { ...user, registeredAt: convertDateToTs(user.registeredAt) };
-
-        return this.dynamoDBClient.putItem(this.tableName, item);
+        return this.dynamoDBClient.putItem(this.tableName, user, DATE_FIELDS);
     }
 
     async getUser(userId: string): Promise<SpotifyUser> {
@@ -23,19 +22,14 @@ export class SpotifyUserDynamoDBStorage implements SpotifyUserStorage {
             Key: { 'userId': { 'S' : userId } } // Partition Key
         };
 
-        const item = await this.dynamoDBClient.getItem(params);
-        const user: SpotifyUser = Object.assign({}, item, { registeredAt: convertTsToDate(item.registeredAt) });
+        const user: SpotifyUser = await this.dynamoDBClient.getItem(params, DATE_FIELDS);
 
         return user;
     }
 
     async getAllUsers(): Promise<SpotifyUser[]> {
         const params: ScanInput = { TableName: this.tableName };
-        const items = await this.dynamoDBClient.scan(params);
-
-        const spotifyUsers: SpotifyUser[] = items.map(item => {
-            return Object.assign({}, item, { registeredAt: convertTsToDate(item.registeredAt) });
-        });
+        const spotifyUsers: SpotifyUser[] = await this.dynamoDBClient.scan(params, DATE_FIELDS);
 
         return spotifyUsers;
     }

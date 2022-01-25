@@ -1,6 +1,7 @@
 import { GetItemInput } from '@aws-sdk/client-dynamodb';
 import { DynamoDBClient, SpotifyToken, SpotifyTokenStorage } from '../../ts';
-import { convertDateToTs, convertTsToDate } from '../../utils/dynamoDBUtils';
+
+const DATE_FIELDS: string[] = ['createdAt'];
 
 export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
     private dynamoDBClient: DynamoDBClient;
@@ -20,15 +21,12 @@ export class SpotifyTokenDynamoDBStorage implements SpotifyTokenStorage {
             }
         };
 
-        const item = await this.dynamoDBClient.getItem(params);
-        const refreshToken: SpotifyToken = Object.assign({}, item, { createdAt: convertTsToDate(item.createdAt) });
+        const refreshToken: SpotifyToken = await this.dynamoDBClient.getItem(params, DATE_FIELDS);
 
         return refreshToken;
     }
 
     async saveToken(token: SpotifyToken): Promise<void> {
-        const item = { ...token, createdAt: convertDateToTs(token.createdAt) };
-
-        return this.dynamoDBClient.putItem(this.tableName, item);
+        return this.dynamoDBClient.putItem(this.tableName, token, DATE_FIELDS);
     }
 }

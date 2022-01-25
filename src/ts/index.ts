@@ -49,12 +49,12 @@ export interface DynamoDBClient {
     // getItem should be: `(tableName: string, key: Key) => Promise<any>`;
     // instead of the caller needing to know the `params: GetItemInput` detail
 
-    getItem: (params: GetItemInput) => Promise<any>;
-    scan: (params: ScanInput) => Promise<any>;
-    query: (params: QueryInput) => Promise<any>;
+    getItem: (params: GetItemInput, dateFields?: string[]) => Promise<any>;
+    scan: (params: ScanInput, dateFields?: string[]) => Promise<any>;
+    query: (params: QueryInput, dateFields?: string[]) => Promise<any>;
 
-    putItem: (tableName: string, item: any) => Promise<any>;
-    batchWriteItems: (tableName: string, items: any[]) => Promise<any>;
+    putItem: (tableName: string, item: any, dateFields?: string[]) => Promise<any>;
+    batchWriteItems: (tableName: string, items: any[], dateFields?: string[]) => Promise<any>;
 
     createTable: (params: CreateTableInput) => Promise<any>;
     deleteTable: (tableName: string) => Promise<any>;

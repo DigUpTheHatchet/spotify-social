@@ -23,11 +23,11 @@ describe('unit/src/models/storage/spotify-user-dynamodb-storage.ts', () => {
         });
 
         it('should use the ddb client to save the spotify user', async () => {
-            const expectedItem = { ... mockUser, registeredAt: mockUser.registeredAt.valueOf() };
+            const expectedDateFields = ['registeredAt'];
 
             await spotifyUserDynamoDBStorage.saveUser(mockUser);
 
-            expect(mockDynamoDBClient.putItem).to.have.been.calledOnceWithExactly(mockTableName, expectedItem);
+            expect(mockDynamoDBClient.putItem).to.have.been.calledOnceWithExactly(mockTableName, mockUser, expectedDateFields);
         });
     });
 
@@ -35,14 +35,14 @@ describe('unit/src/models/storage/spotify-user-dynamodb-storage.ts', () => {
         const mockScanResult = [{
             userId: 'purple',
             email: 'purple@hotmail.com',
-            name: 'namesless1',
-            registeredAt: Date.now(),
+            name: 'nameless1',
+            registeredAt: new Date(),
             isEnabled: true
         }, {
             userId: 'pink',
             email: 'pink@hotmail.com',
             name: 'nameless2',
-            registeredAt: Date.now(),
+            registeredAt: new Date(),
             isEnabled: true
         }];
 
@@ -69,11 +69,12 @@ describe('unit/src/models/storage/spotify-user-dynamodb-storage.ts', () => {
                     registeredAt: new Date(mockScanResult[1].registeredAt)
                 })
             ];
+            const expectedDateFields = ['registeredAt'];
 
             const users: SpotifyUser[] = await spotifyUserDynamoDBStorage.getAllUsers();
 
             expect(users).to.eql(expectedUsers);
-            expect(mockDynamoDBClient.scan).to.have.been.calledOnceWithExactly(expectedScanParams);
+            expect(mockDynamoDBClient.scan).to.have.been.calledOnceWithExactly(expectedScanParams, expectedDateFields);
         });
     });
 
@@ -84,7 +85,7 @@ describe('unit/src/models/storage/spotify-user-dynamodb-storage.ts', () => {
             userId,
             email: 'garry@skysports.com',
             name: 'Garry Neville',
-            registeredAt: Date.now(),
+            registeredAt: new Date(),
             isEnabled: true
         };
 
@@ -108,11 +109,12 @@ describe('unit/src/models/storage/spotify-user-dynamodb-storage.ts', () => {
                 TableName: mockTableName,
                 Key: { 'userId': { 'S' : userId } }
             };
+            const expectedDateFields = ['registeredAt'];
 
             const user: SpotifyUser = await spotifyUserDynamoDBStorage.getUser(userId);
 
             expect(user).to.eql(expectedUser);
-            expect(mockDynamoDBClient.getItem).to.have.been.calledOnceWithExactly(expectedGetItemParams);
+            expect(mockDynamoDBClient.getItem).to.have.been.calledOnceWithExactly(expectedGetItemParams, expectedDateFields);
         });
     });
 });

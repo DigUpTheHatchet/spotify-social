@@ -5,6 +5,7 @@ import { DynamoDBClient, SpotifyToken } from '../../../../ts';
 import { SpotifyTokenDynamoDBStorage } from '../../../../../src/models/storage/spotify-token-dynamodb-storage';
 import { buildSpotifyToken } from '../../../../fixtures';
 
+
 const mockTableName = 'dummy-table';
 const mockDynamoDBClient = stubInterface<DynamoDBClient>();
 const spotifyTokenDynamoDBStorage = new SpotifyTokenDynamoDBStorage(mockDynamoDBClient, mockTableName);
@@ -18,7 +19,7 @@ describe('unit/src/models/storage/spotify-token-dynamodb-storage.ts', () => {
             value: 'blaldasdnlasdasdasndlnaslkdnaskdlnaslkdnas',
             userId,
             scopes: ['user-do-something', 'user-do-something-else'],
-            createdAt: Date.now()
+            createdAt: new Date()
         };
 
         beforeEach(() => {
@@ -35,11 +36,12 @@ describe('unit/src/models/storage/spotify-token-dynamodb-storage.ts', () => {
                 TableName: mockTableName,
                 Key: { 'userId': { 'S' : userId }, 'type': { 'S' : 'refresh' } }
             };
+            const expectedDateFields = ['createdAt'];
 
             const refreshToken: SpotifyToken = await spotifyTokenDynamoDBStorage.getRefreshToken(userId);
 
             expect(refreshToken).to.eql(expectedRefreshToken);
-            expect(mockDynamoDBClient.getItem).to.have.been.calledOnceWithExactly(expectedGetItemParams);
+            expect(mockDynamoDBClient.getItem).to.have.been.calledOnceWithExactly(expectedGetItemParams, expectedDateFields);
         });
     });
 
@@ -48,11 +50,11 @@ describe('unit/src/models/storage/spotify-token-dynamodb-storage.ts', () => {
         const mockToken: SpotifyToken = buildSpotifyToken({ userId });
 
         it('should use the ddb client to save the spotify token', async () => {
-            const expectedItem = { ... mockToken, createdAt: mockToken.createdAt.valueOf()
-            };
+            const expectedDateFields = ['createdAt'];
+
             await spotifyTokenDynamoDBStorage.saveToken(mockToken);
 
-            expect(mockDynamoDBClient.putItem).to.have.been.calledOnceWithExactly(mockTableName, expectedItem);
+            expect(mockDynamoDBClient.putItem).to.have.been.calledOnceWithExactly(mockTableName, mockToken, expectedDateFields);
         });
     });
 });
