@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { stubInterface } from 'ts-sinon';
-import sinon from 'sinon';
 
 import { DynamoDBClient, PlayedTrack } from '../../../../ts';
 import { PlayedTracksDynamoDBStorage } from '../../../../../src/models/storage/played-tracks-dynamodb-storage';
@@ -19,7 +18,7 @@ describe('unit/src/models/storage/played-tracks-dynamodb-storage.ts', () => {
             spotifyUri: 'spotify:track:091n9MH1VUepOdhnv7SLci',
             spotifyId: '091n9MH1VUepOdhnv7SLci',
             trackName: 'Who dunnit?',
-            playedAt: Date.now(),
+            playedAt: new Date(),
             artistNames: ['Scooby Doo', 'Shaggy'],
         }];
 
@@ -41,13 +40,13 @@ describe('unit/src/models/storage/played-tracks-dynamodb-storage.ts', () => {
                     ':v_pk': { 'S': userId }
                 },
             };
-
-            const expectedTrack: PlayedTrack = buildPlayedTrack({ userId, playedAt: new Date(mockQueryReturn[0].playedAt) });
+            const expectedDateFields = ['playedAt'];
+            const expectedTrack: PlayedTrack = mockQueryReturn[0];
 
             const retrievedTrack: PlayedTrack = await playedTracksDynamoDBStorage.getLastSavedPlayedTrack(userId);
 
             expect(retrievedTrack).to.eql(expectedTrack);
-            expect(mockDynamoDBClient.query).to.have.been.calledOnceWithExactly(expectedQueryParams);
+            expect(mockDynamoDBClient.query).to.have.been.calledOnceWithExactly(expectedQueryParams, expectedDateFields);
         });
     });
 
@@ -66,14 +65,11 @@ describe('unit/src/models/storage/played-tracks-dynamodb-storage.ts', () => {
         });
 
         it('should use the ddb client to save the played tracks in the database', async () => {
-            const expectedItems = [
-                Object.assign({}, playedTracks[0], { playedAt: playedTracks[0].playedAt.valueOf() }),
-                Object.assign({}, playedTracks[1], { playedAt: playedTracks[1].playedAt.valueOf() })
-            ];
+            const expectedDateFields = ['playedAt'];
 
             await playedTracksDynamoDBStorage.savePlayedTracks(playedTracks);
 
-            expect(mockDynamoDBClient.batchWriteItems).to.have.been.calledOnceWithExactly(mockTableName, expectedItems);
+            expect(mockDynamoDBClient.batchWriteItems).to.have.been.calledOnceWithExactly(mockTableName, playedTracks, expectedDateFields);
         });
     });
 
@@ -82,7 +78,7 @@ describe('unit/src/models/storage/played-tracks-dynamodb-storage.ts', () => {
         const startDate = new Date('2022-01-01T09:04:41.607Z');
         const endDate = new Date('2022-01-03T09:04:41.607Z');
 
-        const mockQueryReturn = [{
+        const mockPlayedTracks = [{
             userId,
             spotifyUri: 'spotify:track:091n9MH1VUepOdhnv7SLci',
             spotifyId: '091n9MH1VUepOdhnv7SLci',
@@ -99,7 +95,7 @@ describe('unit/src/models/storage/played-tracks-dynamodb-storage.ts', () => {
         }];
 
         beforeEach(() => {
-            mockDynamoDBClient.query.resolves(mockQueryReturn);
+            mockDynamoDBClient.query.resolves(mockPlayedTracks);
         });
 
         afterEach(() => {
@@ -117,16 +113,12 @@ describe('unit/src/models/storage/played-tracks-dynamodb-storage.ts', () => {
                     ':v_to': { 'N': endDate.valueOf().toString() },
                 },
             };
-
-            const expectedPlayedTracks: PlayedTrack[] = [
-                buildPlayedTrack({ userId, playedAt: new Date(mockQueryReturn[0].playedAt) }),
-                buildPlayedTrack({ userId, playedAt: new Date(mockQueryReturn[1].playedAt) })
-            ];
+            const expectedDateFields = ['playedAt'];
 
             const playedTracks: PlayedTrack[] = await playedTracksDynamoDBStorage.getPlayedTracks(userId, startDate, endDate);
 
-            expect(playedTracks).to.eql(expectedPlayedTracks);
-            expect(mockDynamoDBClient.query).to.have.been.calledOnceWithExactly(expectedQueryParams);
+            expect(playedTracks).to.eql(mockPlayedTracks);
+            expect(mockDynamoDBClient.query).to.have.been.calledOnceWithExactly(expectedQueryParams, expectedDateFields);
         });
     });
 });

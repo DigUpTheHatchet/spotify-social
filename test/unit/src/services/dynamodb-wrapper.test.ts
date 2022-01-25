@@ -162,9 +162,10 @@ describe('unit/src/services/dynamodb-wrapper.ts', () => {
     describe('batchWriteItems', () => {
         const mockItem = {
             'spotifyUri': 'spotify:track:091n9MH1VUepOdhnv7SLci', 'spotifyId': '091n9MH1VUepOdhnv7SLci',
-            'trackName': 'Who dunnit?', 'playedAt': 1637370000000, 'artistNames': ['Scooby Doo', 'Shaggy'], 'userId': 'frank'
+            'trackName': 'Who dunnit?', 'playedAt': new Date(1643086257030), 'artistNames': ['Scooby Doo', 'Shaggy'], 'userId': 'frank'
         };
         const mockItems = _.range(0, 30).map(i => mockItem);
+        const dateFields = ['playedAt'];
 
         beforeEach(() => {
             sinon.stub(dynamoDBWrapper, '_batchWriteItem').resolves();
@@ -177,11 +178,11 @@ describe('unit/src/services/dynamodb-wrapper.ts', () => {
         it('should call marshall and chunks the items, then call _batchWriteItem for each 25 item chunk', async () => {
             const marshalledItem = {
                 'PutRequest': {'Item': {'spotifyUri': {'S': 'spotify:track:091n9MH1VUepOdhnv7SLci'}, 'spotifyId': {'S': '091n9MH1VUepOdhnv7SLci'},
-                'trackName': {'S': 'Who dunnit?'}, 'playedAt': {'N': '1637370000000'}, 'artistNames': {'L': [{'S': 'Scooby Doo'}, {'S': 'Shaggy'}]}, 'userId': {'S': 'frank'}}}
+                'trackName': {'S': 'Who dunnit?'}, 'playedAt': {'N': '1643086257030'}, 'artistNames': {'L': [{'S': 'Scooby Doo'}, {'S': 'Shaggy'}]}, 'userId': {'S': 'frank'}}}
             };
             const expectedChunks = [_.range(0, 25).map(i => marshalledItem), _.range(0, 5).map(i => marshalledItem)];
 
-            await dynamoDBWrapper.batchWriteItems(mockTableName, mockItems);
+            await dynamoDBWrapper.batchWriteItems(mockTableName, mockItems, dateFields);
 
             expect(dynamoDBWrapper._batchWriteItem).to.have.been.calledTwice();
 

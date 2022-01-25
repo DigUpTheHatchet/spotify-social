@@ -10,7 +10,7 @@ const mockTableName = 'dummy-table';
 const mockDynamoDBClient = stubInterface<DynamoDBClient>();
 const spotifyTokenDynamoDBStorage = new SpotifyTokenDynamoDBStorage(mockDynamoDBClient, mockTableName);
 
-describe.only('unit/src/models/storage/spotify-token-dynamodb-storage.ts', () => {
+describe('unit/src/models/storage/spotify-token-dynamodb-storage.ts', () => {
     describe('getRefreshToken', () => {
         const userId = 'rickJameson';
 

@@ -37,7 +37,7 @@ export default class DynamoDBWrapper implements DynamoDBClient {
     }
 
     async batchWriteItems(tableName: string, items: any[], dateFields: string[] = []): Promise<any> {
-        const marshalledItems = items.map(item => Object.assign({}, { PutRequest: { Item: unmarshallItem(item, dateFields)} }));
+        const marshalledItems = items.map(item => Object.assign({}, { PutRequest: { Item: marshallItem(item, dateFields)} }));
         const chunkedItems = _.chunk(marshalledItems, 25);
 
         return Bluebird.map(chunkedItems, (chunk) => this._batchWriteItem(tableName, chunk));
