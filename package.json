@@ -8,7 +8,8 @@
         "test:unit": "NODE_ENV=test mocha -r ts-node/register test/unit/**/*.test.ts",
         "test:integration": "NODE_ENV=test mocha -r ts-node/register test/integration/**/*.test.ts",
         "lint": "tslint -c tslint.json -p tsconfig.json",
-        "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix"
+        "lint:fix": "tslint -c tslint.json -p tsconfig.json --fix",
+        "start:ddb-local": "./start-ddb-local.sh"
     },
     "pre-commit": [
         "lint"
