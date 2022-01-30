@@ -17,11 +17,11 @@
     "dependencies": {
         "@aws-sdk/client-dynamodb": "^3.36.0",
         "@aws-sdk/util-dynamodb": "^3.37.0",
-        "axios": "^0.21.1",
+        "axios": "^0.24.0",
         "bluebird": "^3.7.2",
         "lodash": "^4.17.15",
         "querystring": "~0.2.0",
-        "retry-axios": "^2.2.1",
+        "retry-axios": "^2.6.0",
         "uuid": "^8.0.0"
     },
     "devDependencies": {
