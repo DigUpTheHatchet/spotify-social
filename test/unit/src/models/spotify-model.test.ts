@@ -2,11 +2,14 @@ import { expect } from 'chai';
 import { stubInterface } from 'ts-sinon';
 import sinon from 'sinon';
 import { uniqueId } from 'lodash';
+import * as _ from 'lodash';
+
 
 import { SpotifyModel } from '../../../../src/models/spotify-model';
 import HttpClient from '../../../../src/services/http-client';
 import { PlayedTrack, SpotifyToken, SpotifyTokenStorage, SpotifyUser, SpotifyUserStorage } from '../../../../src/ts';
 import { buildPlayedTrack, buildSpotifyToken, buildSpotifyUser, buildSpotifyUserData } from '../../../fixtures';
+import { AxiosRequestConfig } from 'axios';
 
 const mockHttpClient = stubInterface<HttpClient>();
 const mockSpotifyTokenStorage = stubInterface<SpotifyTokenStorage>();
@@ -117,8 +120,9 @@ describe('unit/src/models/spotify-model.ts', () => {
 
             expect(mockHttpClient.post.getCall(0).args[0]).to.eql(expectedUrl);
             expect(mockHttpClient.post.getCall(0).args[1]).to.eql(expectedBody);
-            expect(mockHttpClient.post.getCall(0).args[2]!['headers']['Content-Type']).to.eql(expectedContentType);
-            expect(mockHttpClient.post.getCall(0).args[2]!['headers']['Authorization']).to.a.string;
+
+            expect(_.get(mockHttpClient.post.getCall(0).args[2], 'headers.Content-Type')).to.eql(expectedContentType);
+            expect(_.get(mockHttpClient.post.getCall(0).args[2], 'headers.Authorization')).to.a.string;
 
             expect(accessToken.scopes).to.eql(expectedScopes);
             expect(accessToken.userId).to.eql(userId);
