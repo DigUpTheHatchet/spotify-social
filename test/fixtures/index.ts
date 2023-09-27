@@ -1,5 +1,5 @@
 import { PlayedTrack, SpotifyToken, SpotifyUser, SpotifyUserData } from '../ts';
-import { uniqueId } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 
 export function buildPlayedTrack(overrides?: any): PlayedTrack {
     return Object.assign({
@@ -15,7 +15,7 @@ export function buildPlayedTrack(overrides?: any): PlayedTrack {
 export function buildSpotifyToken(overrides?: any): SpotifyToken {
     return Object.assign({
         type: 'refresh',
-        value: uniqueId(),
+        value: uuidv4(),
         userId: 'rickJames',
         scopes: ['user-do-something', 'user-do-something-else'],
         createdAt: new Date()
@@ -39,7 +39,7 @@ export function buildSpotifyUserData(overrides?: any): SpotifyUserData {
         name: 'Michael Longbottom',
         registeredAt: new Date('2021-01-01T00:00:00.000Z'),
         scopes: ['user-modify-playback-state', 'user-read-currently-playing', 'user-read-email', 'user-read-recently-played', 'user-read-private'],
-        refreshToken: uniqueId(),
+        refreshToken: uuidv4(),
     }, overrides);
 }
 

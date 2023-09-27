@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { stubInterface } from 'ts-sinon';
 import sinon from 'sinon';
-import { uniqueId } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 import * as _ from 'lodash';
 
 
@@ -87,7 +87,7 @@ describe('unit/src/models/spotify-model.ts', () => {
         const userId = 'pillow1444';
 
         const mockRefreshToken: SpotifyToken = buildSpotifyToken({ userId });
-        const mockAccessTokenValue: string = uniqueId();
+        const mockAccessTokenValue: string = uuidv4();
 
         const rawSpotifyReturn = {
             access_token: mockAccessTokenValue,
@@ -107,7 +107,7 @@ describe('unit/src/models/spotify-model.ts', () => {
 
         it('should use the user\'s saved refresh token to retrieve a new access token from Spotify', async () => {
             const expectedUrl = 'https://accounts.spotify.com/api/token';
-            const expectedBody = 'grant_type=refresh_token&refresh_token=2';
+            const expectedBody = `grant_type=refresh_token&refresh_token=${mockRefreshToken.value}`;
 
             const expectedContentType = 'application/x-www-form-urlencoded';
 

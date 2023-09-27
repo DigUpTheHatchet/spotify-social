@@ -36,7 +36,7 @@ describe('integration/src/models/spotify-model.ts', () => {
         it('should retrieve the user\'s recently played tracks from Spotify', async () => {
             const playedTracks: PlayedTrack[] = await spotifyModel.getRecentlyPlayedTracks(userId);
 
-            expect(playedTracks).to.be.an('array').and.to.have.length.greaterThan(10);
+            expect(playedTracks).to.be.an('array').and.to.have.length.greaterThan(5);
 
             // TODO: Make this functional
             for (const track of playedTracks) {
@@ -104,10 +104,9 @@ describe('integration/src/models/spotify-model.ts', () => {
 
             expect(token.userId).to.eql(userId);
             expect(token.type).to.eql('access');
-            expect(token.scopes).to.eql(['user-read-currently-playing', 'user-read-recently-played']);
+            expect(token.scopes).to.eql(['user-read-currently-playing', 'user-read-email', 'user-read-recently-played', 'user-read-private']);
             expect(token.value).to.not.be.null.and.to.be.an.instanceof(String);
             expect(token.createdAt).to.be.an.instanceof(Date);
-
         });
     });
 

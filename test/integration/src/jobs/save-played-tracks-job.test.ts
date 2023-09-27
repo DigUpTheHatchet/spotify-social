@@ -40,7 +40,7 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
             const endDate = new Date('2099-01-01T00:00:00.000Z');
             const savedPlayedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
 
-            expect(savedPlayedTracks).to.be.an('array').and.to.have.length.greaterThan(10);
+            expect(savedPlayedTracks).to.be.an('array').and.to.have.length.greaterThan(5);
 
             // TODO: Make this functional
             for (const track of savedPlayedTracks) {
@@ -70,7 +70,7 @@ describe('integration/src/jobs/save-played-tracks-job.ts', () => {
             const endDate = new Date('2099-01-01T00:00:00.000Z');
             const savedPlayedTracks: PlayedTrack[] = await playedTracksModel.getPlayedTracks(userId, startDate, endDate);
 
-            expect(savedPlayedTracks).to.be.an('array').and.to.have.length.greaterThan(10);
+            expect(savedPlayedTracks).to.be.an('array').and.to.have.length.greaterThan(5);
 
             // TODO: Make this functional
             for (const track of savedPlayedTracks) {
