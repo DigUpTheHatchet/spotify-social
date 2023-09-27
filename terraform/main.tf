@@ -10,5 +10,4 @@ terraform {
 provider "aws" {
   region = "ap-southeast-2"
   shared_credentials_file = "/Users/dylan/.aws/credentials"
-  profile = "digupthehatchet"
 }
