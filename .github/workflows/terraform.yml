@@ -52,6 +52,11 @@ jobs:
       run: zip -qq -r ../artifacts/spotify-social.zip ./*
       working-directory: ./zipme
 
+  - name: Setup Terraform
+    uses: hashicorp/setup-terraform@v3
+    with:
+      terraform_version: "1.10.0"  # or latest
+
     - name: Verify Terraform version
       run: terraform --version
 
