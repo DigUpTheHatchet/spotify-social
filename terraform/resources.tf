@@ -229,7 +229,7 @@ resource "aws_lambda_function" "rsu_lambda" {
 
   source_code_hash = filebase64sha256("../artifacts/spotify-social.zip")
 
-  runtime = "nodejs22.x"
+  runtime = "nodejs20.x"
   timeout = 10
   memory_size = 128
 
