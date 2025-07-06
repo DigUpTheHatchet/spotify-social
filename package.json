@@ -1,6 +1,9 @@
 {
     "name": "spotify-social",
     "license": "MIT",
+    "engines": {
+        "node": ">=22.0.0 <23.0.0"
+    },
     "scripts": {
         "compile": "tsc -p ./",
         "watch:compile": "tsc  -p ./ --watch",
