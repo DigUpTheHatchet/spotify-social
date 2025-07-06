@@ -58,6 +58,9 @@ jobs:
         terraform_version: "1.5.0"
 
     - name: Verify Terraform version
+      run: terraform init -upgrade
+      
+    - name: Verify Terraform version
       run: terraform --version
 
     - name: Terraform init
