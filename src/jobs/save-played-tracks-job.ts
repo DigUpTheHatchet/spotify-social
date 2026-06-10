@@ -2,6 +2,7 @@ import { SpotifyModel } from '../models/spotify-model';
 import { PlayedTracksModel } from '../models/played-tracks-model';
 import { PlayedTrack, SpotifyUser } from '../ts';
 import Bluebird from 'bluebird';
+import * as _ from 'lodash';
 
 export class SavePlayedTracksJob {
     private spotifyModel: SpotifyModel;
@@ -37,6 +38,10 @@ export class SavePlayedTracksJob {
         return recentlyPlayedTracks;
     }
 
+    dedupePlayedTracks(tracks: PlayedTrack[]): PlayedTrack[] {
+        return _.uniqBy(tracks, track => `${track.userId}:${track.playedAt.getTime()}`);
+    }
+
     async getLastSavedPlayedTrack(userId: string): Promise<PlayedTrack> {
         const lastSavedPlayedTrack: PlayedTrack = await this.playedTracksModel.getLastSavedPlayedTrack(userId);
 
@@ -49,7 +54,8 @@ export class SavePlayedTracksJob {
     }
 
     async savePlayedTracks(playedTracks: PlayedTrack[]): Promise<void> {
-        console.log(`Saving ${playedTracks.length} recently played tracks..`);
-        return this.playedTracksModel.savePlayedTracks(playedTracks);
+        const tracksToSave = this.dedupePlayedTracks(playedTracks);
+        console.log(`Saving ${tracksToSave.length} recently played tracks..`);
+        return this.playedTracksModel.savePlayedTracks(tracksToSave);
     }
 }

@@ -88,10 +88,19 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
             mockPlayedTracksModel.savePlayedTracks.reset();
         });
 
-        it('should call the playedTracks model to save the user\'s played tracks', async () => {
-            await savePlayedTracksJob.savePlayedTracks(playedTracks);
+        it('should dedupe and call the playedTracks model to save the user\'s played tracks', async () => {
+            const duplicatePlayedAt = new Date('2021-01-01T01:00:00.000Z');
+            const playedTracksWithDuplicates: PlayedTrack[] = [
+                buildPlayedTrack({ userId, playedAt: new Date('2021-01-01T00:00:00.000Z') }),
+                buildPlayedTrack({ userId, playedAt: duplicatePlayedAt, trackName: 'First' }),
+                buildPlayedTrack({ userId, playedAt: duplicatePlayedAt, trackName: 'Second', spotifyId: 'other-id' }),
+                buildPlayedTrack({ userId, playedAt: new Date('2021-01-01T01:03:40.010Z') })
+            ];
+            const expectedTracks: PlayedTrack[] = savePlayedTracksJob.dedupePlayedTracks(playedTracksWithDuplicates);
 
-            expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(playedTracks);
+            await savePlayedTracksJob.savePlayedTracks(playedTracksWithDuplicates);
+
+            expect(mockPlayedTracksModel.savePlayedTracks).to.have.been.calledOnceWithExactly(expectedTracks);
         });
     });
 
@@ -112,6 +121,24 @@ describe('unit/src/jobs/save-played-tracks-job.ts', () => {
 
             expect(lastSavedPlayedTrack).to.eql(mockPlayedTrack);
             expect(mockPlayedTracksModel.getLastSavedPlayedTrack).to.have.been.calledOnceWithExactly(userId);
+        });
+    });
+
+    describe('dedupePlayedTracks', () => {
+        it('should remove tracks that share the same userId and playedAt timestamp', () => {
+            const playedAt = new Date('2021-01-01T01:00:00.000Z');
+            const playedTracks: PlayedTrack[] = [
+                buildPlayedTrack({ userId: 'alice', playedAt, trackName: 'Track A' }),
+                buildPlayedTrack({ userId: 'alice', playedAt, trackName: 'Track B', spotifyId: 'different-id' }),
+                buildPlayedTrack({ userId: 'alice', playedAt: new Date('2021-01-01T02:00:00.000Z'), trackName: 'Track C' }),
+            ];
+
+            const result: PlayedTrack[] = savePlayedTracksJob.dedupePlayedTracks(playedTracks);
+
+            expect(result).to.eql([
+                buildPlayedTrack({ userId: 'alice', playedAt, trackName: 'Track A' }),
+                buildPlayedTrack({ userId: 'alice', playedAt: new Date('2021-01-01T02:00:00.000Z'), trackName: 'Track C' }),
+            ]);
         });
     });
 
